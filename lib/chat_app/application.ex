@@ -6,6 +6,16 @@ defmodule ChatApp.Application do
   use Application
 
   @impl true
+  def start_phase(:tables, :normal, _) do
+    Slack.EtsDatabase.initialize() |>
+    Enum.map(fn row ->
+      :ets.new(elem(row, 0), elem(row, 1))
+    end)
+
+    :ok
+  end
+
+  @impl true
   def start(_type, _args) do
     children = [
       # Start the Telemetry supervisor
