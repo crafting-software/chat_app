@@ -7,7 +7,7 @@ defmodule ChatApp.Application do
 
   @impl true
   def start_phase(:tables, :normal, _) do
-    Slack.EtsDatabase.initialize() |>
+    ChatApp.ETSDatabase.initialize() |>
     Enum.map(fn row ->
       :ets.new(elem(row, 0), elem(row, 1))
     end)
