@@ -3,3 +3,7 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+
+#promo_element {
+    margin-top: 5%;
+}
