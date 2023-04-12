@@ -3,3 +3,53 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+* {
+    background: #EDFFEC;
+}
+
+.hd{
+    display: inline-block;
+}
+
+header.hd{
+    font-weight: 700;
+    color: #48435C;
+}
+
+input#roomcode{
+    width: 70%;
+    float: left;
+}
+
+button#join {
+    float: right;
+    margin-top: 8px;
+    background: #9792E3;
+}
+
+button#newroom{
+    float: right;
+    background: #9792E3;
+}
+
+#rooms{
+    color: #48435C;
+}
+
+.drawing {
+    position: absolute;
+    transform: translate(-50%,-50%);
+    color: #329325;
+
+  }
+
+.drawn {
+    overflow: hidden;
+    width: 100px;
+    height: 100px;
+    background-color: #329325;
+    position: absolute;
+    border-radius: 30% 70% 70% 30% / 30% 71% 29% 70%;
+    top: 100px;
+    left: 0;
+}
