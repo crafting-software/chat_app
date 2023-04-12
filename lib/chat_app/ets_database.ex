@@ -4,7 +4,7 @@ defmodule ChatApp.ETSDatabase do
     %{name: :messages, properties: [:set, :public, :named_table]}
   ]
 
-  def initialize() do
+  def parse_tables() do
     Enum.map(@tables, fn row ->
       {row.name, row.properties}
     end)

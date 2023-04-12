@@ -7,9 +7,9 @@ defmodule ChatApp.Application do
 
   @impl true
   def start_phase(:tables, :normal, _) do
-    ChatApp.ETSDatabase.initialize() |>
-    Enum.map(fn row ->
-      :ets.new(elem(row, 0), elem(row, 1))
+    ChatApp.ETSDatabase.parse_tables()
+    |> Enum.map(fn {name, properties} ->
+      :ets.new(name, properties)
     end)
 
     :ok
@@ -21,7 +21,7 @@ defmodule ChatApp.Application do
       # Start the Telemetry supervisor
       ChatAppWeb.Telemetry,
       # Start the Ecto repository
-      #ChatApp.Repo,
+      # ChatApp.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: ChatApp.PubSub},
       # Start Finch
