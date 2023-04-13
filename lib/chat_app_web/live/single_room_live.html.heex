@@ -9,7 +9,7 @@
     --%>
 </.header>
 
-<div class="object-fill h-96 border-2 border-gray-900">
+<div class="object-fill h-96 border rounded-lg border-gray-900 overflow-x-auto overflow-y-auto">
   <ul>
     <%= if length(@messages) > 0 do %>
       <%= for message_index <- length(@messages)-1..0 do %>
@@ -21,9 +21,9 @@
   </ul>
 </div>
 
-<form action="#" phx-submit="save_message">
-  <input name="text" class="rounded-md border-4 border-gray-900" />
-  <button type="submit" class="rounded-md text-white bg-blue-500 hover:bg-blue-300">Send</button>
+<form action="#" phx-submit="save_message" class="my-2 grid grid-cols-6 gap-2">
+  <textarea name="text" cols="50" rows="2" class="rounded-lg border border-gray-900 col-span-5"></textarea>
+  <button type="submit" class="rounded-lg text-white bg-blue-500 hover:bg-blue-300 float-right">Send</button>
 </form>
 
 <.back navigate={~p"/rooms"}>Back to room list</.back>
