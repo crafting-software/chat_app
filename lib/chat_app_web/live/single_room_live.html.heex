@@ -1,6 +1,6 @@
 <.header>
-    Room "<%= @room |> elem(1) %>"
-    <%!--
+  Room "<%= @room |> elem(1) %>"
+  <%!--
     <:actions>
     <.link patch={~p"/rooms/#{@room}/show/edit"} phx-click={JS.push_focus()}>
         <.button>Edit room</.button>
@@ -10,16 +10,20 @@
 </.header>
 
 <div class="object-fill h-96 border-2 border-gray-900">
-    <ul>
-        <%= for message <- @messages do %>
-            <li title="anon">anon: <%= message %></li>
-        <% end %>
-    </ul>
+  <ul>
+    <%= if length(@messages) > 0 do %>
+      <%= for message_index <- length(@messages)-1..0 do %>
+        <% text = Enum.at(@messages, message_index) |> Map.get(:text)
+        datetime = Enum.at(@messages, message_index) |> Map.get(:datetime_as_string) %>
+        <li title="anon"><%= datetime %> anon: <%= text %></li>
+      <% end %>
+    <% end %>
+  </ul>
 </div>
 
 <form action="#" phx-submit="save_message">
-    <input name="text" class="rounded-md border-4 border-gray-900"/>
-    <button type="submit" class="rounded-md text-white bg-blue-500 hover:bg-blue-300">Send</button>
+  <input name="text" class="rounded-md border-4 border-gray-900" />
+  <button type="submit" class="rounded-md text-white bg-blue-500 hover:bg-blue-300">Send</button>
 </form>
 
 <.back navigate={~p"/rooms"}>Back to room list</.back>
