@@ -20,7 +20,7 @@ defmodule ChatAppWeb.SingleRoomLive do
     {room_id, _, _, _, _} = socket.assigns.room
     topic = "room:" <> room_id
     PubSub.broadcast(ChatApp.PubSub, topic, {:update_messages, new_message})
-    {:noreply, assign(socket, messages: [new_message | socket.assigns.messages])}
+    {:noreply, socket}
   end
 
   @impl true
