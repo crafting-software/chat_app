@@ -11,7 +11,7 @@ defmodule ChatApp.Application do
       # Start the Telemetry supervisor
       ChatAppWeb.Telemetry,
       # Start the Ecto repository
-      #ChatApp.Repo,
+      # ChatApp.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: ChatApp.PubSub},
       # Start Finch
