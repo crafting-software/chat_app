@@ -1,0 +1,36 @@
+<.header>
+    Room "<%= @room |> elem(1) %>"
+    <%!--
+    <:actions>
+    <.link patch={~p"/rooms/#{@room}/show/edit"} phx-click={JS.push_focus()}>
+        <.button>Edit room</.button>
+    </.link>
+    </:actions>
+    --%>
+</.header>
+
+<div class="object-fill h-96 border-2 border-gray-900">
+    <ul>
+        <%= for message <- @messages do %>
+            <li title="anon">anon: <%= message %></li>
+        <% end %>
+    </ul>
+</div>
+
+<form action="#" phx-submit="save_message">
+    <input name="text" class="rounded-md border-4 border-gray-900"/>
+    <button type="submit" class="rounded-md text-white bg-blue-500 hover:bg-blue-300">Send</button>
+</form>
+
+<.back navigate={~p"/rooms"}>Back to room list</.back>
+<%!--
+<.modal :if={@live_action == :edit} id="room-modal" show on_cancel={JS.patch(~p"/rooms/#{@room}")}>
+    <.live_component
+        module={UltraoriginalChattyChatAppWeb.RoomLive.FormComponent}
+        id={@room.id}
+        title={@page_title}
+        action={@live_action}
+        room={@room}
+        patch={~p"/rooms/#{@room}"}/>
+</.modal>
+--%>
