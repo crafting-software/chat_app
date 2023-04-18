@@ -4,3 +4,5 @@
 @import "home.css";
 
 /* This file is for your main application CSS */
+
+@import "./room-modal.css"
