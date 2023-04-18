@@ -7,11 +7,16 @@ defmodule ChatApp.Application do
 
   @impl true
   def start(_type, _args) do
+    database_module = Application.fetch_env!(:chat_app, :database_module)
+    database_module_children =
+      case database_module do
+        ChatApp.PostgresRepo -> [ChatApp.Repo, Supervisor.child_spec({ChatApp.DatabaseManager, [database_module]}, id: SomeModule)]
+        _ -> [Supervisor.child_spec({ChatApp.DatabaseManager, [database_module]}, id: SomeModule)]
+      end
+
     children = [
       # Start the Telemetry supervisor
       ChatAppWeb.Telemetry,
-      # Start the Ecto repository
-      # ChatApp.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: ChatApp.PubSub},
       # Start Finch
@@ -20,7 +25,7 @@ defmodule ChatApp.Application do
       ChatAppWeb.Endpoint
       # Start a worker by calling: ChatApp.Worker.start_link(arg)
       # {ChatApp.Worker, arg}
-    ]
+    ] ++ database_module_children
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
