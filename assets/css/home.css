@@ -32,8 +32,8 @@ button#newroom{
     color: #48435C;
 }
 
-table tbody td:hover {
-    background-color: rgb(50 147 37);
+#rooms:hover {
+    background-color: forestgreen;
 }
 
 .drawing {
