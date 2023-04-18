@@ -3,3 +3,19 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+
+* {
+    background: #EDFFEC;
+}
+
+.message {
+    padding: 5px;
+}
+
+button {
+    background: #6A44D1;
+}
+
+button:hover {
+    background: #9792E3;
+}
