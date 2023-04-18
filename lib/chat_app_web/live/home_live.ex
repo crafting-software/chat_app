@@ -1,4 +1,4 @@
-defmodule ChatAppWeb.Home do
+defmodule ChatAppWeb.HomeLive do
   use ChatAppWeb, :live_view
 
   def mount(_params, _session, socket) do
