@@ -1,3 +1,7 @@
+.hidden {
+  display: none;
+}
+
 #new-room-modal-container {
   background-color: #edffec;
 }
@@ -31,8 +35,4 @@
 
 .room-modal-button-group button {
   background-color: #9792e3;
-}
-
-.room-modal-button-group button:hover {
-  background-color: #8d88d3;
 }
