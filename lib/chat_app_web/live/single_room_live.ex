@@ -18,10 +18,14 @@ defmodule ChatAppWeb.SingleRoomLive do
   @impl true
   def handle_event("save_message", %{"text" => new_message_text}, socket) do
     {room_id, _, _, _, _} = socket.assigns.room
-    topic = "room:" <> room_id
-    broadcasted_message = {:update_messages, wrap_message_into_a_map(new_message_text)}
-    PubSub.broadcast(ChatApp.PubSub, topic, broadcasted_message)
-    {:noreply, socket}
+    case Regex.match?(~r/^ *$/, new_message_text) do
+      false ->
+        topic = "room:" <> room_id
+        broadcasted_message = {:update_messages, wrap_message_into_a_map(new_message_text)}
+        PubSub.broadcast(ChatApp.PubSub, topic, broadcasted_message)
+        {:noreply, socket}
+      _ -> {:noreply, socket}
+    end
   end
 
   @impl true
