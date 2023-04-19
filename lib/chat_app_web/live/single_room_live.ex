@@ -6,8 +6,15 @@ defmodule ChatAppWeb.SingleRoomLive do
   def mount(%{"id" => room_id}, _session, socket) do
     topic = "room:" <> room_id
     PubSub.subscribe(ChatApp.PubSub, topic)
-    room = {room_id, "Room #0", "John Doe", 10, 300}
-    {:ok, assign(socket, room: room, topic: topic, messages: [])}
+    [{room_id, room}] = :ets.lookup(:rooms, room_id)
+    new_socket =
+      socket
+      |> assign(room_id: room_id)
+      |> assign(room: room)
+      |> assign(topic: topic)
+      |> assign(messages: [])
+      |> assign(users: room.current_participants)
+    {:ok, new_socket}
   end
 
   @impl true
@@ -17,12 +24,10 @@ defmodule ChatAppWeb.SingleRoomLive do
 
   @impl true
   def handle_event("save_message", %{"text" => new_message_text}, socket) do
-    {room_id, _, _, _, _} = socket.assigns.room
     case Regex.match?(~r/^ *$/, new_message_text) do
       false ->
-        topic = "room:" <> room_id
         broadcasted_message = {:update_messages, wrap_message_into_a_map(new_message_text)}
-        PubSub.broadcast(ChatApp.PubSub, topic, broadcasted_message)
+        PubSub.broadcast(ChatApp.PubSub, socket.assigns.topic, broadcasted_message)
         {:noreply, socket}
       _ -> {:noreply, socket}
     end

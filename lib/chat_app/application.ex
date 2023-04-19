@@ -53,6 +53,11 @@ defmodule ChatApp.Application do
       |> ChatApp.Room.add_participant("Jennie Doe")
       |> ChatApp.Room.add_participant("Jamil Doe")
       |> ChatApp.Room.add_participant("James Doe")
+      |> ChatApp.Room.add_participant("Jambalee Doe")
+      |> ChatApp.Room.add_participant("Jeremiah Doe")
+      |> ChatApp.Room.add_participant("Jimmy Doe")
+      |> ChatApp.Room.add_participant("Jumbo Doe")
+      |> ChatApp.Room.add_participant("Jeleu Doe")
     IO.inspect dummy_room, label: "Dummy room"
     :ets.insert(:rooms, dummy_room)
     :ok

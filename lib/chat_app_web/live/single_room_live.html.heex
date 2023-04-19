@@ -1,10 +1,19 @@
 <.header>
   <div>
-    Room "<%= @room |> elem(1) %>"
+    <% room_name = @room.room_name %>
+    Room "<%= room_name %>"
     <div class="float-right">
       <button class="border-gray-900 border rounded-lg hover:animate-pulse hover:motion-reduce bg-purple-800 p-1 px-5 text-white text-base peer">Users</button>
       <aside class="grid fixed top-0 bg-emerald-100 w-[233px] h-full -left-[233px] peer-focus:left-0 ease-out delay-150 duration-300 rounded-r-[25px] border border-purple-600">
-        <h1 class="text-purple-800 font-bold text-[13px] mt-8 text-center uppercase"> Users in room "<%= @room |> elem(1) %>"</h1>
+        <h1 class="text-purple-800 bold text-[15px] mt-8 text-center uppercase"> Users in room "<%= room_name %>"</h1>
+        <ul>
+          <% number_of_users = length(@users) %>
+          <%= if number_of_users > 0 do %>
+            <%= for user_index <- 0..number_of_users-1 do %>
+              <li class="p-2 ml-5 text-[13px]"><%=@users |> Enum.at(user_index)%></li>
+            <% end %>
+          <% end %>
+        </ul>
       </aside>
     </div>
   </div>
@@ -13,8 +22,9 @@
 
 <div class="h-80 border rounded-lg bg-green-100 border-gray-900 overflow-x-auto overflow-y-auto mt-3">
   <ul>
-    <%= if length(@messages) > 0 do %>
-      <%= for message_index <- length(@messages)-1..0 do %>
+    <% number_of_messages = length(@messages) %>
+    <%= if number_of_messages > 0 do %>
+      <%= for message_index <- number_of_messages-1..0 do %>
         <% text = Enum.at(@messages, message_index) |> Map.get(:text)
         datetime = Enum.at(@messages, message_index) |> Map.get(:datetime_as_string) %>
         <li class="message"><%= datetime %> anon: <%= text %></li>
