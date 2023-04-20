@@ -21,6 +21,7 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
+import { Picker } from 'emoji-picker-element';
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
@@ -39,3 +40,15 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+let textareaElement = document.getElementById("message_textarea")
+let emojiButton = document.getElementById("emoji_button")
+
+emojiButton.addEventListener("click", event => {
+    document.querySelector('emoji-picker').removeAttribute("hidden")
+});
+
+document.querySelector('emoji-picker').addEventListener('emoji-click', event => {
+    console.log(event.detail);
+    textareaElement.value += event.detail.unicode
+    document.querySelector('emoji-picker').setAttribute("hidden", "hidden")
+});

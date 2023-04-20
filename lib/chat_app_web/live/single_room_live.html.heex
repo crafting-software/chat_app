@@ -10,7 +10,7 @@
           <% number_of_users = length(@users) %>
           <%= if number_of_users > 0 do %>
             <%= for user_index <- 0..number_of_users-1 do %>
-              <li class="p-2 ml-5 text-[13px]"><%=@users |> Enum.at(user_index)%></li>
+              <li class="p-2 mx-5 text-[13px] hover:bg-emerald-200"><%=@users |> Enum.at(user_index)%></li>
             <% end %>
           <% end %>
         </ul>
@@ -27,18 +27,25 @@
       <%= for message_index <- number_of_messages-1..0 do %>
         <% text = Enum.at(@messages, message_index) |> Map.get(:text)
         datetime = Enum.at(@messages, message_index) |> Map.get(:datetime_as_string) %>
-        <li class="message"><%= datetime %> anon: <%= text %></li>
+        <li class="message hover:bg-emerald-200"><%= datetime %> anon: <%= text %></li>
       <% end %>
     <% end %>
   </ul>
 </div>
 
 <form action="#" phx-submit="save_message" class="my-2 grid grid-cols-6 gap-2">
-  <textarea name="text" maxlength="1000" cols="50" rows="2" class="rounded-lg bg-green-100 border-gray-900 focus:border-purple-800 col-span-5"></textarea>
+  <textarea name="text" id="message_textarea" maxlength="1000" cols="50" rows="2" class="rounded-lg bg-green-100 border-gray-900 focus:border-purple-800 col-span-5"></textarea>
   <button type="submit" class="rounded-lg border-gray-900 border text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce float-right">Send</button>
 </form>
 
+<div id="emoji_utils_container" class="my-2 gap-2">
+  <button id="emoji_button" class="rounded-lg px-2 border-gray-900 border text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce">😁</button>
+  <emoji-picker class="light" id="emoji_popup" phx-hook="EmojiPopup" hidden="hidden"></emoji-picker>
+</div>
+
+
 <.back navigate={~p"/rooms"}>Back to room list</.back>
+
 <%!--
 <.modal :if={@live_action == :edit} id="room-modal" show on_cancel={JS.patch(~p"/rooms/#{@room}")}>
     <.live_component

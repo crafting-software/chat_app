@@ -20,3 +20,7 @@ button:hover {
 .user-list-item {
     padding: 10px;
 }
+
+emoji-picker {
+    --border-radius: 3rem;
+}
