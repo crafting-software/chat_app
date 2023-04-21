@@ -40,3 +40,11 @@ emoji-picker {
     z-index: 10;
 }
 
+#chatbox * {
+    overflow-anchor: none;
+}
+
+#chatbox_anchor {
+    overflow-anchor: auto;
+    height: 1px;
+}

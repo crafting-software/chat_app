@@ -20,7 +20,7 @@
 </.header>
 
 
-<div class="h-80 border rounded-lg bg-green-100 border-gray-900 overflow-x-auto overflow-y-auto mt-3">
+<div id="chatbox" class="h-80 border rounded-lg bg-green-100 border-gray-900 overflow-x-auto overflow-y-auto mt-3">
   <ul>
     <% number_of_messages = length(@messages) %>
     <%= if number_of_messages > 0 do %>
@@ -31,6 +31,7 @@
       <% end %>
     <% end %>
   </ul>
+  <div id="chatbox_anchor"></div>
 </div>
 
 <form action="#" phx-submit="save_message" class="my-2 grid grid-cols-6 gap-2">

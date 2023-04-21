@@ -59,3 +59,4 @@ document.querySelector('emoji-picker').addEventListener('emoji-click', event => 
     textareaElement.value += event.detail.unicode
     emojiPopup.setAttribute("hidden", "hidden")
 });
+
