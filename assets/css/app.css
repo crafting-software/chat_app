@@ -48,3 +48,7 @@ emoji-picker {
     overflow-anchor: auto;
     height: 1px;
 }
+
+.message_content {
+    word-wrap: break-word;
+}

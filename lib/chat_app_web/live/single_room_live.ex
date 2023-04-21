@@ -46,9 +46,15 @@ defmodule ChatAppWeb.SingleRoomLive do
   end
 
   defp get_datetime_as_string() do
-    DateTime.utc_now()
-    |> DateTime.truncate(:second)
-    |> DateTime.to_string()
-    |> String.slice(0..-2)
+    [date_as_string, time_as_string] =
+      DateTime.utc_now()
+      |> DateTime.truncate(:second)
+      |> DateTime.to_string()
+      |> String.slice(0..-2)
+      |> String.split(" ")
+
+    [year_as_string, month_as_string, day_as_string] = String.split(date_as_string, "-")
+    date_in_new_format = day_as_string <> "/" <> month_as_string <> "/" <> year_as_string
+    date_in_new_format <> " " <> time_as_string
   end
 end
