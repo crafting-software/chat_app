@@ -42,13 +42,20 @@ window.liveSocket = liveSocket
 
 let textareaElement = document.getElementById("message_textarea")
 let emojiButton = document.getElementById("emoji_button")
+let emojiPopup = document.querySelector('emoji-picker')
+
+window.onclick = event => {
+    ids = ["emoji_button", "emoji_popup"]
+    if (!ids.includes(event.target.id))
+        emojiPopup.setAttribute("hidden", "hidden")
+}
 
 emojiButton.addEventListener("click", event => {
-    document.querySelector('emoji-picker').removeAttribute("hidden")
+    emojiPopup.toggleAttribute("hidden")
 });
 
 document.querySelector('emoji-picker').addEventListener('emoji-click', event => {
     console.log(event.detail);
     textareaElement.value += event.detail.unicode
-    document.querySelector('emoji-picker').setAttribute("hidden", "hidden")
+    emojiPopup.setAttribute("hidden", "hidden")
 });

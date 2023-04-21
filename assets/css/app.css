@@ -21,6 +21,22 @@ button:hover {
     padding: 10px;
 }
 
-emoji-picker {
-    --border-radius: 3rem;
+#emoji_utils_container {
+    position: relative;
 }
+
+emoji-picker {
+    --num-columns: 6;
+    --emoji-size: 1rem;
+    --border-size: 5px;
+    --border-radius: 5px;
+    --background: #d1fae5;
+}
+
+#emoji_popup {
+    position: absolute;
+    top: -1500%;
+    left: 5%;
+    z-index: 10;
+}
+

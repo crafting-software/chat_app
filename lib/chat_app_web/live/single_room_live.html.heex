@@ -4,13 +4,13 @@
     Room "<%= room_name %>"
     <div class="float-right">
       <button class="border-gray-900 border rounded-lg hover:animate-pulse hover:motion-reduce bg-purple-800 p-1 px-5 text-white text-base peer">Users</button>
-      <aside class="grid fixed top-0 bg-emerald-100 w-[233px] h-full -left-[233px] peer-focus:left-0 ease-out delay-150 duration-300 rounded-r-[25px] border border-purple-600">
+      <aside class="z-10 grid fixed top-0 bg-emerald-100 w-[233px] h-full -left-[233px] peer-focus:left-0 ease-out delay-150 duration-300 rounded-r-[25px] border border-purple-600">
         <h1 class="text-purple-800 bold text-[15px] mt-8 text-center uppercase"> Users in room "<%= room_name %>"</h1>
         <ul>
           <% number_of_users = length(@users) %>
           <%= if number_of_users > 0 do %>
             <%= for user_index <- 0..number_of_users-1 do %>
-              <li class="p-2 mx-5 text-[13px] hover:bg-emerald-200"><%=@users |> Enum.at(user_index)%></li>
+              <li class="p-2 mx-5 text-[13px] hover:bg-emerald-200 rounded-lg"><%=@users |> Enum.at(user_index)%></li>
             <% end %>
           <% end %>
         </ul>
@@ -40,7 +40,7 @@
 
 <div id="emoji_utils_container" class="my-2 gap-2">
   <button id="emoji_button" class="rounded-lg px-2 border-gray-900 border text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce">😁</button>
-  <emoji-picker class="light" id="emoji_popup" phx-hook="EmojiPopup" hidden="hidden"></emoji-picker>
+  <emoji-picker class="light" id="emoji_popup" phx-hook="EmojiPopup" hidden></emoji-picker>
 </div>
 
 
