@@ -28,10 +28,12 @@
         <% text = Enum.at(@messages, message_index) |> Map.get(:text)
         datetime = Enum.at(@messages, message_index) |> Map.get(:datetime_as_string) %>
         <li class="message hover:bg-emerald-200 rounded-2xl p-2">
+          <%= if datetime != "" do %>
           <div class="message_details">
             <span class="message_username m-2">anon</span>
             <span class="message_datetime"><%= datetime %></span>
           </div>
+          <% end %>
           <div class="message_content m-2"><%= text %></div>
         </li>
       <% end %>

@@ -1,11 +1,20 @@
 defmodule ChatAppWeb.SingleRoomLive do
   use ChatAppWeb, :live_view
   alias Phoenix.PubSub
+  require Logger
 
   @impl true
   def mount(%{"id" => room_id}, _session, socket) do
     topic = "room:" <> room_id
-    PubSub.subscribe(ChatApp.PubSub, topic)
+    cond do
+      connected?(socket) ->
+        Logger.info("Liveview's second mount() call")
+        PubSub.subscribe(ChatApp.PubSub, topic)
+        broadcasted_message = {:update_messages, %{text: "anon joined the chat.", datetime_as_string: ""}}
+        PubSub.broadcast(ChatApp.PubSub, topic, broadcasted_message)
+      true -> Logger.info("Liveview's first mount() call")
+    end
+
     [{room_id, room}] = :ets.lookup(:rooms, room_id)
     new_socket =
       socket
