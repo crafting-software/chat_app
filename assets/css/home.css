@@ -17,6 +17,11 @@ input#roomcode{
     float: left;
 }
 
+input#roomcode::placeholder {
+    color: #48435C;
+    opacity: 0.3;
+}
+
 button#join {
     float: right;
     margin-top: 50px;

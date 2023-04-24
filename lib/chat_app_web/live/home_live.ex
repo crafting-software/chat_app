@@ -9,7 +9,7 @@ defmodule ChatAppWeb.HomeLive do
 
   def render(assigns) do
     ~H"""
-    <.header class="hd">Listing Rooms</.header>
+    <.header class="hd">Public Rooms</.header>
     <.button id="newroom" class="hd">New Room</.button>
 
     <.table id="rooms" rows={@rooms}>
@@ -24,7 +24,7 @@ defmodule ChatAppWeb.HomeLive do
     </.table>
 
     <form class="jn">
-      <.input id="roomcode" name="roomcode" value=""/>
+      <.input id="roomcode" name="roomcode" value="" placeholder="room code here"/>
       <.button id="join">Join</.button>
     </form>
 
