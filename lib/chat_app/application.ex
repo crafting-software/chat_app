@@ -17,7 +17,9 @@ defmodule ChatApp.Application do
       # Start Finch
       {Finch, name: ChatApp.Finch},
       # Start the Endpoint (http/https)
-      ChatAppWeb.Endpoint
+      ChatAppWeb.Endpoint,
+      # Start the Liveview monitor which will support the room disconnect message broadcast feature.
+      {ChatApp.LiveviewMonitor, []}
       # Start a worker by calling: ChatApp.Worker.start_link(arg)
       # {ChatApp.Worker, arg}
     ]

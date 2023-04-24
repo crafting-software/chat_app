@@ -1,6 +1,7 @@
 defmodule ChatAppWeb.SingleRoomLive do
   use ChatAppWeb, :live_view
   alias Phoenix.PubSub
+  alias ChatApp.LiveviewMonitor
   require Logger
 
   @impl true
@@ -9,6 +10,7 @@ defmodule ChatAppWeb.SingleRoomLive do
     cond do
       connected?(socket) ->
         Logger.info("Liveview's second mount() call")
+        LiveviewMonitor.monitor(self(), __MODULE__, %{id: socket.id, room_id: room_id})
         PubSub.subscribe(ChatApp.PubSub, topic)
         broadcasted_message = {:update_messages, %{text: "anon joined the chat.", datetime_as_string: ""}}
         PubSub.broadcast(ChatApp.PubSub, topic, broadcasted_message)
@@ -26,8 +28,15 @@ defmodule ChatAppWeb.SingleRoomLive do
     {:ok, new_socket}
   end
 
+  def unmount(%{id: _liveview_id, room_id: room_id}, reason) do
+    IO.inspect reason, label: "Reason for the termination of the Liveview process"
+    broadcasted_message = {:update_messages, %{text: "anon left the chat.", datetime_as_string: ""}}
+    PubSub.broadcast(ChatApp.PubSub, "room:" <> room_id, broadcasted_message)
+    :ok
+  end
+
   @impl true
-  def handle_params(%{"id" => _room_id}, _url, socket) do
+  def handle_params(_params, _url, socket) do
     {:noreply, socket}
   end
 
