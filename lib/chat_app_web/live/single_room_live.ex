@@ -18,18 +18,10 @@ defmodule ChatAppWeb.SingleRoomLive do
     end
 
     [{room_id, room}] = :ets.lookup(:rooms, room_id)
-    new_socket =
-      socket
-      |> assign(room_id: room_id)
-      |> assign(room: room)
-      |> assign(topic: topic)
-      |> assign(messages: [])
-      |> assign(users: room.current_participants)
-    {:ok, new_socket}
+    {:ok, assign(socket, room_id: room_id, room: room, topic: topic, messages: [], users: room.current_participants)}
   end
 
   def unmount(%{id: _liveview_id, room_id: room_id}, reason) do
-    IO.inspect reason, label: "Reason for the termination of the Liveview process"
     broadcasted_message = {:update_messages, %{text: "anon left the chat.", datetime_as_string: ""}}
     PubSub.broadcast(ChatApp.PubSub, "room:" <> room_id, broadcasted_message)
     :ok

@@ -15,13 +15,11 @@ defmodule ChatApp.Room do
     }
   end
 
-  @spec add_participant({Ecto.UUID, ChatApp.Room}, String.t()) :: {Ecto.UUID, ChatApp.Room}
-  def add_participant(room, participant_name) do
-    object = elem(room, 1)
-    new_list_of_participants = [participant_name] ++ object.current_participants
+  def add_participant({room_uuid, room}, participant_name) do
+    new_list_of_participants = [participant_name] ++ room.current_participants
     {
-      elem(room, 0),
-      object |> Map.put(:current_participants, new_list_of_participants)
+      room_uuid,
+      room |> Map.put(:current_participants, new_list_of_participants)
     }
   end
 end

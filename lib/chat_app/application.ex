@@ -40,7 +40,6 @@ defmodule ChatApp.Application do
 
   @impl true
   def start_phase(:create_tables, :normal, _options) do
-    IO.puts "START PHASE CREATE_TABLES"
     :ets.new(:rooms, [:set, :protected, :named_table])
     :ets.new(:messages, [:set, :protected, :named_table])
     :ok
@@ -48,7 +47,6 @@ defmodule ChatApp.Application do
 
   @impl true
   def start_phase(:add_dummy_users, :normal, _options) do
-    IO.puts "START PHASE ADD_DUMMY_USERS"
     dummy_room =
       ChatApp.Room.new("some_room", "John Doe", 10, DateTime.add(DateTime.utc_now(), 30, :minute))
       |> ChatApp.Room.add_participant("John Doe")
