@@ -52,3 +52,35 @@ emoji-picker {
 .message_content {
     word-wrap: break-word;
 }
+
+.message_header > .message_settings_container {
+    float: right;    
+}
+
+.message_settings_container > ul {
+    list-style: none;
+}
+
+.menu button {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+.menu button:hover,
+.menu button:focus {
+    outline: 0;
+    text-decoration: underline;
+}
+
+.message_settings_submenu {
+    display: none;
+    position: absolute;
+}
+
+.menu button:focus + .message_settings_submenu,
+.message_settings_submenu:hover {
+    display: block;
+    background-color: #a7f3d0;
+}
+
+

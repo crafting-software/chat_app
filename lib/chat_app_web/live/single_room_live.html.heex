@@ -27,11 +27,24 @@
       <%= for message_index <- number_of_messages-1..0 do %>
         <% text = Enum.at(@messages, message_index) |> Map.get(:text)
         datetime = Enum.at(@messages, message_index) |> Map.get(:datetime_as_string) %>
-        <li class="message hover:bg-emerald-200 rounded-2xl p-2">
+        <li class="message rounded-2xl p-2">
           <%= if datetime != "" do %>
-          <div class="message_details">
+          <div class="message_header">
             <span class="message_username m-2">anon</span>
             <span class="message_datetime"><%= datetime %></span>
+            <div class="message_settings_container">
+              <ul class="menu">
+                <li>
+                  <button id="message_settings_button" class="items-center p-1.5 text-sm font-medium text-center text-gray-900 rounded-lg hover:bg-emerald-200 border-0 focus:ring-1 focus:ring-gray-900 focus:bg-emerald-200">
+                    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+                  </button>
+                  <ul class="message_settings_submenu rounded-lg p-1.5 border border-gray-900">
+                    <li class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm">Edit</li>
+                    <li class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm">Delete</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
           </div>
           <% end %>
           <div class="message_content m-2"><%= text %></div>
