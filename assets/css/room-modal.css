@@ -36,3 +36,10 @@
 .room-modal-button-group button {
   background-color: #9792e3;
 }
+<<<<<<< HEAD
+=======
+
+.room-modal-button-group button:hover {
+  background-color: #8d88d3;
+}
+>>>>>>> a2655c6 (fix(4): formatted the code)

@@ -45,6 +45,4 @@ defmodule ChatAppWeb.RoomComponent do
     </div>
     """
   end
-
-
 end
