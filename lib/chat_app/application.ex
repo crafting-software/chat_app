@@ -6,7 +6,7 @@ defmodule ChatApp.Application do
   use Application
 
   @impl true
-  def start_phase(:tables, :normal, _) do
+  def start_phase(:initialize_ets_tables, :normal, _) do
     ChatApp.ETSDatabase.parse_tables()
     |> Enum.map(fn {name, properties} ->
       :ets.new(name, properties)

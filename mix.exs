@@ -20,7 +20,7 @@ defmodule ChatApp.MixProject do
     [
       mod: {ChatApp.Application, []},
       extra_applications: [:logger, :runtime_tools],
-      initialize_ets_tables: [tables: []]
+      start_phases: [initialize_ets_tables: []]
     ]
   end
 
