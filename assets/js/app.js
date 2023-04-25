@@ -23,8 +23,55 @@ import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import { Picker } from 'emoji-picker-element';
 
+let Hooks = {}
+
+Hooks.OpenMessageSettings = {
+    mounted() {
+        this.el.addEventListener("click", event => {
+            console.log("Opened message settings") 
+            console.log(event)
+            message_id = event.srcElement.id.split(/-(.*)/s)[1]
+            console.log("Message ID: " + message_id)
+            document.getElementById("settings-" + message_id).toggleAttribute("hidden")
+        }) 
+
+        this.el.addEventListener("focusout", event => {
+            console.log("Focused-out message settings") 
+            console.log(event)
+            message_id = event.srcElement.id.split(/-(.*)/s)[1]
+            console.log("Message ID: " + message_id)
+            document.getElementById("settings-" + message_id).setAttribute("hidden", "hidden")
+        })
+    }
+}
+
+Hooks.CloseMessageSettings = {
+    mounted() {
+        this.el.addEventListener("click", event => {
+            lastClickedElement = srcElement;
+            console.log("CLICK: Closed message settings") 
+            console.log(event)
+            message_id = event.srcElement.id.split(/-(.*)/s)[1]
+            console.log("Message ID: " + message_id)
+            document.getElementById("settings-" + message_id).setAttribute("hidden", "hidden")
+        })
+
+        this.el.addEventListener("pointerleave", event => {
+            console.log("POINTER LEAVE: Closed message settings") 
+            console.log(event)
+            message_id = event.srcElement.id.split(/-(.*)/s)[1]
+            console.log("Message ID: " + message_id)
+            document.getElementById("settings-" + message_id).setAttribute("hidden", "hidden")
+            document.getElementById("button-" + message_id).blur()
+        })
+    }
+}
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, {
+    params: {_csrf_token: csrfToken},
+    hooks: Hooks
+})
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})

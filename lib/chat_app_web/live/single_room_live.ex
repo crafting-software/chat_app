@@ -12,7 +12,7 @@ defmodule ChatAppWeb.SingleRoomLive do
         Logger.info("Liveview's second mount() call")
         LiveviewMonitor.monitor(self(), __MODULE__, %{id: socket.id, room_id: room_id})
         PubSub.subscribe(ChatApp.PubSub, topic)
-        broadcasted_message = {:update_messages, %{text: "anon joined the chat.", datetime_as_string: ""}}
+        broadcasted_message = {:update_messages, ChatApp.Message.new("anon joined the chat.", "", room_id)}
         PubSub.broadcast(ChatApp.PubSub, topic, broadcasted_message)
       true -> Logger.info("Liveview's first mount() call")
     end
@@ -22,7 +22,7 @@ defmodule ChatAppWeb.SingleRoomLive do
   end
 
   def unmount(%{id: _liveview_id, room_id: room_id}, reason) do
-    broadcasted_message = {:update_messages, %{text: "anon left the chat.", datetime_as_string: ""}}
+    broadcasted_message = {:update_messages, ChatApp.Message.new("anon left the chat.", "", room_id)}
     PubSub.broadcast(ChatApp.PubSub, "room:" <> room_id, broadcasted_message)
     :ok
   end
@@ -36,7 +36,7 @@ defmodule ChatAppWeb.SingleRoomLive do
   def handle_event("save_message", %{"text" => new_message_text}, socket) do
     case Regex.match?(~r/^ *$/, new_message_text) do
       false ->
-        broadcasted_message = {:update_messages, wrap_message_into_a_map(new_message_text)}
+        broadcasted_message = {:update_messages, ChatApp.Message.new(new_message_text, "anon", socket.assigns.room_id)}
         PubSub.broadcast(ChatApp.PubSub, socket.assigns.topic, broadcasted_message)
         {:noreply, socket}
       _ -> {:noreply, socket}
@@ -46,13 +46,6 @@ defmodule ChatAppWeb.SingleRoomLive do
   @impl true
   def handle_info({:update_messages, new_message}, socket) do
     {:noreply, assign(socket, messages: [new_message | socket.assigns.messages])}
-  end
-
-  defp wrap_message_into_a_map(text) do
-    %{
-      text: text,
-      datetime_as_string: get_datetime_as_string()
-    }
   end
 
   defp get_datetime_as_string() do
