@@ -28,24 +28,17 @@ let Hooks = {}
 Hooks.OpenMessageSettings = {
     mounted() {
         this.el.addEventListener("click", event => {
-            console.log("Opened message settings") 
-            console.log(event)
             message_id = event.srcElement.id.split(/-(.*)/s)[1]
-            console.log("Message ID: " + message_id)
             document.getElementById("settings-" + message_id).toggleAttribute("hidden")
         }) 
 
         this.el.addEventListener("focusout", event => {
-            console.log("Focused-out message settings") 
-            console.log(event)
             message_id = event.srcElement.id.split(/-(.*)/s)[1]
-            console.log("Message ID: " + message_id)
             document.getElementById("settings-" + message_id).setAttribute("hidden", "hidden")
-            if (event.relatedTarget != null) {
+            if (event.relatedTarget != undefined) {
                 element_type = event.relatedTarget.localName 
                 element_action = event.relatedTarget.id.split(/-(.*)/s)[0]
-                if (element_type != null && element_type == "button" && element_action == "delete") {
-                    console.log("CLICK EVENT HANDLED WHEN FOCUSING OUT: Delete message")
+                if (element_type != undefined && element_type == "button" && element_action == "delete") {
                     this.pushEvent("delete_message", {"id": message_id}) 
                 }
             }
@@ -57,18 +50,12 @@ Hooks.CloseMessageSettings = {
     mounted() {
         this.el.addEventListener("click", event => {
             lastClickedElement = srcElement;
-            console.log("CLICK: Closed message settings") 
-            console.log(event)
             message_id = event.srcElement.id.split(/-(.*)/s)[1]
-            console.log("Message ID: " + message_id)
             document.getElementById("settings-" + message_id).setAttribute("hidden", "hidden")
         })
 
         this.el.addEventListener("pointerleave", event => {
-            console.log("POINTER LEAVE: Closed message settings") 
-            console.log(event)
             message_id = event.srcElement.id.split(/-(.*)/s)[1]
-            console.log("Message ID: " + message_id)
             document.getElementById("settings-" + message_id).setAttribute("hidden", "hidden")
             document.getElementById("button-" + message_id).blur()
         })

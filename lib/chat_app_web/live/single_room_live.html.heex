@@ -78,15 +78,3 @@
   <emoji-picker class="light" id="emoji_popup" hidden></emoji-picker>
   <.back navigate={~p"/rooms"}>Back to room list</.back>
 </div>
-
-<%!--
-<.modal :if={@live_action == :edit} id="room-modal" show on_cancel={JS.patch(~p"/rooms/#{@room}")}>
-    <.live_component
-        module={UltraoriginalChattyChatAppWeb.RoomLive.FormComponent}
-        id={@room.id}
-        title={@page_title}
-        action={@live_action}
-        room={@room}
-        patch={~p"/rooms/#{@room}"}/>
-</.modal>
---%>
