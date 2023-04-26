@@ -9,8 +9,11 @@ defmodule ChatAppWeb.HomeLive do
 
   def render(assigns) do
     ~H"""
+    <div class="hd">
     <.header class="hd">Public Rooms</.header>
-    <.button id="newroom" class="hd">New Room</.button>
+    <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
+    </div>
+
 
     <.table id="rooms" rows={@rooms}>
       <:col :let={room}><%= room.id %></:col>

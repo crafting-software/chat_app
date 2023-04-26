@@ -11,6 +11,15 @@
   text-align: center;
 }
 
+#new-room-button{
+    float:right;
+    background-color:#9792e3;
+}
+
+#new-room-button:hover{
+    background-color: #8d88d3;
+}
+
 .room-modal-form-group {
   display: flex;
   flex-wrap: wrap;
@@ -36,10 +45,7 @@
 .room-modal-button-group button {
   background-color: #9792e3;
 }
-<<<<<<< HEAD
-=======
 
 .room-modal-button-group button:hover {
   background-color: #8d88d3;
 }
->>>>>>> a2655c6 (fix(4): formatted the code)

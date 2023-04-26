@@ -41,7 +41,7 @@ defmodule ChatAppWeb.RoomComponent do
       </div>
     </form>
     </.modal>
-    <.button style="background-color:#9792E3" phx-click={show_modal("new-room-modal")}>New Room</.button>
+    <.button id="new-room-button" phx-click={show_modal("new-room-modal")}>New Room</.button>
     </div>
     """
   end
