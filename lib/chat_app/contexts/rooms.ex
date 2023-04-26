@@ -1,21 +1,18 @@
 defmodule ChatApp.Contexts.Rooms do
-
-  # protocols
-
-  def to_record(
-        %ChatApp.Structs.Room{
-          id: id,
-          room_name: room_name,
-          owner_name: owner_name,
-          current_participants: current_participants,
-          max_participants: max_participants,
-          expiry_timestamp: expiry_timestamp
-        }
-      ) do
-    {id, room_name, owner_name, current_participants, max_participants, expiry_timestamp} |> IO.inspect()
+  def to_record(%ChatApp.Structs.Room{
+        id: id,
+        room_name: room_name,
+        owner_name: owner_name,
+        current_participants: current_participants,
+        max_participants: max_participants,
+        expiry_timestamp: expiry_timestamp
+      }) do
+    {id, room_name, owner_name, current_participants, max_participants, expiry_timestamp}
   end
 
-  def from_record([{id, room_name, owner_name, current_participants, max_participants, expiry_timestamp}]) do
+  def from_record([
+        {id, room_name, owner_name, current_participants, max_participants, expiry_timestamp}
+      ]) do
     %ChatApp.Structs.Room{
       id: id,
       room_name: room_name,
@@ -26,17 +23,9 @@ defmodule ChatApp.Contexts.Rooms do
     }
   end
 
-  def list_rooms() do
-    rooms = :ets.tab2list(:rooms)
-    Enum.map(rooms, fn row ->
-      from_record([row])
-    end)
-  end
+  def list_rooms(), do: :ets.tab2list(:rooms) |> Enum.map(fn row -> from_record([row]) end)
 
-  def get_room(id) do
-    room = :ets.lookup(:rooms, id)
-    from_record(room)
-  end
+  def get_room(id), do: :ets.lookup(:rooms, id) |> from_record()
 
   def insert_room(
         %ChatApp.Structs.Room{
@@ -48,18 +37,13 @@ defmodule ChatApp.Contexts.Rooms do
           expiry_timestamp: _
         } = room
       ) do
-        case :ets.insert_new(:rooms, to_record(room)) do
-           true -> {:ok, room}
-           false -> {:error, "The Room exists!"}
-
-        end
+    case :ets.insert_new(:rooms, to_record(room)) do
+      true -> {:ok, room}
+      false -> {:error, "The Room exists!"}
+    end
   end
 
-  def delete_room(room) do
-    :ets.delete(:rooms, room)
-  end
+  def delete_room(room), do: :ets.delete(:rooms, room)
 
-  def room_exists?(id) do
-    :ets.member(:rooms, id)
-  end
+  def room_exists?(id), do: :ets.member(:rooms, id)
 end
