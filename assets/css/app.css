@@ -44,7 +44,6 @@ emoji-picker {
     overflow-anchor: none;
 }
 
-
 #chatbox_anchor {
     overflow-anchor: auto;
     height: 1px;
@@ -62,9 +61,8 @@ emoji-picker {
     float: right;
 }
 
-.menu > ul {
-    list-style: none;
-    float: left;
+.menu div {
+    width: 4.5rem;
 }
 
 .menu {
@@ -77,10 +75,13 @@ emoji-picker {
     cursor: pointer;
 }
 
+.menu div > button {
+    margin: auto;
+}
+
 .message_settings_submenu {
     position: absolute;
-    cursor: pointer;
-    left: -69px;
+    left: -72px;
     top: -41px;
 }
 

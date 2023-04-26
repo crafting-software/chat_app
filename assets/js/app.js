@@ -41,6 +41,14 @@ Hooks.OpenMessageSettings = {
             message_id = event.srcElement.id.split(/-(.*)/s)[1]
             console.log("Message ID: " + message_id)
             document.getElementById("settings-" + message_id).setAttribute("hidden", "hidden")
+            if (event.relatedTarget != null) {
+                element_type = event.relatedTarget.localName 
+                element_action = event.relatedTarget.id.split(/-(.*)/s)[0]
+                if (element_type != null && element_type == "button" && element_action == "delete") {
+                    console.log("CLICK EVENT HANDLED WHEN FOCUSING OUT: Delete message")
+                    this.pushEvent("delete_message", {"id": message_id}) 
+                }
+            }
         })
     }
 }

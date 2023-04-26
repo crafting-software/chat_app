@@ -43,6 +43,16 @@ defmodule ChatAppWeb.SingleRoomLive do
     end
   end
 
+  def handle_event("delete_message", %{"id" => message_id_from_client}, socket) do
+    IO.puts message_id_from_client
+    {:noreply, assign(socket, messages: Enum.map(socket.assigns.messages, fn {message_id, message} ->
+      cond do
+        message_id == message_id_from_client -> {message_id, %{message | is_deleted: true}}
+        true -> {message_id, message}
+      end
+    end))}
+  end
+
   @impl true
   def handle_info({:update_messages, new_message}, socket) do
     {:noreply, assign(socket, messages: [new_message | socket.assigns.messages])}

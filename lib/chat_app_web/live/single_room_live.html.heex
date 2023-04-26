@@ -3,8 +3,8 @@
     <% room_name = @room.room_name %>
     Room "<%= room_name %>"
     <div class="float-right">
-      <button class="border-gray-900 border rounded-2xl hover:animate-pulse hover:motion-reduce bg-purple-800 p-1 px-5 text-white text-base peer">Users</button>
-      <aside class="z-10 grid fixed top-0 bg-emerald-100 w-[233px] h-full -left-[233px] peer-focus:left-0 ease-out delay-150 duration-300 rounded-r-[25px] border border-purple-600">
+      <button class="rounded-2xl hover:animate-pulse hover:motion-reduce bg-purple-800 p-1 px-5 text-white text-base peer">Users</button>
+      <aside class="border border border-emerald-500 z-10 grid fixed top-0 bg-emerald-100 w-[233px] h-full -left-[233px] peer-focus:left-0 ease-out delay-150 duration-300 rounded-r-[25px]">
         <h1 class="text-purple-800 bold text-[15px] mt-8 text-center uppercase"> Users in room "<%= room_name %>"</h1>
         <ul>
           <% number_of_users = length(@users) %>
@@ -20,13 +20,14 @@
 </.header>
 
 
-<div id="chatbox" class="h-80 border rounded-2xl bg-green-100 border-gray-900 overflow-x-auto overflow-y-auto mt-3">
+<div id="chatbox" class="h-80 rounded-2xl bg-green-100 overflow-x-auto overflow-y-auto mt-3">
   <ul>
     <% number_of_messages = length(@messages) %>
     <%= if number_of_messages > 0 do %>
       <%= for message_index <- number_of_messages-1..0 do %>
         <%
-          {message_id, %ChatApp.Message{text: text, sender: sender, room_id: _, timestamp: timestamp}} = Enum.at(@messages, message_index)
+          {message_id, actual_message} = Enum.at(@messages, message_index)
+          %ChatApp.Message{text: text, sender: sender, room_id: _, timestamp: timestamp, is_deleted: is_deleted, is_edited: is_edited} = actual_message
         %>
         <li class="message rounded-2xl p-2">
           <%= if sender != "" do %>
@@ -36,21 +37,30 @@
             <div class="message_settings_container">
               <ul class="menu">
                 <li>
-                  <button id={"button-#{message_id}"} class="items-center p-1.5 text-sm font-medium text-center text-gray-900 rounded-lg hover:bg-emerald-200 border-0 focus:ring-1 focus:ring-gray-900 focus:bg-emerald-200" phx-hook="OpenMessageSettings">
+                  <button id={"button-#{message_id}"} class="items-center p-1.5 text-sm font-medium text-center text-gray-900 rounded-lg hover:bg-emerald-200 focus:ring-1 focus:ring-emerald-500 focus:bg-emerald-200" phx-hook="OpenMessageSettings">
                     <svg id={"svg-#{message_id}"} class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                       <path id={"path-#{message_id}"} d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
                     </svg>
                   </button>
-                  <ul id={"settings-#{message_id}"} hidden class="message_settings_submenu rounded-lg p-1.5 border border-gray-900 bg-emerald-200" phx-hook="CloseMessageSettings">
-                    <li id={"edit-#{message_id}"} class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm">Edit</li>
-                    <li id={"delete-#{message_id}"} class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm">Delete</li>
-                  </ul>
+                  <div id={"settings-#{message_id}"} hidden class="message_settings_submenu rounded-lg p-1.5 bg-emerald-200 border border-emerald-500" phx-hook="CloseMessageSettings">
+                    <button id={"edit-#{message_id}"} class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm">Edit</button>
+                    <%= if not is_deleted do %>
+                      <button id={"delete-#{message_id}"} class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm">Delete</button>
+                    <% else %>
+                      <button id={"delete-#{message_id}"} disabled class="opacity-25 hover:bg-emerald-300 rounded-lg p-1.5 text-sm">Delete</button>
+                    <% end %>
+                  </div>
                 </li>
               </ul>
             </div>
           </div>
           <% end %>
-          <div class="message_content m-2"><%= text %></div>
+          <div class="message_content m-2">
+            <%= cond do %>
+              <% is_deleted -> %> This message has been deleted.
+              <% true -> %> <%= text %>
+            <% end %>
+          </div>
         </li>
       <% end %>
     <% end %>
@@ -59,12 +69,12 @@
 </div>
 
 <form action="#" phx-submit="save_message" class="my-2 grid grid-cols-6 gap-2">
-  <textarea name="text" id="message_textarea" maxlength="1000" cols="50" rows="2" class="rounded-2xl bg-green-100 border-gray-900 focus:border-purple-800 col-span-5"></textarea>
-  <button type="submit" class="rounded-2xl border-gray-900 border text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce float-right">Send</button>
+  <textarea name="text" id="message_textarea" maxlength="1000" cols="50" rows="2" class="rounded-2xl bg-green-100 border-0 focus:border focus:border-purple-800 col-span-5 resize-none"></textarea>
+  <button type="submit" class="rounded-2xl text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce float-right">Send</button>
 </form>
 
 <div id="emoji_utils_container" class="my-2 gap-2">
-  <button id="emoji_button" class="rounded-2xl px-2 border-gray-900 border text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce">😁</button>
+  <button id="emoji_button" class="rounded-2xl px-2 text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce">😁</button>
   <emoji-picker class="light" id="emoji_popup" hidden></emoji-picker>
   <.back navigate={~p"/rooms"}>Back to room list</.back>
 </div>
