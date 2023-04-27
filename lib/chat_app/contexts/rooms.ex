@@ -1,4 +1,7 @@
 defmodule ChatApp.Contexts.Rooms do
+  @adapter ChatApp.DatabaseAdapter
+  alias ChatApp.Structs.Room
+
   def to_record(%ChatApp.Structs.Room{
         id: id,
         room_name: room_name,
@@ -23,9 +26,25 @@ defmodule ChatApp.Contexts.Rooms do
     }
   end
 
-  def list_rooms(), do: :ets.tab2list(:rooms) |> Enum.map(fn row -> from_record([row]) end)
+  def list_rooms(), do: @adapter.get_all(Room) |> Enum.map(fn row -> from_record([row]) end)
 
-  def get_room(id), do: :ets.lookup(:rooms, id) |> from_record()
+  def get_room(id), do: @adapter.get(Room, id) |> from_record()
+
+  def update_room(
+        %ChatApp.Structs.Room{
+          id: _,
+          room_name: _,
+          owner_name: _,
+          current_participants: _,
+          max_participants: _,
+          expiry_timestamp: _
+        } = room
+      ) do
+    case @adapter.update(Room, to_record(room)) do
+      true -> {:ok, room}
+      _ -> {:error, "An error has occured."}
+    end
+  end
 
   def insert_room(
         %ChatApp.Structs.Room{
@@ -37,13 +56,18 @@ defmodule ChatApp.Contexts.Rooms do
           expiry_timestamp: _
         } = room
       ) do
-    case :ets.insert_new(:rooms, to_record(room)) do
+    case @adapter.insert(Room, to_record(room)) do
       true -> {:ok, room}
-      false -> {:error, "The Room exists!"}
+      _ -> {:error, "An error has occured."}
     end
   end
 
-  def delete_room(room), do: :ets.delete(:rooms, room)
+  def delete_room(id) do
+    case @adapter.delete(Room, id) do
+      true -> {:ok, "Room deleted successfully."}
+      _ -> {:error, "An error occured."}
+    end
+  end
 
-  def room_exists?(id), do: :ets.member(:rooms, id)
+  def room_exists?(id), do: @adapter.exists?(Room, id)
 end

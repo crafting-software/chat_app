@@ -5,4 +5,6 @@ defmodule ChatApp.Structs.Room do
             current_participants: [],
             max_participants: nil,
             expiry_timestamp: nil
+
+  def schema_name, do: :rooms
 end

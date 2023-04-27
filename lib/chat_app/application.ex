@@ -17,6 +17,8 @@ defmodule ChatApp.Application do
 
   @impl true
   def start(_type, _args) do
+    database_module = Application.fetch_env!(:chat_app, :database_module)
+
     children = [
       # Start the Telemetry supervisor
       ChatAppWeb.Telemetry,
@@ -27,9 +29,10 @@ defmodule ChatApp.Application do
       # Start Finch
       {Finch, name: ChatApp.Finch},
       # Start the Endpoint (http/https)
-      ChatAppWeb.Endpoint
+      ChatAppWeb.Endpoint,
       # Start a worker by calling: ChatApp.Worker.start_link(arg)
       # {ChatApp.Worker, arg}
+      {ChatApp.DatabaseManager, [database_module]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
