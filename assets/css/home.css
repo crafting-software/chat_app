@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 8e18fe6 (feat(3): removed * selector css)
 .hd{
     display: grid;
     grid-template-columns: auto auto;
@@ -23,8 +28,10 @@ button#join {
     float: right;
     margin-top: 50px;
     background: #9792E3;
+    color: #EDFFEC;
 }
 
+<<<<<<< HEAD
 #rooms{
     color: #48435C;
 }
@@ -40,6 +47,20 @@ button#join {
     border-radius: 0px;
 }
 
+=======
+button#newroom{
+    float: right;
+    background: #9792E3;
+    color: #EDFFEC;
+}
+
+tbody#rooms{
+    height: 10px;
+    overflow-y: scroll;
+    color: #48435C;
+}
+
+>>>>>>> 8e18fe6 (feat(3): removed * selector css)
 .drawing {
     position: absolute;
     transform: translate(-50%,-50%);

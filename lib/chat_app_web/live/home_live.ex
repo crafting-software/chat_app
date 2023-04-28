@@ -7,7 +7,6 @@ defmodule ChatAppWeb.HomeLive do
       %{id: 2, name: "room2", description: "capybara numero dos"},
       %{id: 3, name: "room3", description: "capybara numero tres"}
     ]
-
     socket = assign(socket, :rooms, rooms)
     {:ok, socket}
   end

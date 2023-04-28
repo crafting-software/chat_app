@@ -452,9 +452,9 @@ defmodule ChatAppWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-100 text-sm leading-6 text-zinc-700"
+          class="max-h-16 overflow-y-auto relative divide-y divide-zinc-100 border-zinc-200 text-sm leading-6 text-zinc-700"
         >
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="">
+          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:text-zinc-50">
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
