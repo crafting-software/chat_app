@@ -25,40 +25,63 @@ import { Picker } from 'emoji-picker-element';
 
 let Hooks = {}
 
+function extractMessageIdFromElementId(element) {
+    return element.id.split(/-(.*)/s)[1]
+}
+
+function triggerMessageDeletionEvent(event, component) {
+    if (event.relatedTarget != undefined) {
+        element_type = event.relatedTarget.localName 
+        element_action = event.relatedTarget.id.split(/-(.*)/s)[0]
+        if (element_type != undefined && element_type == "button" && element_action == "delete") {
+            component.pushEvent("delete_message", {"id": extractMessageIdFromElementId(event.srcElement)}) 
+        }
+    }
+}
+
+function addClickEventListenerOnMessageSettingsButton(component) {
+    component.el.addEventListener("click", event => {
+        event.target.focus()
+        element_id = "settings-" + extractMessageIdFromElementId(event.srcElement)
+        document.getElementById(element_id).toggleAttribute("hidden")
+    })
+}
+
+function addFocusOutEventListenerOnMessageSettingsButton(component) {
+    component.el.addEventListener("focusout", event => {
+        element_id = "settings-" + extractMessageIdFromElementId(event.srcElement)
+        document.getElementById(element_id).setAttribute("hidden", "hidden")
+        triggerMessageDeletionEvent(event, component)
+    })
+}
+
+function addClickEventListenerOnMessageSettingsPopup(component) {
+    component.el.addEventListener("click", event => {
+        event.target.focus()
+        element_id = "settings-" + extractMessageIdFromElementId(event.srcElement)
+        document.getElementById(element_id).setAttribute("hidden", "hidden")
+    })
+}
+
+function addPointerLeaveListenerOnMessageSettingsPopup(component) {
+    component.el.addEventListener("pointerleave", event => {
+        message_id = event.srcElement.id.split(/-(.*)/s)[1]
+        document.getElementById("settings-" + message_id).setAttribute("hidden", "hidden")
+        document.getElementById("button-" + message_id).blur()
+    })
+}
+
 Hooks.OpenMessageSettings = {
     mounted() {
-        this.el.addEventListener("click", event => {
-            message_id = event.srcElement.id.split(/-(.*)/s)[1]
-            document.getElementById("settings-" + message_id).toggleAttribute("hidden")
-        }) 
-
-        this.el.addEventListener("focusout", event => {
-            message_id = event.srcElement.id.split(/-(.*)/s)[1]
-            document.getElementById("settings-" + message_id).setAttribute("hidden", "hidden")
-            if (event.relatedTarget != undefined) {
-                element_type = event.relatedTarget.localName 
-                element_action = event.relatedTarget.id.split(/-(.*)/s)[0]
-                if (element_type != undefined && element_type == "button" && element_action == "delete") {
-                    this.pushEvent("delete_message", {"id": message_id}) 
-                }
-            }
-        })
-    }
+        addClickEventListenerOnMessageSettingsButton(this)
+        addFocusOutEventListenerOnMessageSettingsButton(this)
+    } 
 }
 
 Hooks.CloseMessageSettings = {
     mounted() {
-        this.el.addEventListener("click", event => {
-            lastClickedElement = srcElement;
-            message_id = event.srcElement.id.split(/-(.*)/s)[1]
-            document.getElementById("settings-" + message_id).setAttribute("hidden", "hidden")
-        })
-
-        this.el.addEventListener("pointerleave", event => {
-            message_id = event.srcElement.id.split(/-(.*)/s)[1]
-            document.getElementById("settings-" + message_id).setAttribute("hidden", "hidden")
-            document.getElementById("button-" + message_id).blur()
-        })
+        addClickEventListenerOnMessageSettingsPopup(this)
+        addPointerLeaveListenerOnMessageSettingsPopup(this)
     }
 }
 

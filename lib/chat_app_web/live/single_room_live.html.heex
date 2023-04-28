@@ -32,22 +32,22 @@
         <li class="message rounded-2xl p-2">
           <%= if sender != "" do %>
           <div class="message_header">
-            <span class="message_username m-2"><%= sender %></span>
+            <span class="message_username m-2 font-bold"><%= sender %></span>
             <span class="message_datetime"><%= timestamp %></span>
             <div class="message_settings_container">
               <ul class="menu">
                 <li>
-                  <button id={"button-#{message_id}"} class="items-center p-1.5 text-sm font-medium text-center text-gray-900 rounded-lg hover:bg-green-200 focus:ring-1 focus:ring-green-300 focus:bg-green-200" phx-hook="OpenMessageSettings">
+                  <button id={"button-#{message_id}"} class="message_settings_button items-center p-1.5 text-sm font-medium text-center text-gray-900 hover:bg-green-200 focus:bg-green-200" phx-hook="OpenMessageSettings">
                     <svg id={"svg-#{message_id}"} class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                       <path id={"path-#{message_id}"} d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
                     </svg>
                   </button>
-                  <div id={"settings-#{message_id}"} hidden class="message_settings_submenu rounded-lg p-1.5 bg-green-200 focus:ring-1 border border-green-300 focus:bg-green-200" phx-hook="CloseMessageSettings">
+                  <div id={"settings-#{message_id}"} hidden class="message_settings_submenu p-1.5 bg-green-200 focus:bg-green-200" phx-hook="CloseMessageSettings">
                     <button id={"edit-#{message_id}"} class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm">Edit</button>
                     <%= if not is_deleted do %>
                       <button id={"delete-#{message_id}"} class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm">Delete</button>
                     <% else %>
-                      <button id={"delete-#{message_id}"} disabled class="opacity-25 hover:bg-emerald-300 rounded-lg p-1.5 text-sm">Delete</button>
+                      <button id={"delete-#{message_id}"} disabled class="opacity-25 rounded-lg p-1.5 text-sm">Delete</button>
                     <% end %>
                   </div>
                 </li>

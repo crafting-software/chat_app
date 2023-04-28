@@ -63,18 +63,30 @@ emoji-picker {
 }
 
 .menu button {
-    border: 0;
     background: transparent;
     cursor: pointer;
 }
 
+.message_settings_button {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
 .menu div > button {
     margin: auto;
+    max-width: fit-content;
+    text-align: center;
 }
 
 .message_settings_submenu {
     position: absolute;
-    left: -72px;
-    top: -41px;
+    left: -65px;
+    top: -40px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 0px;
 }
 
