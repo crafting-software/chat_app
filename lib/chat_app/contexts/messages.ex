@@ -8,19 +8,21 @@ defmodule ChatApp.Contexts.Messages do
         content: content,
         room_id: room_id,
         timestamp: timestamp,
-        is_deleted: is_deleted
+        is_deleted: is_deleted,
+        is_edited: is_edited
       }) do
-    {id, sender, content, room_id, timestamp, is_deleted}
+    {id, sender, content, room_id, timestamp, is_deleted, is_edited}
   end
 
-  def from_record([{id, sender, content, room_id, timestamp, is_deleted}]) do
+  def from_record([{id, sender, content, room_id, timestamp, is_deleted, is_edited}]) do
     %ChatApp.Structs.Message{
       id: id,
       sender: sender,
       content: content,
       room_id: room_id,
       timestamp: timestamp,
-      is_deleted: is_deleted
+      is_deleted: is_deleted,
+      is_edited: is_edited
     }
   end
 
@@ -35,7 +37,8 @@ defmodule ChatApp.Contexts.Messages do
           content: _,
           room_id: _,
           timestamp: _,
-          is_deleted: _
+          is_deleted: _,
+          is_edited: _
         } = message
       ) do
     case @adapter.update(Message, to_record(message)) do
@@ -51,7 +54,8 @@ defmodule ChatApp.Contexts.Messages do
           content: _,
           room_id: _,
           timestamp: _,
-          is_deleted: _
+          is_deleted: _,
+          is_edited: _
         } = message
       ) do
     case @adapter.insert(Message, to_record(message)) do
