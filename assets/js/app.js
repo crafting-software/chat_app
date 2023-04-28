@@ -21,10 +21,112 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
+<<<<<<< HEAD
 import { Picker } from 'emoji-picker-element'
 import { Hooks } from './hooks'
 
+<<<<<<< HEAD
 import "./room-modal"
+=======
+import "./room-modal.js"
+=======
+import { Picker } from 'emoji-picker-element';
+
+import "./room-modal.js"
+let Hooks = {}
+
+function extractActionAndMessageIdFromDomElementId(element) {
+    return element.id.split(/-(.*)/s)
+}
+
+function triggerMessageDeletionEvent(event, component) {
+    if (event.relatedTarget != undefined) {
+        elementType = event.relatedTarget.localName 
+        elementAction = extractActionAndMessageIdFromDomElementId(event.relatedTarget)[0]
+        if (elementType != undefined && elementType == "button" && elementAction == "delete") {
+            component.pushEvent("delete_message", {"id": extractActionAndMessageIdFromDomElementId(event.srcElement)[1]}) 
+        }
+    }
+}
+
+function addClickEventListenerOnMessageSettingsButton(component) {
+    component.el.addEventListener("click", event => {
+        event.target.focus()
+        elementId = "settings-" + extractActionAndMessageIdFromDomElementId(event.srcElement)[1]
+        document.getElementById(elementId).toggleAttribute("hidden")
+    })
+}
+
+function addFocusOutEventListenerOnMessageSettingsButton(component) {
+    component.el.addEventListener("focusout", event => {
+        elementId = "settings-" + extractActionAndMessageIdFromDomElementId(event.srcElement)[1]
+        document.getElementById(elementId).setAttribute("hidden", "hidden")
+        triggerMessageDeletionEvent(event, component)
+    })
+}
+
+function addClickEventListenerOnMessageSettingsPopup(component) {
+    component.el.addEventListener("click", event => {
+        event.target.focus()
+        elementId = "settings-" + extractActionAndMessageIdFromDomElementId(event.srcElement)[1]
+        document.getElementById(elementId).setAttribute("hidden", "hidden")
+    })
+}
+
+function addPointerLeaveListenerOnMessageSettingsPopup(component) {
+    component.el.addEventListener("pointerleave", event => {
+        messageId = extractActionAndMessageIdFromDomElementId(event.srcElement)[1]
+        document.getElementById("settings-" + messageId).setAttribute("hidden", "hidden")
+        document.getElementById("button-" + messageId).blur()
+    })
+}
+
+function adaptUtcTimestampToUserTimezone(component) {
+    dateElement = document.getElementById(component.el.id)
+    utcTimestamp = dateElement.innerHTML
+    dateElement.innerHTML = new Date(utcTimestamp).toLocaleString().replace(",", "")
+}
+
+Hooks.OpenMessageSettings = {
+    mounted() {
+        addClickEventListenerOnMessageSettingsButton(this)
+        addFocusOutEventListenerOnMessageSettingsButton(this)
+    } 
+}
+
+Hooks.CloseMessageSettings = {
+    mounted() {
+        addClickEventListenerOnMessageSettingsPopup(this)
+        addPointerLeaveListenerOnMessageSettingsPopup(this)
+    }
+}
+
+Hooks.HandleTimestampTimezone = {
+    mounted() {
+        adaptUtcTimestampToUserTimezone(this)
+    },
+
+    updated() {
+        adaptUtcTimestampToUserTimezone(this)
+    }
+}
+
+Hooks.SendMessageOnEnterKeyPress = {
+    mounted() {
+        this.el.addEventListener("keydown", (event) => {
+            if (event.which === 13 && !event.shiftKey) {
+                textareaElement = document.getElementById("message_textarea") 
+                this.pushEvent("save_message",  {"text": textareaElement.value})
+                textareaElement.value = ""
+                textareaElement.blur()
+            } 
+        })
+    }
+}
+import { Picker } from 'emoji-picker-element'
+import { Hooks } from 'hooks'
+>>>>>>> 7d6b0e8 (feat(3): removed * selector css)
+>>>>>>> e5d059c (feat(3): removed * selector css)
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
