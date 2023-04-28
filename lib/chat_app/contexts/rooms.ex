@@ -8,13 +8,15 @@ defmodule ChatApp.Contexts.Rooms do
         owner_name: owner_name,
         current_participants: current_participants,
         max_participants: max_participants,
+        is_private: is_private,
+        password: password,
         expiry_timestamp: expiry_timestamp
       }) do
-    {id, room_name, owner_name, current_participants, max_participants, expiry_timestamp}
+    {id, room_name, owner_name, current_participants, max_participants, is_private, password, expiry_timestamp}
   end
 
   def from_record([
-        {id, room_name, owner_name, current_participants, max_participants, expiry_timestamp}
+        {id, room_name, owner_name, current_participants, max_participants, is_private, password, expiry_timestamp}
       ]) do
     %ChatApp.Structs.Room{
       id: id,
@@ -22,6 +24,8 @@ defmodule ChatApp.Contexts.Rooms do
       owner_name: owner_name,
       current_participants: current_participants,
       max_participants: max_participants,
+      is_private: is_private,
+      password: password,
       expiry_timestamp: expiry_timestamp
     }
   end
@@ -37,6 +41,8 @@ defmodule ChatApp.Contexts.Rooms do
           owner_name: _,
           current_participants: _,
           max_participants: _,
+          is_private: _,
+          password: _,
           expiry_timestamp: _
         } = room
       ) do
@@ -53,6 +59,8 @@ defmodule ChatApp.Contexts.Rooms do
           owner_name: _,
           current_participants: _,
           max_participants: _,
+          is_private: _,
+          password: _,
           expiry_timestamp: _
         } = room
       ) do
