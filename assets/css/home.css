@@ -37,7 +37,10 @@ button#newroom {
   color: #edffec;
 }
 
-tbody#rooms {
+#rooms{
+  color: #48435C;
+  height: 10px;
+  overflow-y: scroll;
   color: #48435c;
 }
 

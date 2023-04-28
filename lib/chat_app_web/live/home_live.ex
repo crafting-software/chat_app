@@ -22,6 +22,7 @@ defmodule ChatAppWeb.HomeLive do
         %{id: 9, name: "room9", description: "capybara numero nueve"},
         %{id: 10, name: "room10", description: "capybara numero diez"}
       ])
+
     socket = assign(socket, :rooms, rooms)
     {:ok, socket}
   end
@@ -29,10 +30,11 @@ defmodule ChatAppWeb.HomeLive do
   def render(assigns) do
     ~H"""
     <div class="flex flex-col flex-1 h-full">
-      <div class="hd">
-        <.header class="hd">Public Rooms</.header>
-        <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
+      <div>
+        <.header class="inline-block">Public Rooms</.header>
+        <.live_component class="inline-block" module={ChatAppWeb.RoomComponent} id="modal" />
       </div>
+
 
       <div id="divrooms" class="overflow-y-auto w-full mt-8">
         <.table id="rooms" rows={@rooms}>
