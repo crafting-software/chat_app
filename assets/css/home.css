@@ -1,7 +1,3 @@
-* {
-    background: #EDFFEC;
-}
-
 .hd{
     display: inline-block;
 }
@@ -37,8 +33,15 @@ button#newroom{
     color: #48435C;
 }
 
-#rooms:hover {
+#rooms > tr:hover * {
     background-color: forestgreen;
+    color: beige;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+#rooms > tr:hover > td > * {
+    border-radius: 0px;
 }
 
 .drawing {

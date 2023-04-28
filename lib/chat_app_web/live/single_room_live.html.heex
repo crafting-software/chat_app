@@ -4,7 +4,7 @@
     Room "<%= room_name %>"
     <div class="float-right">
       <button class="rounded-2xl hover:animate-pulse hover:motion-reduce bg-purple-800 p-1 px-5 text-white text-base peer">Users</button>
-      <aside class="border border border-emerald-500 z-10 grid fixed top-0 bg-emerald-100 w-[233px] h-full -left-[233px] peer-focus:left-0 ease-out delay-150 duration-300 rounded-r-[25px]">
+      <aside class="border border border-emerald-300 z-10 grid fixed top-0 bg-green-100 w-[233px] h-full -left-[233px] peer-focus:left-0 ease-out delay-150 duration-300 rounded-r-[25px]">
         <h1 class="text-purple-800 bold text-[15px] mt-8 text-center uppercase"> Users in room "<%= room_name %>"</h1>
         <ul>
           <% number_of_users = length(@users) %>
@@ -37,12 +37,12 @@
             <div class="message_settings_container">
               <ul class="menu">
                 <li>
-                  <button id={"button-#{message_id}"} class="items-center p-1.5 text-sm font-medium text-center text-gray-900 rounded-lg hover:bg-emerald-200 focus:ring-1 focus:ring-emerald-500 focus:bg-emerald-200" phx-hook="OpenMessageSettings">
+                  <button id={"button-#{message_id}"} class="items-center p-1.5 text-sm font-medium text-center text-gray-900 rounded-lg hover:bg-green-200 focus:ring-1 focus:ring-green-300 focus:bg-green-200" phx-hook="OpenMessageSettings">
                     <svg id={"svg-#{message_id}"} class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                       <path id={"path-#{message_id}"} d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
                     </svg>
                   </button>
-                  <div id={"settings-#{message_id}"} hidden class="message_settings_submenu rounded-lg p-1.5 bg-emerald-200 border border-emerald-500" phx-hook="CloseMessageSettings">
+                  <div id={"settings-#{message_id}"} hidden class="message_settings_submenu rounded-lg p-1.5 bg-green-200 focus:ring-1 border border-green-300 focus:bg-green-200" phx-hook="CloseMessageSettings">
                     <button id={"edit-#{message_id}"} class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm">Edit</button>
                     <%= if not is_deleted do %>
                       <button id={"delete-#{message_id}"} class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm">Delete</button>
@@ -76,5 +76,5 @@
 <div id="emoji_utils_container" class="my-2 gap-2">
   <button id="emoji_button" class="rounded-2xl px-2 text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce">😁</button>
   <emoji-picker class="light" id="emoji_popup" hidden></emoji-picker>
-  <.back navigate={~p"/rooms"}>Back to room list</.back>
+  <.back navigate={~p"/"}>Back to room list</.back>
 </div>

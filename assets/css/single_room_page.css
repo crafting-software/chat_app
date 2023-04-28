@@ -1,0 +1,80 @@
+.background {
+    background: #EDFFEC;
+}
+
+.message {
+    padding: 5px;
+}
+
+button:hover {
+    background: #9792E3;
+}
+
+.user-list-item {
+    padding: 10px;
+}
+
+#emoji_utils_container {
+    position: relative;
+}
+
+emoji-picker {
+    --num-columns: 6;
+    --emoji-size: 1rem;
+    --border-size: 5px;
+    --border-radius: 5px;
+    --background: #d1fae5;
+}
+
+#emoji_popup {
+    position: absolute;
+    top: -1500%;
+    left: 5%;
+    z-index: 10;
+}
+
+#chatbox * {
+    overflow-anchor: none;
+}
+
+#chatbox_anchor {
+    overflow-anchor: auto;
+    height: 1px;
+}
+
+.message_content {
+    word-wrap: break-word;
+}
+
+.message_header > .message_settings_container {
+    float: right;    
+}
+
+.message_settings_container > menu > * {
+    float: right;
+}
+
+.menu div {
+    width: 4.5rem;
+}
+
+.menu {
+    position: relative;
+}
+
+.menu button {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.menu div > button {
+    margin: auto;
+}
+
+.message_settings_submenu {
+    position: absolute;
+    left: -72px;
+    top: -41px;
+}
+
