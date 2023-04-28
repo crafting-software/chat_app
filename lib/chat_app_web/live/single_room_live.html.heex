@@ -20,7 +20,7 @@
 </.header>
 
 
-<div id="chatbox" class="h-80 rounded-2xl bg-green-100 overflow-x-auto overflow-y-auto mt-3">
+<div id="chatbox" class="h-80 rounded-2xl bg-green-100 overflow-y-auto mt-3">
   <ul>
     <% number_of_messages = length(@messages) %>
     <%= if number_of_messages > 0 do %>
@@ -33,7 +33,7 @@
           <%= if sender != "" do %>
           <div class="message_header">
             <span class="message_username m-2 font-bold"><%= sender %></span>
-            <span class="message_datetime"><%= timestamp %></span>
+            <span id={"message-datetime-#{message_id}"} class="message_datetime" phx-hook="HandleTimestampTimezone"><%= timestamp %></span>
             <div class="message_settings_container">
               <ul class="menu">
                 <li>
@@ -57,7 +57,7 @@
           <% end %>
           <div class="message_content m-2">
             <%= cond do %>
-              <% is_deleted -> %> This message has been deleted.
+              <% is_deleted -> %> 🗑️ <i> This message has been deleted. </i> 🗑️
               <% true -> %> <%= text %>
             <% end %>
           </div>

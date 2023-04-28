@@ -46,6 +46,10 @@ emoji-picker {
     word-wrap: break-word;
 }
 
+.message_content i {
+    color: #9792E3; 
+}
+
 .message_header > .message_settings_container {
     float: right;    
 }

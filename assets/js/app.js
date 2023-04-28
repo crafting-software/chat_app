@@ -31,9 +31,9 @@ function extractMessageIdFromElementId(element) {
 
 function triggerMessageDeletionEvent(event, component) {
     if (event.relatedTarget != undefined) {
-        element_type = event.relatedTarget.localName 
-        element_action = event.relatedTarget.id.split(/-(.*)/s)[0]
-        if (element_type != undefined && element_type == "button" && element_action == "delete") {
+        elementType = event.relatedTarget.localName 
+        elementAction = event.relatedTarget.id.split(/-(.*)/s)[0]
+        if (elementType != undefined && elementType == "button" && elementAction == "delete") {
             component.pushEvent("delete_message", {"id": extractMessageIdFromElementId(event.srcElement)}) 
         }
     }
@@ -42,15 +42,15 @@ function triggerMessageDeletionEvent(event, component) {
 function addClickEventListenerOnMessageSettingsButton(component) {
     component.el.addEventListener("click", event => {
         event.target.focus()
-        element_id = "settings-" + extractMessageIdFromElementId(event.srcElement)
-        document.getElementById(element_id).toggleAttribute("hidden")
+        elementId = "settings-" + extractMessageIdFromElementId(event.srcElement)
+        document.getElementById(elementId).toggleAttribute("hidden")
     })
 }
 
 function addFocusOutEventListenerOnMessageSettingsButton(component) {
     component.el.addEventListener("focusout", event => {
-        element_id = "settings-" + extractMessageIdFromElementId(event.srcElement)
-        document.getElementById(element_id).setAttribute("hidden", "hidden")
+        elementId = "settings-" + extractMessageIdFromElementId(event.srcElement)
+        document.getElementById(elementId).setAttribute("hidden", "hidden")
         triggerMessageDeletionEvent(event, component)
     })
 }
@@ -58,17 +58,23 @@ function addFocusOutEventListenerOnMessageSettingsButton(component) {
 function addClickEventListenerOnMessageSettingsPopup(component) {
     component.el.addEventListener("click", event => {
         event.target.focus()
-        element_id = "settings-" + extractMessageIdFromElementId(event.srcElement)
-        document.getElementById(element_id).setAttribute("hidden", "hidden")
+        elementId = "settings-" + extractMessageIdFromElementId(event.srcElement)
+        document.getElementById(elementId).setAttribute("hidden", "hidden")
     })
 }
 
 function addPointerLeaveListenerOnMessageSettingsPopup(component) {
     component.el.addEventListener("pointerleave", event => {
-        message_id = event.srcElement.id.split(/-(.*)/s)[1]
-        document.getElementById("settings-" + message_id).setAttribute("hidden", "hidden")
-        document.getElementById("button-" + message_id).blur()
+        messageId = event.srcElement.id.split(/-(.*)/s)[1]
+        document.getElementById("settings-" + messageId).setAttribute("hidden", "hidden")
+        document.getElementById("button-" + messageId).blur()
     })
+}
+
+function adaptUtcTimestampToUserTimezone(component) {
+    dateElement = document.getElementById(component.el.id)
+    utcTimestamp = dateElement.innerHTML
+    dateElement.innerHTML = new Date(utcTimestamp).toLocaleString().replace(",", "")
 }
 
 Hooks.OpenMessageSettings = {
@@ -82,6 +88,16 @@ Hooks.CloseMessageSettings = {
     mounted() {
         addClickEventListenerOnMessageSettingsPopup(this)
         addPointerLeaveListenerOnMessageSettingsPopup(this)
+    }
+}
+
+Hooks.HandleTimestampTimezone = {
+    mounted() {
+        adaptUtcTimestampToUserTimezone(this)
+    },
+
+    updated() {
+        adaptUtcTimestampToUserTimezone(this)
     }
 }
 
