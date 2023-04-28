@@ -63,11 +63,6 @@ defmodule ChatAppWeb.HomeLive do
       </div>
     </div>
     """
-
-    # <div class="drawing">
-    #   <div class="draw" id="jos"></div>
-    #   <div class="draw" id="sus"></div>
-    # </div>
   end
 
   def handle_event(
