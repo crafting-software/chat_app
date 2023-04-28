@@ -101,6 +101,19 @@ Hooks.HandleTimestampTimezone = {
     }
 }
 
+Hooks.SendMessageOnEnterKeyPress = {
+    mounted() {
+        this.el.addEventListener("keydown", (event) => {
+            if (event.which === 13 && !event.shiftKey) {
+                textareaElement = document.getElementById("message_textarea") 
+                this.pushEvent("save_message",  {"text": textareaElement.value})
+                textareaElement.value = ""
+                textareaElement.blur()
+            } 
+        })
+    }
+}
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
     params: {_csrf_token: csrfToken},
@@ -133,10 +146,9 @@ window.onclick = event => {
 
 emojiButton.addEventListener("click", event => {
     emojiPopup.toggleAttribute("hidden")
-});
+})
 
 document.querySelector('emoji-picker').addEventListener('emoji-click', event => {
     textareaElement.value += event.detail.unicode
     emojiPopup.setAttribute("hidden", "hidden")
-});
-
+})

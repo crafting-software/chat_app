@@ -18,7 +18,7 @@ defmodule ChatAppWeb.SingleRoomLive do
     end
 
     [{room_id, room}] = :ets.lookup(:rooms, room_id)
-    {:ok, assign(socket, room_id: room_id, room: room, topic: topic, messages: [], users: room.current_participants)}
+    {:ok, assign(socket, room_id: room_id, room: room, topic: topic, messages: [], users: room.current_participants, current_message: "")}
   end
 
   def unmount(%{id: _liveview_id, room_id: room_id}, _reason) do
@@ -34,7 +34,7 @@ defmodule ChatAppWeb.SingleRoomLive do
 
   @impl true
   def handle_event("save_message", %{"text" => new_message_text}, socket) do
-    case Regex.match?(~r/^ *$/, new_message_text) do
+    case Regex.match?(~r/^\s*$/, new_message_text) do
       false ->
         broadcasted_message = {:add_messages, ChatApp.Message.new(new_message_text, "anon", socket.assigns.room_id)}
         PubSub.broadcast(ChatApp.PubSub, socket.assigns.topic, broadcasted_message)

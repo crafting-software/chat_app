@@ -46,6 +46,10 @@ emoji-picker {
     word-wrap: break-word;
 }
 
+.message_content pre {
+    font-family: Arial, Helvetica, sans-serif; 
+}
+
 .message_content i {
     color: #9792E3; 
 }

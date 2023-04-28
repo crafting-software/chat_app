@@ -58,7 +58,7 @@
           <div class="message_content m-2">
             <%= cond do %>
               <% is_deleted -> %> 🗑️ <i> This message has been deleted. </i> 🗑️
-              <% true -> %> <%= text %>
+              <% true -> %> <pre><%= text %></pre>
             <% end %>
           </div>
         </li>
@@ -69,7 +69,7 @@
 </div>
 
 <form action="#" phx-submit="save_message" class="my-2 grid grid-cols-6 gap-2">
-  <textarea name="text" id="message_textarea" maxlength="1000" cols="50" rows="2" class="rounded-2xl bg-green-100 border-0 focus:border focus:border-purple-800 col-span-5 resize-none"></textarea>
+  <textarea name="text" id="message_textarea" maxlength="1000" cols="50" rows="2" class="rounded-2xl bg-green-100 border-0 focus:border focus:border-purple-800 col-span-5 resize-none" phx-hook="SendMessageOnEnterKeyPress"></textarea>
   <button type="submit" class="rounded-2xl text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce float-right">Send</button>
 </form>
 
