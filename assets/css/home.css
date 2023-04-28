@@ -3,66 +3,70 @@
     display: grid;
     grid-template-columns: auto auto;
 }
-
-header.hd{
-    font-weight: 700;
-    color: #48435C;
+[data-phx-main] {
+  display: flex;
+  height: 100%;
 }
 
-input#roomcode{
-    margin-top: 50px;
-    width: 70%;
-    float: left;
+header.hd {
+  font-weight: 700;
+  color: #48435c;
+}
+
+input#roomcode {
+  margin-top: 50px;
+  width: 70%;
+  float: left;
 }
 
 input#roomcode::placeholder {
-    color: #48435C;
-    opacity: 0.3;
+  color: #48435c;
+  opacity: 0.3;
 }
 
 button#join {
-    float: right;
-    margin-top: 50px;
-    background: #9792E3;
-    color: #EDFFEC;
+  float: right;
+  margin-top: 50px;
+  background: #9792e3;
+  color: #edffec;
 }
 
-button#newroom{
-    float: right;
-    background: #9792E3;
-    color: #EDFFEC;
+button#newroom {
+  float: right;
+  background: #9792e3;
+  color: #edffec;
 }
 
-tbody#rooms{
-    height: 10px;
-    overflow-y: scroll;
-    color: #48435C;
+tbody#rooms {
+  height: 10px;
+  overflow-y: scroll;
+  color: #48435c;
 }
 
 .drawing {
-    position: absolute;
-    transform: translate(-50%,-50%);
-    color: #329325;
-  }
+  position: absolute;
+  transform: translate(-50%, -50%);
+  color: #329325;
+}
 
 .draw {
-    overflow: hidden;
-    width: 500px;
-    height: 500px;
-    background-color: #329325;
-    position: absolute;
-    border-radius: 30% 70% 70% 30% / 30% 71% 29% 70%;
+  overflow: hidden;
+  width: 500px;
+  height: 500px;
+  background-color: #329325;
+  position: absolute;
+  border-radius: 30% 70% 70% 30% / 30% 71% 29% 70%;
 }
 
-.draw#jos{
-    top: 50px;
-    left: -500px;
+.draw#jos {
+  top: 50px;
+  left: -500px;
 }
 
-.draw#sus{
-    width: 300px;
-    height: 300px;
-    transform: rotate(180deg);
-    top: -500px;
-    left: 840px;
+.draw#sus {
+  width: 300px;
+  height: 300px;
+  transform: rotate(180deg);
+  top: -500px;
+  left: 840px;
 }

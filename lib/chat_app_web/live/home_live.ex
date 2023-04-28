@@ -2,9 +2,27 @@ defmodule ChatAppWeb.HomeLive do
   use ChatAppWeb, :live_view
 
   def mount(_params, _session, socket) do
-    rooms = [%{id: 1, name: "room1", description: "capybara numero uno"}, %{id: 2, name: "room2", description: "capybara numero dos"}, %{id: 3, name: "room3", description: "capybara numero tres"}]
-    rooms = Enum.concat(rooms, [%{id: 4, name: "room4", description: "capybara numero cuatro"}, %{id: 5, name: "room5", description: "capybara numero cinco"}, %{id: 6, name: "room6", description: "capybara numero seis"}])
-    rooms = Enum.concat(rooms, [%{id: 7, name: "room7", description: "capybara numero siete"}, %{id: 8, name: "room8", description: "capybara numero ocho"}, %{id: 9, name: "room9", description: "capybara numero nueve"}, %{id: 10, name: "room10", description: "capybara numero diez"}])
+    rooms = [
+      %{id: 1, name: "room1", description: "capybara numero uno"},
+      %{id: 2, name: "room2", description: "capybara numero dos"},
+      %{id: 3, name: "room3", description: "capybara numero tres"}
+    ]
+
+    rooms =
+      Enum.concat(rooms, [
+        %{id: 4, name: "room4", description: "capybara numero cuatro"},
+        %{id: 5, name: "room5", description: "capybara numero cinco"},
+        %{id: 6, name: "room6", description: "capybara numero seis"}
+      ])
+
+    rooms =
+      Enum.concat(rooms, [
+        %{id: 7, name: "room7", description: "capybara numero siete"},
+        %{id: 8, name: "room8", description: "capybara numero ocho"},
+        %{id: 9, name: "room9", description: "capybara numero nueve"},
+        %{id: 10, name: "room10", description: "capybara numero diez"}
+      ])
+
     socket = assign(socket, :rooms, rooms)
     {:ok, socket}
   end
@@ -37,6 +55,7 @@ defmodule ChatAppWeb.HomeLive do
       <div class="draw" id="sus"></div>
     </div>
     """
+
     # <div class="drawing">
     #   <div class="draw" id="jos"></div>
     #   <div class="draw" id="sus"></div>
