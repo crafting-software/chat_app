@@ -25,16 +25,16 @@ import { Picker } from 'emoji-picker-element';
 
 let Hooks = {}
 
-function extractMessageIdFromElementId(element) {
-    return element.id.split(/-(.*)/s)[1]
+function extractActionAndMessageIdFromDomElementId(element) {
+    return element.id.split(/-(.*)/s)
 }
 
 function triggerMessageDeletionEvent(event, component) {
     if (event.relatedTarget != undefined) {
         elementType = event.relatedTarget.localName 
-        elementAction = event.relatedTarget.id.split(/-(.*)/s)[0]
+        elementAction = extractActionAndMessageIdFromDomElementId(event.relatedTarget)[0]
         if (elementType != undefined && elementType == "button" && elementAction == "delete") {
-            component.pushEvent("delete_message", {"id": extractMessageIdFromElementId(event.srcElement)}) 
+            component.pushEvent("delete_message", {"id": extractActionAndMessageIdFromDomElementId(event.srcElement)[1]}) 
         }
     }
 }
@@ -42,14 +42,14 @@ function triggerMessageDeletionEvent(event, component) {
 function addClickEventListenerOnMessageSettingsButton(component) {
     component.el.addEventListener("click", event => {
         event.target.focus()
-        elementId = "settings-" + extractMessageIdFromElementId(event.srcElement)
+        elementId = "settings-" + extractActionAndMessageIdFromDomElementId(event.srcElement)[1]
         document.getElementById(elementId).toggleAttribute("hidden")
     })
 }
 
 function addFocusOutEventListenerOnMessageSettingsButton(component) {
     component.el.addEventListener("focusout", event => {
-        elementId = "settings-" + extractMessageIdFromElementId(event.srcElement)
+        elementId = "settings-" + extractActionAndMessageIdFromDomElementId(event.srcElement)[1]
         document.getElementById(elementId).setAttribute("hidden", "hidden")
         triggerMessageDeletionEvent(event, component)
     })
@@ -58,14 +58,14 @@ function addFocusOutEventListenerOnMessageSettingsButton(component) {
 function addClickEventListenerOnMessageSettingsPopup(component) {
     component.el.addEventListener("click", event => {
         event.target.focus()
-        elementId = "settings-" + extractMessageIdFromElementId(event.srcElement)
+        elementId = "settings-" + extractActionAndMessageIdFromDomElementId(event.srcElement)[1]
         document.getElementById(elementId).setAttribute("hidden", "hidden")
     })
 }
 
 function addPointerLeaveListenerOnMessageSettingsPopup(component) {
     component.el.addEventListener("pointerleave", event => {
-        messageId = event.srcElement.id.split(/-(.*)/s)[1]
+        messageId = extractActionAndMessageIdFromDomElementId(event.srcElement)[1]
         document.getElementById("settings-" + messageId).setAttribute("hidden", "hidden")
         document.getElementById("button-" + messageId).blur()
     })

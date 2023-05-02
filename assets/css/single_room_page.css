@@ -2,6 +2,10 @@
     background: #EDFFEC;
 }
 
+input, textarea, button, select, a {
+    -webkit-tap-highlight-color: transparent;
+}
+
 .message {
     padding: 5px;
 }
@@ -23,14 +27,16 @@ emoji-picker {
     --emoji-size: 1rem;
     --border-size: 5px;
     --border-radius: 5px;
-    --background: #d1fae5;
+    --background: #dcfce7;
 }
 
 #emoji_popup {
     position: absolute;
-    top: -1500%;
-    left: 5%;
+    bottom: 0px;
+    left: 35px;
     z-index: 10;
+    animation-duration: 0.1s;
+    animation-name: zoom;
 }
 
 #chatbox * {
@@ -96,5 +102,36 @@ emoji-picker {
     border-bottom-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 0px;
+    animation-duration: 0.1s;
+    animation-name: zoom;
 }
 
+.message_settings_container {
+    display: none;
+}
+
+.message:hover .message_settings_container {
+    display: block;
+}
+ 
+@keyframes zoom {
+    0% {
+      transform: scale(0.1, 0.1);
+    }
+
+    25% {
+      transform: scale(0.25, 0.25);
+    }
+
+    50% {
+      transform: scale(0.5, 0.5);
+    }
+
+    75% {
+      transform: scale(0.75, 0.75);
+    }
+
+    100% {
+      transform: scale(1, 1);
+    }
+}
