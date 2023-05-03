@@ -7,13 +7,14 @@ defmodule ChatAppWeb.SingleRoomLive do
   @impl true
   def mount(%{"id" => room_id}, _session, socket) do
     topic = "room:" <> room_id
-
+    username = Faker.Person.name()
     if connected?(socket) do
       Logger.info("Liveview's second mount() call")
-      LiveviewMonitor.monitor(self(), __MODULE__, %{id: socket.id, room_id: room_id})
+      LiveviewMonitor.monitor(self(), __MODULE__, %{id: socket.id, room_id: room_id, username: username, users_typing: %{}})
       PubSub.subscribe(ChatApp.PubSub, topic)
+      PubSub.subscribe(ChatApp.PubSub, "users_typing")
 
-      message = ChatApp.Contexts.Messages.create_message_as_map("anon joined the chat", "", room_id)
+      message = ChatApp.Contexts.Messages.create_message_as_map("#{username} joined the chat", "", room_id)
       ChatApp.Contexts.Messages.insert_message(message)
       PubSub.broadcast(ChatApp.PubSub, topic, :refresh_messages)
     else
@@ -28,12 +29,14 @@ defmodule ChatAppWeb.SingleRoomLive do
        room: room,
        topic: topic,
        messages: ChatApp.Contexts.Rooms.get_room_messages(room_id),
-       users: ChatApp.Contexts.Rooms.get_room_users(room_id)
+       users: ChatApp.Contexts.Rooms.get_room_users(room_id),
+       username: username,
+       users_typing: %{}
      )}
   end
 
-  def unmount(%{id: liveview_id, room_id: room_id}, _reason) do
-    message = ChatApp.Contexts.Messages.create_message_as_map("anon left the chat", "", room_id)
+  def unmount(%{id: liveview_id, room_id: room_id, username: username}, _reason) do
+    message = ChatApp.Contexts.Messages.create_message_as_map("#{username} left the chat", "", room_id)
     ChatApp.Contexts.Messages.insert_message(message)
     PubSub.broadcast(ChatApp.PubSub, "room:" <> room_id, :refresh_messages)
 
@@ -57,7 +60,6 @@ defmodule ChatAppWeb.SingleRoomLive do
         ChatApp.Contexts.Messages.insert_message(message)
         PubSub.broadcast(ChatApp.PubSub, socket.assigns.topic, :refresh_messages)
         {:noreply, socket}
-
       _ ->
         {:noreply, socket}
     end
@@ -69,6 +71,18 @@ defmodule ChatAppWeb.SingleRoomLive do
 
     broadcasted_message = {:delete_messages, message_id_from_client}
     PubSub.broadcast(ChatApp.PubSub, socket.assigns.topic, broadcasted_message)
+    {:noreply, socket}
+  end
+
+  def handle_event("user_typing_indication", _, socket) do
+    Logger.info("#{socket.assigns.username} is typing...")
+    PubSub.broadcast(ChatApp.PubSub, "users_typing", {:users_typing, socket.assigns.username})
+    {:noreply, socket}
+  end
+
+  def handle_event("user_typing_indication_ended", _, socket) do
+    Logger.info("#{socket.assigns.username} is not typing anymore.")
+    PubSub.broadcast(ChatApp.PubSub, "users_typing", {:users_typing_end, socket.assigns.username})
     {:noreply, socket}
   end
 
@@ -91,4 +105,19 @@ defmodule ChatAppWeb.SingleRoomLive do
         end)
      )}
   end
+
+  def handle_info({:users_typing, username}, socket) do
+    cond do
+      socket.assigns.username == username -> {:noreply, socket}
+      true -> {:noreply, assign(socket, users_typing: Map.put(socket.assigns.users_typing, username, true))}
+    end
+  end
+
+  def handle_info({:users_typing_end, username}, socket) do
+    cond do
+      socket.assigns.username == username -> {:noreply, socket}
+      true -> {:noreply, assign(socket, users_typing: Map.put(socket.assigns.users_typing, username, false))}
+    end
+  end
+
 end

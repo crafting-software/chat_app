@@ -30,6 +30,7 @@
   </div>
 </.header>
 
+<div id="chatbox_container" class="rounded-2xl bg-green-100">
 <div id="chatbox" class="h-80 rounded-2xl bg-green-100 overflow-y-auto mt-3">
   <ul>
     <% number_of_messages = length(@messages) %>
@@ -103,30 +104,37 @@
               <% true -> %>
                 <pre><%= message.content %></pre>
             <% end %>
-          </div>
-        </li>
+            </div>
+          </li>
+        <% end %>
       <% end %>
+    </ul>
+  </div>
+  <div id="chatbox_anchor">
+    <p> <%
+      actual_users_typing = Map.filter(@users_typing, fn {_key, value} -> value == true end)
+      number_of_users_typing = Map.values(actual_users_typing) |> length()
+      users_enumeration_string = Map.keys(actual_users_typing) |> Enum.join(",")
+      correct_present_continuous_verb = if number_of_users_typing == 1, do: "is", else: "are"
+      cond do
+        number_of_users_typing > 0 and number_of_users_typing <= 5 ->
+          IO.puts(users_enumeration_string <> " " <> correct_present_continuous_verb <> " typing...")
+        number_of_users_typing > 5 -> "Many users are typing..."
+        true -> ""
+      end
+    %> </p>
+    <%= if number_of_users_typing == 1 do %>
+      <%= users_enumeration_string <> " is typing..." %>
     <% end %>
-  </ul>
-  <div id="chatbox_anchor"></div>
+    <%= if number_of_users_typing > 1 do %>
+      <%= users_enumeration_string <> " are typing..." %>
+    <% end %>
+  </div>
 </div>
 
 <form action="#" phx-submit="save_message" class="my-2 grid grid-cols-6 gap-2">
-  <textarea
-    name="text"
-    id="message_textarea"
-    maxlength="1000"
-    cols="50"
-    rows="2"
-    class="rounded-2xl bg-green-100 border-0 focus:border focus:border-purple-800 col-span-5 resize-none"
-    phx-hook="SendMessageOnEnterKeyPress"
-  ></textarea>
-  <button
-    type="submit"
-    class="rounded-2xl text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce float-right"
-  >
-    Send
-  </button>
+  <textarea name="text" id="message_textarea" maxlength="1000" cols="50" rows="2" class="rounded-2xl bg-green-100 border-0 focus:border focus:border-purple-800 col-span-5 resize-none" phx-hook="CaptureKeyPress"></textarea>
+  <button type="submit" class="rounded-2xl text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce float-right">Send</button>
 </form>
 
 <div id="emoji_utils_container" class="my-2 gap-2">
