@@ -17,7 +17,7 @@ defmodule ChatApp.Application do
       # Start Finch
       {Finch, name: ChatApp.Finch},
       # Start the Endpoint (http/https)
-      ChatAppWeb.Endpoint,
+      ChatAppWeb.Endpoint
       # Start a worker by calling: ChatApp.Worker.start_link(arg)
       # {ChatApp.Worker, arg}
     ]
