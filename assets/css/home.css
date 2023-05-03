@@ -38,8 +38,6 @@ button#newroom {
 }
 
 tbody#rooms {
-  height: 10px;
-  overflow-y: scroll;
   color: #48435c;
 }
 
@@ -58,15 +56,15 @@ tbody#rooms {
   border-radius: 30% 70% 70% 30% / 30% 71% 29% 70%;
 }
 
-.draw#jos {
-  top: 50px;
-  left: -500px;
+.draw#downleft {
+  top: 350px;
+  left: -650px;
 }
 
-.draw#sus {
+.draw#upright {
   width: 300px;
   height: 300px;
   transform: rotate(180deg);
-  top: -500px;
-  left: 840px;
+  top: -175px;
+  left: 850px;
 }

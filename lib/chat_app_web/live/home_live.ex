@@ -33,17 +33,18 @@ defmodule ChatAppWeb.HomeLive do
       <.header class="hd">Public Rooms</.header>
       <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
     </div>
-
-    <.table id="rooms" rows={@rooms}>
-      <:col :let={room}><%= room.id %></:col>
-      <:col :let={room}><%= room.name %></:col>
-      <:col :let={room}><%= room.description %></:col>
-      <:action>
-        <.link method="join" class="join_link">
-          Join
-        </.link>
-      </:action>
-    </.table>
+      <div class="overflow-y-auto w-full mt-8">
+        <.table id="rooms" rows={@rooms}>
+          <:col :let={room}><%= room.id %></:col>
+          <:col :let={room}><%= room.name %></:col>
+          <:col :let={room}><%= room.description %></:col>
+          <:action>
+            <.link method="join" class="join_link">
+              Join
+            </.link>
+          </:action>
+        </.table>
+      </div>
 
     <form class="jn">
       <.input id="roomcode" name="roomcode" value="" placeholder="room code here" />
@@ -53,6 +54,11 @@ defmodule ChatAppWeb.HomeLive do
     <div class="drawing">
       <div class="draw" id="jos"></div>
       <div class="draw" id="sus"></div>
+    </div>
+
+    <div class="drawing">
+      <div class="draw" id="downleft"></div>
+      <div class="draw" id="upright"></div>
     </div>
     """
 

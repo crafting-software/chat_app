@@ -441,8 +441,8 @@ defmodule ChatAppWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
-      <table class="w-[40rem] mt-11 sm:w-full">
+    <div class="overflow-y-auto w-full px-4 sm:overflow-auto sm:px-0">
+      <table class="w-full">
         <thead class="text-sm text-left leading-6 text-zinc-500">
           <tr>
             <th :for={col <- @col} class="p-0 pr-6 pb-4 font-normal"><%= col[:label] %></th>
@@ -452,24 +452,20 @@ defmodule ChatAppWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="max-h-16 overflow-y-auto relative divide-y divide-zinc-100 border-zinc-200 text-sm leading-6 text-zinc-700"
+          class="w-full overflow-y-auto relative divide-y divide-zinc-100 border-zinc-200 text-sm leading-6 text-zinc-700"
         >
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:text-zinc-50">
+          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group-hover:bg-forestgreen group-hover:px-4 group-hover:rounded-3xl group hover:text-zinc-50">
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
-              class={["relative p-0", @row_click && "hover:cursor-pointer"]}
+              class={["relative p-0", @row_click && "hover:cursor-pointer group-hover:bg-forestgreen ", i == 0 && "font-semibold"]}
             >
-              <div class="block py-4 pr-6">
-                <span class="absolute -inset-y-px right-0 -left-4 sm:rounded-l-xl" />
-                <span class={["relative text-zinc-900", i == 0 && "font-semibold"]}>
+              <div class={["relative py-4 group-hover:bg-forestgreen group-hover:text-zinc-50", i==0 && "pl-4 rounded-l-xl", i==2 && "pr-4 rounded-r-xl"]}>
                   <%= render_slot(col, @row_item.(row)) %>
-                </span>
               </div>
             </td>
-            <td :if={@action != []} class="relative w-14 p-0">
+            <td :if={@action != []} class="relative p-0">
               <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
-                <span class="absolute -inset-y-px -right-4 left-0 sm:rounded-r-xl " />
                 <span
                   :for={action <- @action}
                   class="relative ml-4 font-semibold leading-6 text-zinc-900"
