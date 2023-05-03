@@ -1,7 +1,5 @@
-function delay(time) {
-    return new Promise(resolve => setTimeout(resolve, time))
-}
-  
+import { delay } from "../utils"
+ 
 const CaptureKeyPress = {
     mounted() {
         this.el.addEventListener("keydown", event => {

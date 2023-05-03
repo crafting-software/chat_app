@@ -2,4 +2,8 @@ function extractActionAndMessageIdFromDomElementId(element) {
     return element.id.split(/-(.*)/s)
 }
 
-export {extractActionAndMessageIdFromDomElementId}
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time))
+}
+
+export {extractActionAndMessageIdFromDomElementId, delay}

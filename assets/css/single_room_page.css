@@ -36,7 +36,7 @@ emoji-picker {
     left: 35px;
     z-index: 10;
     animation-duration: 0.1s;
-    animation-name: zoom;
+    animation-name: zoom-in;
 }
 
 #chatbox_container {
@@ -46,9 +46,16 @@ emoji-picker {
 #chatbox_anchor {
     height: 20px;
     font-size: 8px;
-    margin-left: 16px;
-    bottom: -5px;
+    padding-left: 16px;
+    bottom: -30px;
     position: sticky;
+    animation-direction: normal;
+    animation-duration: 1s;
+    border-radius: 10px;
+}
+
+.opened_typing_indicator {
+    animation-name: slide-up;
 }
 
 pre {
@@ -110,7 +117,7 @@ pre {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 0px;
     animation-duration: 0.1s;
-    animation-name: zoom;
+    animation-name: zoom-in;
 }
 
 .message_settings_container {
@@ -121,7 +128,7 @@ pre {
     display: block;
 }
  
-@keyframes zoom {
+@keyframes zoom-in {
     0% {
       transform: scale(0.1, 0.1);
     }
@@ -140,5 +147,14 @@ pre {
 
     100% {
       transform: scale(1, 1);
+    }
+}
+
+@keyframes slide-up {
+    from {
+        transform: translateY(25%);
+    }
+    to {
+        transform: translateY(0%);
     }
 }

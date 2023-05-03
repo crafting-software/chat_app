@@ -23,6 +23,7 @@ import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import { Picker } from 'emoji-picker-element'
 import { Hooks } from './hooks'
+import { delay } from "./utils"
 
 import "./room-modal"
 
@@ -40,8 +41,15 @@ window.addEventListener("phx:new_message", event => {
     console.log("New message event")
     var chatbox = document.getElementById("chatbox")
     chatbox.scrollTop = chatbox.scrollHeight
+})
+window.addEventListener("phx:animate_typing_indicator", event => {
+    console.log("Typing indicator animation event")
+    console.log(event)
     var chatbox_anchor = document.getElementById("chatbox_anchor")
-    chatbox_anchor.style.top = "0px";
+    if (event.detail.status) {
+        chatbox_anchor.classList = []
+        chatbox_anchor.classList.add("opened_typing_indicator")
+    }
 })
 
 // connect if there are any LiveViews on the page

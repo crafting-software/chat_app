@@ -1,5 +1,6 @@
 defmodule ChatAppWeb.SingleRoomLive do
   use ChatAppWeb, :live_view
+  import Bitwise
   alias Phoenix.PubSub
   alias ChatApp.LiveviewMonitor
   require Logger
@@ -76,13 +77,13 @@ defmodule ChatAppWeb.SingleRoomLive do
 
   def handle_event("user_typing_indication", _, socket) do
     Logger.info("#{socket.assigns.username} is typing...")
-    PubSub.broadcast(ChatApp.PubSub, "users_typing", {:users_typing, socket.assigns.username})
+    PubSub.broadcast(ChatApp.PubSub, "users_typing", {:users_typing, socket.assigns.username, true})
     {:noreply, socket}
   end
 
   def handle_event("user_typing_indication_ended", _, socket) do
     Logger.info("#{socket.assigns.username} is not typing anymore.")
-    PubSub.broadcast(ChatApp.PubSub, "users_typing", {:users_typing_end, socket.assigns.username})
+    PubSub.broadcast(ChatApp.PubSub, "users_typing", {:users_typing, socket.assigns.username, false})
     {:noreply, socket}
   end
 
@@ -106,17 +107,21 @@ defmodule ChatAppWeb.SingleRoomLive do
      )}
   end
 
-  def handle_info({:users_typing, username}, socket) do
+  def handle_info({:users_typing, username, status}, socket) do
+    bool_as_int = fn x -> if x, do: 1, else: 0 end
+    int_as_bool = fn x -> if x == 0, do: false, else: true end
     cond do
       socket.assigns.username == username -> {:noreply, socket}
-      true -> {:noreply, assign(socket, users_typing: Map.put(socket.assigns.users_typing, username, true))}
-    end
-  end
-
-  def handle_info({:users_typing_end, username}, socket) do
-    cond do
-      socket.assigns.username == username -> {:noreply, socket}
-      true -> {:noreply, assign(socket, users_typing: Map.put(socket.assigns.users_typing, username, false))}
+      socket.assigns.username != username ->
+        current_status = Map.get(socket.assigns.users_typing, username) |> bool_as_int.()
+        updated_socket = assign(socket, users_typing: Map.put(socket.assigns.users_typing, username, status))
+        sent_status = bool_as_int.(status)
+        animation_condition = Bitwise.bxor(current_status, sent_status) |> int_as_bool.()
+        if animation_condition do
+          {:noreply, push_event(updated_socket, "animate_typing_indicator", %{id: "chatbox_anchor", status: status})}
+        else
+          {:noreply, updated_socket}
+        end
     end
   end
 

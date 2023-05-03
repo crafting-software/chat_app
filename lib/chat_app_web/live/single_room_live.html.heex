@@ -110,25 +110,23 @@
       <% end %>
     </ul>
   </div>
+  <%
+    actual_users_typing = Map.filter(@users_typing, fn {_key, value} -> value == true end)
+    number_of_users_typing = Map.values(actual_users_typing) |> length()
+    users_enumeration_string = Map.keys(actual_users_typing) |> Enum.join(",")
+    correct_present_continuous_verb = if number_of_users_typing == 1, do: "is", else: "are"
+  %>
   <div id="chatbox_anchor">
-    <p> <%
-      actual_users_typing = Map.filter(@users_typing, fn {_key, value} -> value == true end)
-      number_of_users_typing = Map.values(actual_users_typing) |> length()
-      users_enumeration_string = Map.keys(actual_users_typing) |> Enum.join(",")
-      correct_present_continuous_verb = if number_of_users_typing == 1, do: "is", else: "are"
+    <p>
+    <%=
       cond do
         number_of_users_typing > 0 and number_of_users_typing <= 5 ->
-          IO.puts(users_enumeration_string <> " " <> correct_present_continuous_verb <> " typing...")
+          users_enumeration_string <> " " <> correct_present_continuous_verb <> " typing..."
         number_of_users_typing > 5 -> "Many users are typing..."
         true -> ""
       end
-    %> </p>
-    <%= if number_of_users_typing == 1 do %>
-      <%= users_enumeration_string <> " is typing..." %>
-    <% end %>
-    <%= if number_of_users_typing > 1 do %>
-      <%= users_enumeration_string <> " are typing..." %>
-    <% end %>
+    %>
+    </p>
   </div>
 </div>
 
