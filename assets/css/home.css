@@ -37,6 +37,10 @@ button#newroom {
   color: #edffec;
 }
 
+tbody#rooms {
+  color: #48435c;
+}
+
 #rooms{
   color: #48435C;
   height: 10px;
