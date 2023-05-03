@@ -8,7 +8,6 @@
 import Config
 
 config :chat_app,
-  database_module: ChatApp.ETSDatabase,
   ecto_repos: [ChatApp.Repo]
 
 # Configures the endpoint
