@@ -6,24 +6,12 @@ defmodule ChatApp.Application do
   use Application
 
   @impl true
-  def start_phase(:initialize_ets_tables, :normal, _) do
-    ChatApp.ETSDatabase.parse_tables()
-    |> Enum.map(fn {name, properties} ->
-      :ets.new(name, properties)
-    end)
-
-    :ok
-  end
-
-  @impl true
   def start(_type, _args) do
-    database_module = Application.fetch_env!(:chat_app, :database_module)
-
     children = [
       # Start the Telemetry supervisor
       ChatAppWeb.Telemetry,
       # Start the Ecto repository
-      # ChatApp.Repo,
+      ChatApp.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: ChatApp.PubSub},
       # Start Finch
@@ -32,7 +20,6 @@ defmodule ChatApp.Application do
       ChatAppWeb.Endpoint,
       # Start a worker by calling: ChatApp.Worker.start_link(arg)
       # {ChatApp.Worker, arg}
-      {ChatApp.DatabaseManager, [database_module]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

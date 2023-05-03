@@ -1,70 +1,22 @@
 defmodule ChatApp.Contexts.Messages do
-  @adapter ChatApp.DatabaseAdapter
   alias ChatApp.Structs.Message
+  alias ChatApp.Repo
 
-  def to_record(%ChatApp.Structs.Message{
-        id: id,
-        sender: sender,
-        content: content,
-        room_id: room_id,
-        timestamp: timestamp,
-        is_deleted: is_deleted,
-        is_edited: is_edited
-      }) do
-    {id, sender, content, room_id, timestamp, is_deleted, is_edited}
+  def list_messages(), do: Repo.all(Message)
+
+  def get_message(id), do: Repo.get(Message, id)
+
+  def update_message(%Message{} = message, attrs) do
+    message
+    |> Message.changeset(attrs)
+    |> Repo.update()
   end
 
-  def from_record([{id, sender, content, room_id, timestamp, is_deleted, is_edited}]) do
-    %ChatApp.Structs.Message{
-      id: id,
-      sender: sender,
-      content: content,
-      room_id: room_id,
-      timestamp: timestamp,
-      is_deleted: is_deleted,
-      is_edited: is_edited
-    }
+  def insert_message(attrs \\ %{}) do
+    %Message{}
+    |> Message.changeset(attrs)
+    |> Repo.insert()
   end
 
-  def list_messages(), do: @adapter.get_all(Message) |> Enum.map(fn row -> from_record([row]) end)
-
-  def get_message(id), do: @adapter.get(Message, id) |> from_record()
-
-  def update_message(
-        %ChatApp.Structs.Message{
-          id: _,
-          sender: _,
-          content: _,
-          room_id: _,
-          timestamp: _,
-          is_deleted: _,
-          is_edited: _
-        } = message
-      ) do
-    case @adapter.update(Message, to_record(message)) do
-      true -> {:ok, message}
-      _ -> {:error, "An error has occured."}
-    end
-  end
-
-  def insert_message(
-        %ChatApp.Structs.Message{
-          id: _,
-          sender: _,
-          content: _,
-          room_id: _,
-          timestamp: _,
-          is_deleted: _,
-          is_edited: _
-        } = message
-      ) do
-    case @adapter.insert(Message, to_record(message)) do
-      true -> {:ok, message}
-      _ -> {:error, "An error has occured."}
-    end
-  end
-
-  def delete_message(message), do: @adapter.delete(Message, message)
-
-  def message_exists?(id), do: @adapter.exists?(Message, id)
+  def delete_message(%Message{} = message), do: Repo.delete(message)
 end
