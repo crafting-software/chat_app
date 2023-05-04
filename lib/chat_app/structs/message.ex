@@ -8,9 +8,11 @@ defmodule ChatApp.Structs.Message do
   schema "messages" do
     field(:sender, :string)
     field(:content, :string)
+
     belongs_to :room, ChatApp.Structs.Room,
       foreign_key: :room_id,
       references: :room_id
+
     field(:timestamp, :utc_datetime)
     field(:is_deleted, :boolean)
     field(:is_edited, :boolean)
