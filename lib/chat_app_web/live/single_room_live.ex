@@ -11,7 +11,7 @@ defmodule ChatAppWeb.SingleRoomLive do
     username = Faker.Person.name()
     if connected?(socket) do
       Logger.info("Liveview's second mount() call")
-      LiveviewMonitor.monitor(self(), __MODULE__, %{id: socket.id, room_id: room_id, username: username, users_typing: %{}})
+      LiveviewMonitor.monitor!(self(), __MODULE__, %{id: socket.id, room_id: room_id, username: username, users_typing: %{}})
       PubSub.subscribe(ChatApp.PubSub, topic)
       PubSub.subscribe(ChatApp.PubSub, "users_typing")
 

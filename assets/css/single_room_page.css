@@ -4,6 +4,7 @@
 
 input, textarea, button, select, a {
     -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 .message {
@@ -40,6 +41,10 @@ emoji-picker {
 }
 
 #chatbox_container {
+    position: relative;
+}
+
+#chatbox {
     position: relative;
 }
 
@@ -127,10 +132,34 @@ pre {
 .message:hover .message_settings_container {
     display: block;
 }
+
+.arrow_symbol {
+    font-size: 30px;
+}
+
+#message_notifier_button {
+    bottom: 40%;
+    left: 50%;
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    animation-direction: normal;
+    animation-duration: 0.1s;
+    z-index: 100;
+}
+
+.message_notifier_button_appearance {
+    animation-name: zoom-in;
+}
+
+.message_notifier_button_disappearance {
+    animation-name: slide-up;
+    animation-direction: reverse;
+}
  
 @keyframes zoom-in {
     0% {
-      transform: scale(0.1, 0.1);
+      transform: scale(0.01, 0.01);
     }
 
     25% {
@@ -158,3 +187,4 @@ pre {
         transform: translateY(0%);
     }
 }
+
