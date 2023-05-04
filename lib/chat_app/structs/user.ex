@@ -1,20 +1,14 @@
-defmodule ChatApp.Structs.Message do
+defmodule ChatApp.Structs.User do
   use Ecto.Schema
   import Ecto.Changeset
 
   @primary_key {:id, Ecto.UUID, autogenerate: true}
   @foreign_key_type Ecto.UUID
 
-  schema "messages" do
-    field(:sender, :string)
-    field(:content, :string)
+  schema "users" do
+    field(:username, :string)
 
     belongs_to(:room, ChatApp.Structs.Room, references: :id)
-
-    field(:timestamp, :utc_datetime)
-    field(:is_deleted, :boolean)
-    field(:is_edited, :boolean)
-    field(:seq_number, :integer)
 
     timestamps()
   end
