@@ -2,7 +2,7 @@ defmodule ChatApp.Structs.Message do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:message_id, Ecto.UUID, autogenerate: true}
+  @primary_key {:id, Ecto.UUID, autogenerate: true}
   @foreign_key_type Ecto.UUID
 
   schema "messages" do
@@ -10,8 +10,7 @@ defmodule ChatApp.Structs.Message do
     field(:content, :string)
 
     belongs_to :room, ChatApp.Structs.Room,
-      foreign_key: :room_id,
-      references: :room_id
+      references: :id
 
     field(:timestamp, :utc_datetime)
     field(:is_deleted, :boolean)
