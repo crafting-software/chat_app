@@ -3,6 +3,7 @@ defmodule ChatApp.Structs.Room do
   import Ecto.Changeset
 
   @primary_key {:room_id, Ecto.UUID, autogenerate: true}
+  @foreign_key_type Ecto.UUID
 
   schema "rooms" do
     field(:room_name, :string)
@@ -12,6 +13,10 @@ defmodule ChatApp.Structs.Room do
     field(:is_private, :boolean)
     field(:password, :string)
     field(:expiry_timestamp, :utc_datetime)
+
+    has_many :messages, ChatApp.Structs.Message,
+    foreign_key: :room_id,
+    references: :room_id
 
     timestamps()
   end
