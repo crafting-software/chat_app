@@ -4,7 +4,9 @@ defmodule ChatApp.Contexts.Rooms do
 
   def list_rooms(), do: Repo.all(Room) |> Repo.preload([:messages])
 
-  def get_room(id), do: Repo.get(Room, id) |> Repo.preload([:messages])
+  def get_room(id), do: Repo.get(Room, id)
+
+  def get_room_messages(id), do: Repo.get(Room, id) |> Repo.preload([:messages])
 
   def update_room(%Room{} = room, attrs) do
     room

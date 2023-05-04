@@ -14,8 +14,7 @@ defmodule ChatApp.Structs.Room do
     field(:password, :string)
     field(:expiry_timestamp, :utc_datetime)
 
-    has_many :messages, ChatApp.Structs.Message,
-      references: :id
+    has_many :messages, ChatApp.Structs.Message, references: :id
 
     timestamps()
   end

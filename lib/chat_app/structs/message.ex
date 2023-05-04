@@ -9,8 +9,7 @@ defmodule ChatApp.Structs.Message do
     field(:sender, :string)
     field(:content, :string)
 
-    belongs_to :room, ChatApp.Structs.Room,
-      references: :id
+    belongs_to :room, ChatApp.Structs.Room, references: :id
 
     field(:timestamp, :utc_datetime)
     field(:is_deleted, :boolean)

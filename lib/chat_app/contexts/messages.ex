@@ -2,8 +2,6 @@ defmodule ChatApp.Contexts.Messages do
   alias ChatApp.Structs.Message
   alias ChatApp.Repo
 
-  def list_messages(), do: Repo.all(Message)
-
   def get_message(id), do: Repo.get(Message, id)
 
   def update_message(%Message{} = message, attrs) do
