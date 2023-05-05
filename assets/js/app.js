@@ -38,7 +38,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 
 const chatbox = document.getElementById("chatbox")
-let messageNotifierButton = document.getElementById("message_notifier_button")
+const messageNotifierButton = document.getElementById("message_notifier_button")
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 window.addEventListener("phx:new_message", event => {
@@ -51,7 +51,7 @@ window.addEventListener("phx:new_message", event => {
 window.addEventListener("phx:animate_typing_indicator", event => {
     console.log("Typing indicator animation event")
     console.log(event)
-    var chatbox_anchor = document.getElementById("chatbox_anchor")
+    const chatbox_anchor = document.getElementById("chatbox_anchor")
     if (event.detail.status) {
         chatbox_anchor.classList = []
         chatbox_anchor.classList.add("opened_typing_indicator")
@@ -88,9 +88,9 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
-let textareaElement = document.getElementById("message_textarea")
-let emojiButton = document.getElementById("emoji_button")
-let emojiPopup = document.querySelector('emoji-picker')
+const textareaElement = document.getElementById("message_textarea")
+const emojiButton = document.getElementById("emoji_button")
+const emojiPopup = document.querySelector('emoji-picker')
 
 window.onclick = event => {
     ids = ["emoji_button", "emoji_popup"]
@@ -110,5 +110,8 @@ document.querySelector('emoji-picker').addEventListener('emoji-click', event => 
 messageNotifierButton.addEventListener("click", () => {
     console.log("arrow button clicked")
     const messageElementHeight = document.querySelector(".message").offsetHeight
-    chatbox.scrollTop = chatbox.scrollHeight - messageElementHeight
+    chatbox.scroll({
+        top: chatbox.scrollHeight - messageElementHeight,
+        behavior: "smooth"
+    })
 })
