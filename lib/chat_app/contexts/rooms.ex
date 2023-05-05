@@ -2,7 +2,7 @@ defmodule ChatApp.Contexts.Rooms do
   alias ChatApp.Structs.Room
   alias ChatApp.Repo
 
-  def list_rooms(), do: Repo.all(Room) |> Repo.preload([:messages]) |> Repo.preload([:users])
+  def list_rooms(), do: Repo.all(Room) |> Repo.preload([:messages, :users])
 
   def get_room(id), do: Repo.get(Room, id)
 
