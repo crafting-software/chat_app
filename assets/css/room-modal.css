@@ -1,0 +1,47 @@
+#new-room-modal-container {
+  background-color: #edffec;
+}
+
+#new-room-modal-title {
+  font-size: 32px;
+  text-align: center;
+}
+
+#new-room-button{
+    float:right;
+    background-color:#9792e3;
+}
+
+#new-room-button:hover{
+    background-color: #8d88d3;
+}
+
+.room-modal-form-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.room-modal-input-group {
+  flex-basis: 100%;
+  margin-bottom: 10px;
+}
+
+.room-modal-input-group input {
+  width: 100%;
+  margin-left: 10px;
+}
+
+.room-modal-checkbox-group {
+  flex-basis: 100%;
+  margin-bottom: 10px;
+}
+
+.room-modal-button-group button {
+  background-color: #9792e3;
+}
+
+.room-modal-button-group button:hover {
+  background-color: #8d88d3;
+}

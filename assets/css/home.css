@@ -1,5 +1,6 @@
 .hd{
-    display: inline-block;
+    display: grid;
+    grid-template-columns: auto auto;
 }
 
 header.hd{
@@ -21,11 +22,6 @@ input#roomcode::placeholder {
 button#join {
     float: right;
     margin-top: 50px;
-    background: #9792E3;
-}
-
-button#newroom{
-    float: right;
     background: #9792E3;
 }
 

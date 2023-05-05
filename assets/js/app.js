@@ -24,6 +24,8 @@ import topbar from "../vendor/topbar"
 import { Picker } from 'emoji-picker-element'
 import { Hooks } from 'hooks'
 
+import "./room-modal.js"
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
     params: {_csrf_token: csrfToken},
