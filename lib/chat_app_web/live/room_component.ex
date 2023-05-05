@@ -23,12 +23,12 @@ defmodule ChatAppWeb.RoomComponent do
         <input type="text" id="room-name" name="room_name" required />
         </div>
         <div class="room-modal-input-group">
-        <label for="user-name">User Name:</label>
-        <input type="text" id="user-name" name="user_name" required />
+        <label for="owner-name">User Name:</label>
+        <input type="text" id="owner-name" name="owner_name" required />
         </div>
         <div class="room-modal-checkbox-group">
-        <label for="is_public">Private Room:</label>
-        <input type="checkbox" id="is_public" name="is_public" />
+        <label for="is_private">Private Room:</label>
+        <input type="checkbox" id="is_private" name="is_private" />
         </div>
         <div class="room-modal-input-group">
         <label for="password" id="password-label" class="hidden">Password:</label>
