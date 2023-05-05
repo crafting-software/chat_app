@@ -20,7 +20,7 @@ defmodule ChatAppWeb.HomeLive do
       <:col :let={room}><%= room.name %></:col>
       <:col :let={room}><%= room.description %></:col>
       <:action>
-        <.link method="join">
+        <.link method="join" class="join_link">
           Join
         </.link>
       </:action>

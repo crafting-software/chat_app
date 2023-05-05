@@ -11,13 +11,15 @@ defmodule ChatApp.Application do
       # Start the Telemetry supervisor
       ChatAppWeb.Telemetry,
       # Start the Ecto repository
-      #ChatApp.Repo,
+      ChatApp.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: ChatApp.PubSub},
       # Start Finch
       {Finch, name: ChatApp.Finch},
       # Start the Endpoint (http/https)
-      ChatAppWeb.Endpoint
+      ChatAppWeb.Endpoint,
+      # Start the Liveview monitor which will support the room disconnect message broadcast feature.
+      {ChatApp.LiveviewMonitor, []}
       # Start a worker by calling: ChatApp.Worker.start_link(arg)
       # {ChatApp.Worker, arg}
     ]
