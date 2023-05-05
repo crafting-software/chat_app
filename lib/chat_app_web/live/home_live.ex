@@ -29,11 +29,13 @@ defmodule ChatAppWeb.HomeLive do
 
   def render(assigns) do
     ~H"""
-    <div class="hd">
-      <.header class="hd">Public Rooms</.header>
-      <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
-    </div>
-      <div class="overflow-y-auto w-full mt-8">
+    <div class="flex flex-col flex-1 h-full">
+      <div class="hd">
+        <.header class="hd">Public Rooms</.header>
+        <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
+      </div>
+
+      <div id="divrooms" class="overflow-y-auto w-full mt-8">
         <.table id="rooms" rows={@rooms}>
           <:col :let={room}><%= room.id %></:col>
           <:col :let={room}><%= room.name %></:col>
@@ -46,19 +48,20 @@ defmodule ChatAppWeb.HomeLive do
         </.table>
       </div>
 
-    <form class="jn">
-      <.input id="roomcode" name="roomcode" value="" placeholder="room code here" />
-      <.button id="join">Join</.button>
-    </form>
+      <form class="jn">
+        <.input id="roomcode" name="roomcode" value="" placeholder="room code here" />
+        <.button id="join">Join</.button>
+      </form>
 
-    <div class="drawing">
-      <div class="draw" id="jos"></div>
-      <div class="draw" id="sus"></div>
-    </div>
+      <div class="drawing">
+        <div class="draw" id="jos"></div>
+        <div class="draw" id="sus"></div>
+      </div>
 
-    <div class="drawing">
-      <div class="draw" id="downleft"></div>
-      <div class="draw" id="upright"></div>
+      <div class="drawing">
+        <div class="draw" id="downleft"></div>
+        <div class="draw" id="upright"></div>
+      </div>
     </div>
     """
 

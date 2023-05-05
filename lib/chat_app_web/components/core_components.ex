@@ -460,7 +460,7 @@ defmodule ChatAppWeb.CoreComponents do
               phx-click={@row_click && @row_click.(row)}
               class={["relative p-0", @row_click && "hover:cursor-pointer group-hover:bg-forestgreen ", i == 0 && "font-semibold"]}
             >
-              <div class={["relative py-4 group-hover:bg-forestgreen group-hover:text-zinc-50", i==0 && "pl-4 rounded-l-xl", i==2 && "pr-4 rounded-r-xl"]}>
+              <div class="relative py-4 group-hover:bg-forestgreen group-hover:text-zinc-50">
                   <%= render_slot(col, @row_item.(row)) %>
               </div>
             </td>
