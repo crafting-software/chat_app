@@ -1,0 +1,137 @@
+.background {
+    background: #EDFFEC;
+}
+
+input, textarea, button, select, a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.message {
+    padding: 5px;
+}
+
+button:hover {
+    background: #9792E3;
+}
+
+.user-list-item {
+    padding: 10px;
+}
+
+#emoji_utils_container {
+    position: relative;
+}
+
+emoji-picker {
+    --num-columns: 6;
+    --emoji-size: 1rem;
+    --border-size: 5px;
+    --border-radius: 5px;
+    --background: #dcfce7;
+}
+
+#emoji_popup {
+    position: absolute;
+    bottom: 0px;
+    left: 35px;
+    z-index: 10;
+    animation-duration: 0.1s;
+    animation-name: zoom;
+}
+
+#chatbox * {
+    overflow-anchor: none;
+}
+
+#chatbox_anchor {
+    overflow-anchor: auto;
+    height: 1px;
+}
+
+.message_content {
+    word-wrap: break-word;
+}
+
+.message_content pre {
+    font-family: Arial, Helvetica, sans-serif; 
+}
+
+.message_content i {
+    color: #9792E3; 
+}
+
+.message_header > .message_settings_container {
+    float: right;    
+}
+
+.message_settings_container > menu > * {
+    float: right;
+}
+
+.menu div {
+    width: 4.5rem;
+}
+
+.menu {
+    position: relative;
+}
+
+.menu button {
+    background: transparent;
+    cursor: pointer;
+}
+
+.message_settings_button {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.menu div > button {
+    margin: auto;
+    max-width: fit-content;
+    text-align: center;
+}
+
+.message_settings_submenu {
+    position: absolute;
+    left: -65px;
+    top: -40px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 0px;
+    animation-duration: 0.1s;
+    animation-name: zoom;
+}
+
+.message_settings_container {
+    display: none;
+}
+
+.message:hover .message_settings_container {
+    display: block;
+}
+ 
+@keyframes zoom {
+    0% {
+      transform: scale(0.1, 0.1);
+    }
+
+    25% {
+      transform: scale(0.25, 0.25);
+    }
+
+    50% {
+      transform: scale(0.5, 0.5);
+    }
+
+    75% {
+      transform: scale(0.75, 0.75);
+    }
+
+    100% {
+      transform: scale(1, 1);
+    }
+}

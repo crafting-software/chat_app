@@ -452,17 +452,17 @@ defmodule ChatAppWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
+          class="relative divide-y divide-zinc-100 text-sm leading-6 text-zinc-700"
         >
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-forestgreen hover:text-zinc-50">
+          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="">
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
               class={["relative p-0", @row_click && "hover:cursor-pointer"]}
             >
               <div class="block py-4 pr-6">
-                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-forestgreen group-hover:text-zinc-50 sm:rounded-l-xl" />
-                <span class={["relative text-zinc-900 group-hover:bg-forestgreen group-hover:text-zinc-50", i == 0 && "font-semibold"]}>
+                <span class="absolute -inset-y-px right-0 -left-4 sm:rounded-l-xl" />
+                <span class={["relative text-zinc-900", i == 0 && "font-semibold"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
               </div>
@@ -472,7 +472,7 @@ defmodule ChatAppWeb.CoreComponents do
                 <span class="absolute -inset-y-px -right-4 left-0 sm:rounded-r-xl " />
                 <span
                   :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 group-hover:text-forestgreen text-zinc-900"
+                  class="relative ml-4 font-semibold leading-6 text-zinc-900"
                 >
                   <%= render_slot(action, @row_item.(row)) %>
                 </span>
