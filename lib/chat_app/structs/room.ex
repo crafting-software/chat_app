@@ -8,7 +8,6 @@ defmodule ChatApp.Structs.Room do
   schema "rooms" do
     field(:room_name, :string)
     field(:owner_name, :string)
-    field(:current_participants, {:array, :string})
     field(:max_participants, :integer)
     field(:is_private, :boolean)
     field(:password, :string)
