@@ -20,7 +20,6 @@ defmodule ChatApp.MixProject do
     [
       mod: {ChatApp.Application, []},
       extra_applications: [:logger, :runtime_tools],
-      start_phases: [create_tables: [], add_dummy_users: []]
     ]
   end
 

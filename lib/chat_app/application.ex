@@ -37,29 +37,4 @@ defmodule ChatApp.Application do
     ChatAppWeb.Endpoint.config_change(changed, removed)
     :ok
   end
-
-  @impl true
-  def start_phase(:create_tables, :normal, _options) do
-    :ets.new(:rooms, [:set, :protected, :named_table])
-    :ets.new(:messages, [:set, :protected, :named_table])
-    :ok
-  end
-
-  @impl true
-  def start_phase(:add_dummy_users, :normal, _options) do
-    dummy_room =
-      ChatApp.Room.new("some_room", "John Doe", 10, DateTime.add(DateTime.utc_now(), 30, :minute))
-      |> ChatApp.Room.add_participant("John Doe")
-      |> ChatApp.Room.add_participant("Jennie Doe")
-      |> ChatApp.Room.add_participant("Jamil Doe")
-      |> ChatApp.Room.add_participant("James Doe")
-      |> ChatApp.Room.add_participant("Jambalee Doe")
-      |> ChatApp.Room.add_participant("Jeremiah Doe")
-      |> ChatApp.Room.add_participant("Jimmy Doe")
-      |> ChatApp.Room.add_participant("Jumbo Doe")
-      |> ChatApp.Room.add_participant("Jeleu Doe")
-    IO.inspect dummy_room, label: "Dummy room"
-    :ets.insert(:rooms, dummy_room)
-    :ok
-  end
 end
