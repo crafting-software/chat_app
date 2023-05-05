@@ -1,0 +1,67 @@
+<.header>
+  <div>
+    <% room_name = @room.room_name %>
+    Room "<%= room_name %>"
+    <div class="float-right">
+      <button class="border-gray-900 border rounded-2xl hover:animate-pulse hover:motion-reduce bg-purple-800 p-1 px-5 text-white text-base peer">Users</button>
+      <aside class="z-10 grid fixed top-0 bg-emerald-100 w-[233px] h-full -left-[233px] peer-focus:left-0 ease-out delay-150 duration-300 rounded-r-[25px] border border-purple-600">
+        <h1 class="text-purple-800 bold text-[15px] mt-8 text-center uppercase"> Users in room "<%= room_name %>"</h1>
+        <ul>
+          <% number_of_users = length(@users) %>
+          <%= if number_of_users > 0 do %>
+            <%= for user_index <- 0..number_of_users-1 do %>
+              <li class="p-2 mx-5 text-[13px] hover:bg-emerald-200 rounded-2xl"><%=@users |> Enum.at(user_index)%></li>
+            <% end %>
+          <% end %>
+        </ul>
+      </aside>
+    </div>
+  </div>
+</.header>
+
+
+<div id="chatbox" class="h-80 border rounded-2xl bg-green-100 border-gray-900 overflow-x-auto overflow-y-auto mt-3">
+  <ul>
+    <% number_of_messages = length(@messages) %>
+    <%= if number_of_messages > 0 do %>
+      <%= for message_index <- number_of_messages-1..0 do %>
+        <% text = Enum.at(@messages, message_index) |> Map.get(:text)
+        datetime = Enum.at(@messages, message_index) |> Map.get(:datetime_as_string) %>
+        <li class="message hover:bg-emerald-200 rounded-2xl p-2">
+          <%= if datetime != "" do %>
+          <div class="message_details">
+            <span class="message_username m-2">anon</span>
+            <span class="message_datetime"><%= datetime %></span>
+          </div>
+          <% end %>
+          <div class="message_content m-2"><%= text %></div>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+  <div id="chatbox_anchor"></div>
+</div>
+
+<form action="#" phx-submit="save_message" class="my-2 grid grid-cols-6 gap-2">
+  <textarea name="text" id="message_textarea" maxlength="1000" cols="50" rows="2" class="rounded-2xl bg-green-100 border-gray-900 focus:border-purple-800 col-span-5"></textarea>
+  <button type="submit" class="rounded-2xl border-gray-900 border text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce float-right">Send</button>
+</form>
+
+<div id="emoji_utils_container" class="my-2 gap-2">
+  <button id="emoji_button" class="rounded-2xl px-2 border-gray-900 border text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce">😁</button>
+  <emoji-picker class="light" id="emoji_popup" phx-hook="EmojiPopup" hidden></emoji-picker>
+  <.back navigate={~p"/rooms"}>Back to room list</.back>
+</div>
+
+
+<%!--
+<.modal :if={@live_action == :edit} id="room-modal" show on_cancel={JS.patch(~p"/rooms/#{@room}")}>
+    <.live_component
+        module={UltraoriginalChattyChatAppWeb.RoomLive.FormComponent}
+        id={@room.id}
+        title={@page_title}
+        action={@live_action}
+        room={@room}
+        patch={~p"/rooms/#{@room}"}/>
+</.modal>
+--%>

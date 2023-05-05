@@ -18,6 +18,7 @@ defmodule ChatAppWeb.Router do
     pipe_through :browser
 
     live "/", HomeLive
+    live "/rooms/:id", SingleRoomLive, :show
   end
 
   # Other scopes may use custom stacks.
