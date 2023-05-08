@@ -60,7 +60,7 @@ defmodule ChatAppWeb.HomeLive do
       "room_name" => room_name,
       "owner_name" => owner_name,
       "max_participants" => max_participants,
-      "is_private" => is_private,
+      "is_private" => is_private_room,
       "password" => password,
       "expiry_timestamp" => DateTime.utc_now() |> DateTime.add(12, :hour)
     }
