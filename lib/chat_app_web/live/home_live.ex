@@ -49,12 +49,11 @@ defmodule ChatAppWeb.HomeLive do
           "room_name" => room_name,
           "owner_name" => owner_name,
           "max_participants" => max_participants,
-          "is_private" => is_private,
           "password" => password
-        },
+        } = params,
         socket
       ) do
-    is_private_room = is_private == "on"
+    is_private_room = Map.get(params, "is_private") == "on"
 
     room = %{
       "room_name" => room_name,
@@ -66,6 +65,13 @@ defmodule ChatAppWeb.HomeLive do
     }
 
     {:ok, result} = ChatApp.Contexts.Rooms.insert_room(room)
+
+    user = %{
+      "username" => owner_name,
+      "room_id" => result.id
+    }
+
+    {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
 
     {:noreply, socket |> push_redirect(to: "/rooms/#{result.id}")}
   end

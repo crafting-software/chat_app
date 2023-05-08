@@ -32,7 +32,7 @@ defmodule ChatAppWeb.RoomComponent do
         </div>
         <div class="room-modal-checkbox-group">
         <label for="is_private">Private Room:</label>
-        <input type="hidden" value="0"><input type="checkbox" name="is_private" id="is_private" onclick="this.previousSibling.value=1-this.previousSibling.value">
+        <input type="checkbox" id="is_private" name="is_private" />
         </div>
         <div class="room-modal-input-group">
         <label for="password" id="password-label" class="hidden">Password:</label>
