@@ -21,7 +21,6 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
-<<<<<<< HEAD
 import { Picker } from 'emoji-picker-element'
 import { Hooks } from './hooks'
 
@@ -29,11 +28,7 @@ import { Hooks } from './hooks'
 import "./room-modal"
 =======
 import "./room-modal.js"
-=======
-import { Picker } from 'emoji-picker-element';
-
-import "./room-modal.js"
-let Hooks = {}
+// let Hooks = {}
 
 function extractActionAndMessageIdFromDomElementId(element) {
     return element.id.split(/-(.*)/s)
@@ -125,8 +120,11 @@ Hooks.SendMessageOnEnterKeyPress = {
 }
 import { Picker } from 'emoji-picker-element'
 import { Hooks } from 'hooks'
+<<<<<<< HEAD
 >>>>>>> 7d6b0e8 (feat(3): removed * selector css)
 >>>>>>> e5d059c (feat(3): removed * selector css)
+=======
+>>>>>>> ae72e07 (incorporated new room modal button)
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {

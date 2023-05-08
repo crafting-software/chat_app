@@ -35,7 +35,6 @@ defmodule ChatAppWeb.HomeLive do
         <.live_component class="inline-block" module={ChatAppWeb.RoomComponent} id="modal" />
       </div>
 
-
       <div id="divrooms" class="overflow-y-auto w-full mt-8">
         <.table id="rooms" rows={@rooms}>
           <:col :let={room}><%= room.id %></:col>
