@@ -17,8 +17,8 @@ defmodule ChatAppWeb.SingleRoomLive do
        Logger.info("Liveview's first mount() call")
     end
 
-    [{room_id, room}] = :ets.lookup(:rooms, room_id)
-    {:ok, assign(socket, room_id: room_id, room: room, topic: topic, messages: [], users: room.current_participants, current_message: "")}
+    room = ChatApp.Contexts.Rooms.get_room(room_id)
+    {:ok, assign(socket, room_id: room.id, room: room, topic: topic, messages: [], users: ChatApp.Contexts.Rooms.get_room_users(room.id).users, current_message: "")}
   end
 
   def unmount(%{id: _liveview_id, room_id: room_id}, _reason) do

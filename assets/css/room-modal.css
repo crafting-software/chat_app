@@ -7,13 +7,13 @@
   text-align: center;
 }
 
-#new-room-button{
-    float:right;
-    background-color:#9792e3;
+#new-room-button {
+  float: right;
+  background-color: #9792e3;
 }
 
-#new-room-button:hover{
-    background-color: #8d88d3;
+#new-room-button:hover {
+  background-color: #8d88d3;
 }
 
 .room-modal-form-group {
