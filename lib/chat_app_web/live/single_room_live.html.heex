@@ -12,7 +12,7 @@
             <%= for user_index <- 0..number_of_users-1 do %>
               <%= if Enum.at(@users, user_index).username == @room.owner_name do %>
                 <li class="p-2 mx-5 text-[13px] hover:bg-emerald-200 rounded-2xl"><%= Enum.at(@users, user_index).username %> [Room Owner]</li>
-              <%= else %>
+              <% else %>
                 <li class="p-2 mx-5 text-[13px] hover:bg-emerald-200 rounded-2xl"><%= Enum.at(@users, user_index).username %></li>
               <% end %>
             <% end %>
