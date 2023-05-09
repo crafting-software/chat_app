@@ -118,6 +118,7 @@ Hooks.SendMessageOnEnterKeyPress = {
         })
     }
 }
+<<<<<<< HEAD
 import { Picker } from 'emoji-picker-element'
 import { Hooks } from 'hooks'
 <<<<<<< HEAD
@@ -125,6 +126,8 @@ import { Hooks } from 'hooks'
 >>>>>>> e5d059c (feat(3): removed * selector css)
 =======
 >>>>>>> ae72e07 (incorporated new room modal button)
+=======
+>>>>>>> 52697a2 (feat(3): resolved merge conflicts)
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
