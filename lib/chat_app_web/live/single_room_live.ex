@@ -1,6 +1,6 @@
 defmodule ChatAppWeb.SingleRoomLive do
   use ChatAppWeb, :live_view
-  import Bitwise
+  alias Bitwise
   alias Phoenix.PubSub
   alias ChatApp.LiveviewMonitor
   require Logger
@@ -89,8 +89,8 @@ defmodule ChatAppWeb.SingleRoomLive do
 
   @impl true
   def handle_info(:refresh_messages, socket) do
-    {:noreply,
-     assign(socket, messages: ChatApp.Contexts.Rooms.get_room_messages(socket.assigns.room_id))}
+    updated_socket = assign(socket, messages: ChatApp.Contexts.Rooms.get_room_messages(socket.assigns.room_id))
+    {:noreply, push_event(updated_socket, "new_message", %{id: "chatbox"})}
   end
 
   def handle_info({:delete_messages, message_id_from_client}, socket) do
