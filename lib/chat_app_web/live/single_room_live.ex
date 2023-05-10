@@ -25,21 +25,23 @@ defmodule ChatAppWeb.SingleRoomLive do
 
       IO.inspect(socket.assigns)
 
-      broadcasted_message = {:add_messages, message}
+      IO.inspect(message, label: "Broadcasted join message")
 
-      PubSub.broadcast(ChatApp.PubSub, topic, broadcasted_message)
+      ChatApp.Contexts.Messages.insert_message(message)
+      PubSub.broadcast(ChatApp.PubSub, topic, :refresh_messages)
     else
       Logger.info("Liveview's first mount() call")
     end
 
     room = ChatApp.Contexts.Rooms.get_room(room_id)
+    comparator = fn x, y -> DateTime.compare(x.timestamp, y.timestamp) != :gt end
 
     {:ok,
      assign(socket,
        room_id: room_id,
        room: room,
        topic: topic,
-       messages: Enum.reverse(ChatApp.Contexts.Rooms.get_room_messages(room_id)),
+       messages: Enum.sort(ChatApp.Contexts.Rooms.get_room_messages(room_id), comparator),
        users: ChatApp.Contexts.Rooms.get_room_users(room_id)
      )}
   end
@@ -55,9 +57,8 @@ defmodule ChatAppWeb.SingleRoomLive do
       "seq_number" => 1
     }
 
-    broadcasted_message = {:add_messages, message}
-    PubSub.broadcast(ChatApp.PubSub, "room:" <> room_id, broadcasted_message)
-    IO.inspect broadcasted_message, label: "Broadcasted exit message"
+    ChatApp.Contexts.Messages.insert_message(message)
+    PubSub.broadcast(ChatApp.PubSub, "room:" <> room_id, :refresh_messages)
     Logger.info("Liveview broadcasted exit message in room #{room_id} with liveview id #{liveview_id}.")
     :ok
   end
@@ -81,10 +82,8 @@ defmodule ChatAppWeb.SingleRoomLive do
           "seq_number" => 0
         }
 
-        broadcasted_message =
-           {:add_messages, message}
-
-        PubSub.broadcast(ChatApp.PubSub, socket.assigns.topic, broadcasted_message)
+        ChatApp.Contexts.Messages.insert_message(message)
+        PubSub.broadcast(ChatApp.PubSub, socket.assigns.topic, :refresh_messages)
         {:noreply, socket}
 
       _ ->
@@ -94,29 +93,31 @@ defmodule ChatAppWeb.SingleRoomLive do
 
   def handle_event("delete_message", %{"id" => message_id_from_client}, socket) do
     IO.puts(message_id_from_client)
+
+    deleted_message = ChatApp.Contexts.Messages.get_message(message_id_from_client)
+    IO.inspect(deleted_message, label: "Deleted message displayed in liveview")
+    ChatApp.Contexts.Messages.update_message(deleted_message, %{is_deleted: true})
+
     broadcasted_message = {:delete_messages, message_id_from_client}
     PubSub.broadcast(ChatApp.PubSub, socket.assigns.topic, broadcasted_message)
     {:noreply, socket}
   end
 
-  @impl true
-  def handle_info({:add_messages, new_message}, socket) do
-    Logger.info("Liveview received an :add_messages broadcast: #{new_message["content"]}")
-    {:ok, message} = ChatApp.Contexts.Messages.insert_message(new_message)
-    {:noreply, assign(socket, messages: [message | socket.assigns.messages])}
+  def handle_info(:refresh_messages, socket) do
+    {:noreply, assign(socket, messages: ChatApp.Contexts.Rooms.get_room_messages(socket.assigns.room_id))}
   end
 
   def handle_info({:delete_messages, message_id_from_client}, socket) do
     {:noreply,
      assign(socket,
        messages:
-         Enum.map(socket.assigns.messages, fn {message_id, message} ->
+         Enum.map(socket.assigns.messages, fn message ->
            cond do
-             message_id == message_id_from_client ->
-               {message_id, %{message | is_deleted: true}}
-
+             message.id == message_id_from_client ->
+                Logger.info("Message.id equal to message_id_from_client: #{message.id} #{message_id_from_client}")
+                %{message | is_deleted: true}
              true ->
-               {message_id, message}
+                message
            end
          end)
      )}
