@@ -2,26 +2,8 @@ defmodule ChatAppWeb.HomeLive do
   use ChatAppWeb, :live_view
 
   def mount(_params, _session, socket) do
-    rooms = [
-      %{id: 1, name: "room1", description: "capybara numero uno"},
-      %{id: 2, name: "room2", description: "capybara numero dos"},
-      %{id: 3, name: "room3", description: "capybara numero tres"}
-    ]
-
-    rooms =
-      Enum.concat(rooms, [
-        %{id: 4, name: "room4", description: "capybara numero cuatro"},
-        %{id: 5, name: "room5", description: "capybara numero cinco"},
-        %{id: 6, name: "room6", description: "capybara numero seis"}
-      ])
-
-    rooms =
-      Enum.concat(rooms, [
-        %{id: 7, name: "room7", description: "capybara numero siete"},
-        %{id: 8, name: "room8", description: "capybara numero ocho"},
-        %{id: 9, name: "room9", description: "capybara numero nueve"},
-        %{id: 10, name: "room10", description: "capybara numero diez"}
-      ])
+    rooms = ChatApp.Contexts.Rooms.list_rooms()
+    |> Enum.filter(fn room -> room.is_private == false end)
 
     socket = assign(socket, :rooms, rooms)
     {:ok, socket}
@@ -37,9 +19,8 @@ defmodule ChatAppWeb.HomeLive do
 
       <div id="divrooms" class="overflow-y-auto w-full mt-8">
         <.table id="rooms" rows={@rooms}>
-          <:col :let={room}><%= room.id %></:col>
-          <:col :let={room}><%= room.name %></:col>
-          <:col :let={room}><%= room.description %></:col>
+          <:col :let={room}><%= room.room_name %></:col>
+          <:col :let={room}><%= room.max_participants %></:col>
           <:action>
             <.link method="join" class="join_link">
               Join

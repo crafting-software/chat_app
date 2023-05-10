@@ -54,17 +54,17 @@ tbody#rooms {
   border-bottom-left-radius: 12px;
 }
 
-#divrooms td:nth-of-type(3) div {
+#divrooms td:nth-of-type(2) div {
   padding-right: 16px;
   border-top-right-radius: 12px;
   border-bottom-right-radius: 12px;
 }
 
-#divrooms td:nth-of-type(4) div {
+#divrooms td:nth-of-type(3) div {
   padding-right: 16px;
 }
 
-#divrooms td:nth-of-type(4):hover div span a{
+#divrooms td:nth-of-type(3):hover div span a{
   color: #329325;
 }
 
