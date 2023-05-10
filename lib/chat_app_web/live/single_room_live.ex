@@ -124,5 +124,4 @@ defmodule ChatAppWeb.SingleRoomLive do
         end
     end
   end
-
 end

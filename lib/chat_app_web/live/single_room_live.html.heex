@@ -108,28 +108,28 @@
           </li>
         <% end %>
       <% end %>
-    </ul>
-    <%
-      actual_users_typing = Map.filter(@users_typing, fn {_key, value} -> value == true end)
-      number_of_users_typing = Map.values(actual_users_typing) |> length()
-      users_enumeration_string = Map.keys(actual_users_typing) |> Enum.join(", ")
-      correct_present_continuous_verb = if number_of_users_typing == 1, do: "is", else: "are"
-    %>
-    <button id="message_notifier_button" hidden class="text-center text-white rounded-3xl bg-purple-800">
-      <span class="arrow_symbol">↓</span>
-    </button>
-    <div id="chatbox_anchor">
-      <p>
-      <%=
-        cond do
-          number_of_users_typing > 0 and number_of_users_typing <= 5 ->
-            users_enumeration_string <> " " <> correct_present_continuous_verb <> " typing..."
-          number_of_users_typing > 5 -> "Many users are typing..."
-          true -> ""
-        end
+      </ul>
+      <%
+        actual_users_typing = Map.filter(@users_typing, fn {_key, value} -> value == true end)
+        number_of_users_typing = Map.values(actual_users_typing) |> length()
+        users_enumeration_string = Map.keys(actual_users_typing) |> Enum.join(", ")
+        correct_present_continuous_verb = if number_of_users_typing == 1, do: "is", else: "are"
       %>
-      </p>
-    </div>
+      <button id="message_notifier_button" hidden class="text-center text-white rounded-3xl bg-purple-800">
+        <span class="arrow_symbol">↓</span>
+      </button>
+      <div id="chatbox_anchor">
+        <p>
+        <%=
+          cond do
+            number_of_users_typing > 0 and number_of_users_typing <= 5 ->
+              users_enumeration_string <> " " <> correct_present_continuous_verb <> " typing..."
+            number_of_users_typing > 5 -> "Many users are typing..."
+            true -> ""
+          end
+        %>
+        </p>
+      </div>
   </div>
 </div>
 

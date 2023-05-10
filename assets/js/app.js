@@ -26,6 +26,7 @@ import { Hooks } from './hooks'
 import { delay } from "./utils"
 
 import "./room-modal"
+import "./emoji-popup"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
