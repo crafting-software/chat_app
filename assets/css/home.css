@@ -1,9 +1,3 @@
-
-.hd{
-    display: grid;
-    grid-template-columns: auto auto;
-}
-
 [data-phx-main] {
   display: flex;
   height: 100%;
@@ -12,7 +6,10 @@
 header.hd {
   font-weight: 700;
   color: #48435c;
+  display: grid;
+  grid-template-columns: auto auto;
 }
+
 input#roomcode {
   margin-top: 50px;
   width: 70%;
@@ -48,23 +45,23 @@ tbody#rooms {
   color: #48435c;
 }
 
-#divrooms td:nth-of-type(1) div {
+#divrooms td:first-of-type div {
   padding-left: 16px;
   border-top-left-radius: 12px;
   border-bottom-left-radius: 12px;
 }
 
-#divrooms td:nth-of-type(2) div {
+#divrooms td:nth-last-of-type(2) div {
   padding-right: 16px;
   border-top-right-radius: 12px;
   border-bottom-right-radius: 12px;
 }
 
-#divrooms td:nth-of-type(3) div {
+#divrooms td:last-of-type div {
   padding-right: 16px;
 }
 
-#divrooms td:nth-of-type(3):hover div span a{
+#divrooms td:last-of-type:hover div span a{
   color: #329325;
 }
 
