@@ -25,6 +25,7 @@ defmodule ChatApp.LiveviewMonitor do
   end
 
   def handle_info({:DOWN, _ref, :process, pid, reason}, state) do
+    Logger.info("LiveviewMonitor detected an exit event from liveview with id #{Map.get(state.views, pid) |> elem(1) |> Map.get(:id)}.")
     {{module, liveview_data}, new_views} = Map.pop(state.views, pid)
     module.unmount(liveview_data, reason)
     {:noreply, %{state | views: new_views}}

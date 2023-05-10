@@ -1,4 +1,4 @@
-SendMessageOnEnterKeyPress = {
+const SendMessageOnEnterKeyPress = {
     mounted() {
         this.el.addEventListener("keydown", (event) => {
             if (event.which === 13 && !event.shiftKey) {

@@ -26,7 +26,7 @@ function addFocusOutEventListenerOnMessageSettingsButton(component) {
     })
 }
 
-OpenMessageSettings = {
+const OpenMessageSettings = {
     mounted() {
         addClickEventListenerOnMessageSettingsButton(this)
         addFocusOutEventListenerOnMessageSettingsButton(this)

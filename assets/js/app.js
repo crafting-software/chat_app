@@ -22,9 +22,10 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import { Picker } from 'emoji-picker-element'
-import { Hooks } from 'hooks'
+import { Hooks } from './hooks'
 
-import "./room-modal.js"
+import "./room-modal"
+import "./emoji-popup"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
@@ -45,22 +46,3 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
-
-let textareaElement = document.getElementById("message_textarea")
-let emojiButton = document.getElementById("emoji_button")
-let emojiPopup = document.querySelector('emoji-picker')
-
-window.onclick = event => {
-    ids = ["emoji_button", "emoji_popup"]
-    if (!ids.includes(event.target.id))
-        emojiPopup.setAttribute("hidden", "hidden")
-}
-
-emojiButton.addEventListener("click", event => {
-    emojiPopup.toggleAttribute("hidden")
-})
-
-document.querySelector('emoji-picker').addEventListener('emoji-click', event => {
-    textareaElement.value += event.detail.unicode
-    emojiPopup.setAttribute("hidden", "hidden")
-})

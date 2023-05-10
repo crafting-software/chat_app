@@ -7,23 +7,58 @@ defmodule ChatAppWeb.SingleRoomLive do
   @impl true
   def mount(%{"id" => room_id}, _session, socket) do
     topic = "room:" <> room_id
+
     if connected?(socket) do
-        Logger.info("Liveview's second mount() call")
-        LiveviewMonitor.monitor(self(), __MODULE__, %{id: socket.id, room_id: room_id})
-        PubSub.subscribe(ChatApp.PubSub, topic)
-        broadcasted_message = {:add_messages, ChatApp.Message.new("anon joined the chat.", "", room_id)}
-        PubSub.broadcast(ChatApp.PubSub, topic, broadcasted_message)
+      Logger.info("Liveview's second mount() call")
+      LiveviewMonitor.monitor(self(), __MODULE__, %{id: socket.id, room_id: room_id})
+      PubSub.subscribe(ChatApp.PubSub, topic)
+
+      message = %{
+        "content" => "anon joined the chat",
+        "sender" => "",
+        "room_id" => room_id,
+        "timestamp" => DateTime.utc_now(),
+        "is_deleted" => false,
+        "is_edited" => false,
+        "seq_number" => 0
+      }
+
+      IO.inspect(socket.assigns)
+
+      broadcasted_message = {:add_messages, message}
+
+      PubSub.broadcast(ChatApp.PubSub, topic, broadcasted_message)
     else
-       Logger.info("Liveview's first mount() call")
+      Logger.info("Liveview's first mount() call")
     end
 
     room = ChatApp.Contexts.Rooms.get_room(room_id)
-    {:ok, assign(socket, room_id: room.id, room: room, topic: topic, messages: [], users: ChatApp.Contexts.Rooms.get_room_users(room.id).users, current_message: "")}
+
+    {:ok,
+     assign(socket,
+       room_id: room_id,
+       room: room,
+       topic: topic,
+       messages: Enum.reverse(ChatApp.Contexts.Rooms.get_room_messages(room_id)),
+       users: ChatApp.Contexts.Rooms.get_room_users(room_id)
+     )}
   end
 
-  def unmount(%{id: _liveview_id, room_id: room_id}, _reason) do
-    broadcasted_message = {:add_messages, ChatApp.Message.new("anon left the chat.", "", room_id)}
+  def unmount(%{id: liveview_id, room_id: room_id}, _reason) do
+    message = %{
+      "content" => "anon left the chat",
+      "sender" => "",
+      "room_id" => room_id,
+      "timestamp" => DateTime.utc_now(),
+      "is_deleted" => false,
+      "is_edited" => false,
+      "seq_number" => 1
+    }
+
+    broadcasted_message = {:add_messages, message}
     PubSub.broadcast(ChatApp.PubSub, "room:" <> room_id, broadcasted_message)
+    IO.inspect broadcasted_message, label: "Broadcasted exit message"
+    Logger.info("Liveview broadcasted exit message in room #{room_id} with liveview id #{liveview_id}.")
     :ok
   end
 
@@ -36,15 +71,29 @@ defmodule ChatAppWeb.SingleRoomLive do
   def handle_event("save_message", %{"text" => new_message_text}, socket) do
     case Regex.match?(~r/^\s*$/, new_message_text) do
       false ->
-        broadcasted_message = {:add_messages, ChatApp.Message.new(new_message_text, "anon", socket.assigns.room_id)}
+        message = %{
+          "content" => new_message_text,
+          "sender" => "anon",
+          "room_id" => socket.assigns.room_id,
+          "timestamp" => DateTime.utc_now(),
+          "is_deleted" => false,
+          "is_edited" => false,
+          "seq_number" => 0
+        }
+
+        broadcasted_message =
+           {:add_messages, message}
+
         PubSub.broadcast(ChatApp.PubSub, socket.assigns.topic, broadcasted_message)
         {:noreply, socket}
-      _ -> {:noreply, socket}
+
+      _ ->
+        {:noreply, socket}
     end
   end
 
   def handle_event("delete_message", %{"id" => message_id_from_client}, socket) do
-    IO.puts message_id_from_client
+    IO.puts(message_id_from_client)
     broadcasted_message = {:delete_messages, message_id_from_client}
     PubSub.broadcast(ChatApp.PubSub, socket.assigns.topic, broadcasted_message)
     {:noreply, socket}
@@ -52,30 +101,24 @@ defmodule ChatAppWeb.SingleRoomLive do
 
   @impl true
   def handle_info({:add_messages, new_message}, socket) do
-    {:noreply, assign(socket, messages: [new_message | socket.assigns.messages])}
+    Logger.info("Liveview received an :add_messages broadcast: #{new_message["content"]}")
+    {:ok, message} = ChatApp.Contexts.Messages.insert_message(new_message)
+    {:noreply, assign(socket, messages: [message | socket.assigns.messages])}
   end
 
   def handle_info({:delete_messages, message_id_from_client}, socket) do
-    {:noreply, assign(socket, messages: Enum.map(socket.assigns.messages, fn {message_id, message} ->
-      cond do
-        message_id == message_id_from_client ->
-          {message_id, %{message | is_deleted: true}}
-        true ->
-          {message_id, message}
-      end
-    end))}
-  end
+    {:noreply,
+     assign(socket,
+       messages:
+         Enum.map(socket.assigns.messages, fn {message_id, message} ->
+           cond do
+             message_id == message_id_from_client ->
+               {message_id, %{message | is_deleted: true}}
 
-  defp get_datetime_as_string() do
-    [date_as_string, time_as_string] =
-      DateTime.utc_now()
-      |> DateTime.truncate(:second)
-      |> DateTime.to_string()
-      |> String.slice(0..-2)
-      |> String.split(" ")
-
-    [year_as_string, month_as_string, day_as_string] = String.split(date_as_string, "-")
-    date_in_new_format = day_as_string <> "/" <> month_as_string <> "/" <> year_as_string
-    date_in_new_format <> " " <> time_as_string
+             true ->
+               {message_id, message}
+           end
+         end)
+     )}
   end
 end
