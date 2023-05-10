@@ -64,6 +64,10 @@ tbody#rooms {
   padding-right: 16px;
 }
 
+#divrooms td:nth-of-type(4):hover div span a{
+  color: #329325;
+}
+
 .drawing {
   position: fixed;
   transform: translate(-50%, -50%);
