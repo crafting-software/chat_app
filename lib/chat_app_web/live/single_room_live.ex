@@ -59,7 +59,11 @@ defmodule ChatAppWeb.SingleRoomLive do
 
     ChatApp.Contexts.Messages.insert_message(message)
     PubSub.broadcast(ChatApp.PubSub, "room:" <> room_id, :refresh_messages)
-    Logger.info("Liveview broadcasted exit message in room #{room_id} with liveview id #{liveview_id}.")
+
+    Logger.info(
+      "Liveview broadcasted exit message in room #{room_id} with liveview id #{liveview_id}."
+    )
+
     :ok
   end
 
@@ -104,7 +108,8 @@ defmodule ChatAppWeb.SingleRoomLive do
   end
 
   def handle_info(:refresh_messages, socket) do
-    {:noreply, assign(socket, messages: ChatApp.Contexts.Rooms.get_room_messages(socket.assigns.room_id))}
+    {:noreply,
+     assign(socket, messages: ChatApp.Contexts.Rooms.get_room_messages(socket.assigns.room_id))}
   end
 
   def handle_info({:delete_messages, message_id_from_client}, socket) do
@@ -114,10 +119,14 @@ defmodule ChatAppWeb.SingleRoomLive do
          Enum.map(socket.assigns.messages, fn message ->
            cond do
              message.id == message_id_from_client ->
-                Logger.info("Message.id equal to message_id_from_client: #{message.id} #{message_id_from_client}")
-                %{message | is_deleted: true}
+               Logger.info(
+                 "Message.id equal to message_id_from_client: #{message.id} #{message_id_from_client}"
+               )
+
+               %{message | is_deleted: true}
+
              true ->
-                message
+               message
            end
          end)
      )}
