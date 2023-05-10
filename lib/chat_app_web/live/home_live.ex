@@ -13,8 +13,8 @@ defmodule ChatAppWeb.HomeLive do
     ~H"""
     <div class="flex flex-col flex-1 h-full">
       <div>
-        <.header class="inline-block">Public Rooms</.header>
-        <.live_component class="inline-block" module={ChatAppWeb.RoomComponent} id="modal" />
+        <.header class="hd" >Public Rooms</.header>
+        <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
       </div>
 
       <div id="divrooms" class="overflow-y-auto w-full mt-8">
@@ -29,7 +29,7 @@ defmodule ChatAppWeb.HomeLive do
         </.table>
       </div>
 
-      <form class="jn">
+      <form>
         <.input id="roomcode" name="roomcode" value="" placeholder="room code here" />
         <.button id="join">Join</.button>
       </form>

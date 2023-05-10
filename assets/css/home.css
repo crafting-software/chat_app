@@ -3,11 +3,9 @@
   height: 100%;
 }
 
-header.hd {
+header.hd h1 {
   font-weight: 700;
   color: #48435c;
-  display: grid;
-  grid-template-columns: auto auto;
 }
 
 input#roomcode {
@@ -39,8 +37,6 @@ tbody#rooms {
 }
 
 #rooms{
-  color: #48435C;
-  height: 10px;
   overflow-y: scroll;
   color: #48435c;
 }
