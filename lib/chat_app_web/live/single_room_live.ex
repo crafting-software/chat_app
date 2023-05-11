@@ -13,20 +13,7 @@ defmodule ChatAppWeb.SingleRoomLive do
       LiveviewMonitor.monitor(self(), __MODULE__, %{id: socket.id, room_id: room_id})
       PubSub.subscribe(ChatApp.PubSub, topic)
 
-      message = %{
-        "content" => "anon joined the chat",
-        "sender" => "",
-        "room_id" => room_id,
-        "timestamp" => DateTime.utc_now(),
-        "is_deleted" => false,
-        "is_edited" => false,
-        "seq_number" => 0
-      }
-
-      IO.inspect(socket.assigns)
-
-      IO.inspect(message, label: "Broadcasted join message")
-
+      message = ChatApp.Contexts.Messages.create_message_as_map("anon joined the chat", "", room_id)
       ChatApp.Contexts.Messages.insert_message(message)
       PubSub.broadcast(ChatApp.PubSub, topic, :refresh_messages)
     else
@@ -46,16 +33,7 @@ defmodule ChatAppWeb.SingleRoomLive do
   end
 
   def unmount(%{id: liveview_id, room_id: room_id}, _reason) do
-    message = %{
-      "content" => "anon left the chat",
-      "sender" => "",
-      "room_id" => room_id,
-      "timestamp" => DateTime.utc_now(),
-      "is_deleted" => false,
-      "is_edited" => false,
-      "seq_number" => 1
-    }
-
+    message = ChatApp.Contexts.Messages.create_message_as_map("anon left the chat", "", room_id)
     ChatApp.Contexts.Messages.insert_message(message)
     PubSub.broadcast(ChatApp.PubSub, "room:" <> room_id, :refresh_messages)
 
@@ -75,16 +53,7 @@ defmodule ChatAppWeb.SingleRoomLive do
   def handle_event("save_message", %{"text" => new_message_text}, socket) do
     case Regex.match?(~r/^\s*$/, new_message_text) do
       false ->
-        message = %{
-          "content" => new_message_text,
-          "sender" => "anon",
-          "room_id" => socket.assigns.room_id,
-          "timestamp" => DateTime.utc_now(),
-          "is_deleted" => false,
-          "is_edited" => false,
-          "seq_number" => 0
-        }
-
+        message = ChatApp.Contexts.Messages.create_message_as_map(new_message_text, "anon", socket.assigns.room_id)
         ChatApp.Contexts.Messages.insert_message(message)
         PubSub.broadcast(ChatApp.PubSub, socket.assigns.topic, :refresh_messages)
         {:noreply, socket}
@@ -95,10 +64,7 @@ defmodule ChatAppWeb.SingleRoomLive do
   end
 
   def handle_event("delete_message", %{"id" => message_id_from_client}, socket) do
-    IO.puts(message_id_from_client)
-
     deleted_message = ChatApp.Contexts.Messages.get_message(message_id_from_client)
-    IO.inspect(deleted_message, label: "Deleted message displayed in liveview")
     ChatApp.Contexts.Messages.update_message(deleted_message, %{is_deleted: true})
 
     broadcasted_message = {:delete_messages, message_id_from_client}
@@ -117,18 +83,12 @@ defmodule ChatAppWeb.SingleRoomLive do
      assign(socket,
        messages:
          Enum.map(socket.assigns.messages, fn message ->
-           cond do
-             message.id == message_id_from_client ->
-               Logger.info(
-                 "Message.id equal to message_id_from_client: #{message.id} #{message_id_from_client}"
-               )
-
-               %{message | is_deleted: true}
-
-             true ->
-               message
-           end
-         end)
+          if message.id == message_id_from_client do
+            %{message | is_deleted: true}
+          else
+            message
+          end
+        end)
      )}
   end
 end

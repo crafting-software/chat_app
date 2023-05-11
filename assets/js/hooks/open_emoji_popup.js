@@ -1,27 +1,5 @@
-/**
-const emojiButton = document.getElementById("emoji_button")
-
-if (emojiPopup != null) {
-    window.onclick = event => {
-        ids = ["emoji_button", "emoji_popup"]
-        if (!ids.includes(event.target.id))
-            emojiPopup.setAttribute("hidden", "hidden")
-    }
-
-    emojiButton.addEventListener("click", event => {
-        emojiPopup.toggleAttribute("hidden")
-    })
-
-    emojiPopup.addEventListener('emoji-click', event => {
-        textareaElement.value += event.detail.unicode
-        emojiPopup.setAttribute("hidden", "hidden")
-    })
-}
-**/
-
 function addClickEventListenerOnEmojiButton(component) {
     component.el.addEventListener("click", event => {
-        console.log(event.target)
         event.target.focus()
         document.getElementById("emoji_popup").toggleAttribute("hidden")
     })

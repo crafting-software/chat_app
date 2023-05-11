@@ -5,11 +5,9 @@ defmodule ChatApp.Contexts.Messages do
   def get_message(id), do: Repo.get(Message, id)
 
   def update_message(%Message{} = message, attrs) do
-    updated_message =
-      message
-      |> Message.changeset(attrs)
-      |> Repo.update()
-    updated_message
+    message
+    |> Message.changeset(attrs)
+    |> Repo.update()
   end
 
   def insert_message(attrs \\ %{}) do
@@ -19,4 +17,14 @@ defmodule ChatApp.Contexts.Messages do
   end
 
   def delete_message(%Message{} = message), do: Repo.delete(message)
+
+  def create_message_as_map(content, sender, room_id) do
+    %{
+      "content" => content,
+      "sender" => sender,
+      "room_id" => room_id,
+      "is_deleted" => false,
+      "is_edited" => false
+    }
+  end
 end

@@ -1,13 +1,13 @@
 <.header>
   <div>
-    <% room_name = @room.room_name %> Room "<%= room_name %>"
+    Room "<%= @room.room_name %>"
     <div class="float-right">
       <button class="rounded-2xl hover:animate-pulse hover:motion-reduce bg-purple-800 p-1 px-5 text-white text-base peer">
         Users
       </button>
       <aside class="border border border-emerald-300 z-10 grid fixed top-0 bg-green-100 w-[233px] h-full -left-[233px] peer-focus:left-0 ease-out delay-150 duration-300 rounded-r-[25px]">
         <h1 class="text-purple-800 bold text-[15px] mt-8 text-center uppercase">
-          Users in room "<%= room_name %>"
+          Users in room "<%= @room.room_name %>"
         </h1>
         <ul>
           <% number_of_users = length(@users) %>

@@ -7,14 +7,18 @@ defmodule ChatApp.Contexts.Rooms do
   def get_room(id), do: Repo.get(Room, id)
 
   def get_room_messages(id) do
-    room = Repo.get(Room, id) |> Repo.preload([:messages])
     comparator = fn x, y -> DateTime.compare(x.inserted_at, y.inserted_at) == :gt end
-    Enum.sort(room.messages, comparator)
+    case Repo.get(Room, id) do
+      nil -> nil
+      room -> Repo.preload(room, [:messages]).messages |> Enum.sort(comparator)
+    end
   end
 
   def get_room_users(id) do
-    room = Repo.get(Room, id) |> Repo.preload([:users])
-    room.users
+    case Repo.get(Room, id) do
+      nil -> nil
+      room -> Repo.preload(room, [:users]).users
+    end
   end
 
   def update_room(%Room{} = room, attrs) do
