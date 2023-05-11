@@ -5,11 +5,9 @@ defmodule ChatApp.Contexts.Messages do
   def get_message(id), do: Repo.get(Message, id)
 
   def update_message(%Message{} = message, attrs) do
-    updated_message =
-      message
-      |> Message.changeset(attrs)
-      |> Repo.update()
-    updated_message
+    message
+    |> Message.changeset(attrs)
+    |> Repo.update()
   end
 
   def insert_message(attrs \\ %{}) do
