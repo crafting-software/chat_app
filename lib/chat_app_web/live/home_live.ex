@@ -13,14 +13,14 @@ defmodule ChatAppWeb.HomeLive do
     ~H"""
     <div class="flex flex-col flex-1 h-full">
       <div>
-        <.header class="hd" >Public Rooms</.header>
+        <.header>Public Rooms</.header>
         <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
       </div>
 
       <div id="divrooms" class="overflow-y-auto w-full mt-8">
         <.table id="rooms" rows={@rooms}>
-          <:col :let={room}><%= room.room_name %></:col>
-          <:col :let={room}><%= room.max_participants %></:col>
+          <:col :let={room} label="Name"><%= room.room_name %></:col>
+          <:col :let={room} label="Max nr of participants"><%= room.max_participants %></:col>
           <:action>
             <.link method="join" class="join_link">
               Join

@@ -37,8 +37,14 @@ tbody#rooms {
 }
 
 #rooms{
-  overflow-y: scroll;
   color: #48435c;
+}
+
+#divrooms table thead th{
+  background-color: #edffec;
+  position: sticky; 
+  top: 0;
+  z-index: 1;
 }
 
 #divrooms td:first-of-type div {

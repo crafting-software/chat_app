@@ -441,7 +441,7 @@ defmodule ChatAppWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="overflow-y-auto w-full px-4 sm:overflow-auto sm:px-0">
+    <div class="w-full px-4 sm:px-0">
       <table class="w-full">
         <thead class="text-sm text-left leading-6 text-zinc-500">
           <tr>
@@ -452,7 +452,7 @@ defmodule ChatAppWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="w-full overflow-y-auto relative divide-y divide-zinc-100 border-zinc-200 text-sm leading-6 text-zinc-700">
+          class="w-full relative divide-y divide-zinc-100 border-zinc-200 text-sm leading-6 text-zinc-700">
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group-hover:bg-forestgreen group-hover:px-4 group-hover:rounded-3xl group hover:text-zinc-50">
             <td
               :for={{col, i} <- Enum.with_index(@col)}
