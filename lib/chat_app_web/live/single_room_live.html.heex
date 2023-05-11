@@ -30,22 +30,22 @@
   </div>
 </.header>
 
-<div id="chatbox_container" class="rounded-2xl bg-green-100">
-<div id="chatbox" class="h-80 rounded-2xl bg-green-100 overflow-y-auto mt-3">
-  <ul>
-    <% number_of_messages = length(@messages) %>
-    <%= if number_of_messages > 0 do %>
-      <%= for message_index <- number_of_messages-1..0 do %>
-        <% message = Enum.at(@messages, message_index) %>
-        <li class="message rounded-2xl p-2">
-          <%= if not is_nil(Map.get(message, :sender)) do %>
-            <div class="message_header">
-              <span class="message_username m-2 font-bold"><%= message.sender %></span>
-              <span
-                id={"message-datetime-#{message.id}"}
-                class="message_datetime"
-                phx-hook="HandleTimestampTimezone"
-              >
+<div id="chatbox_container" class="rounded-2xl bg-green-100 ">
+  <div id="chatbox" class="h-80 rounded-2xl bg-green-100 overflow-y-auto mt-3">
+    <ul>
+      <% number_of_messages = length(@messages) %>
+      <%= if number_of_messages > 0 do %>
+        <%= for message_index <- number_of_messages-1..0 do %>
+          <% message = Enum.at(@messages, message_index) %>
+          <li class="message rounded-2xl p-2">
+            <%= if not is_nil(Map.get(message, :sender)) do %>
+              <div class="message_header">
+                <span class="message_username m-2 font-bold"><%= message.sender %></span>
+                <span
+                  id={"message-datetime-#{message.id}"}
+                  class="message_datetime"
+                  phx-hook="HandleTimestampTimezone"
+                >
                 <%= message.inserted_at %>
               </span>
               <%= if not message.is_deleted do %>
