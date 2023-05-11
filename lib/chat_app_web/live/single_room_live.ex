@@ -34,14 +34,13 @@ defmodule ChatAppWeb.SingleRoomLive do
     end
 
     room = ChatApp.Contexts.Rooms.get_room(room_id)
-    comparator = fn x, y -> DateTime.compare(x.timestamp, y.timestamp) != :gt end
 
     {:ok,
      assign(socket,
        room_id: room_id,
        room: room,
        topic: topic,
-       messages: Enum.sort(ChatApp.Contexts.Rooms.get_room_messages(room_id), comparator),
+       messages: ChatApp.Contexts.Rooms.get_room_messages(room_id),
        users: ChatApp.Contexts.Rooms.get_room_users(room_id)
      )}
   end
@@ -107,6 +106,7 @@ defmodule ChatAppWeb.SingleRoomLive do
     {:noreply, socket}
   end
 
+  @impl true
   def handle_info(:refresh_messages, socket) do
     {:noreply,
      assign(socket, messages: ChatApp.Contexts.Rooms.get_room_messages(socket.assigns.room_id))}

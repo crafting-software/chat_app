@@ -45,7 +45,7 @@
                 class="message_datetime"
                 phx-hook="HandleTimestampTimezone"
               >
-                <%= message.timestamp %>
+                <%= message.inserted_at %>
               </span>
               <%= if not message.is_deleted do %>
                 <div class="message_settings_container">

@@ -4,6 +4,7 @@ defmodule ChatApp.Structs.Message do
 
   @primary_key {:id, Ecto.UUID, autogenerate: true}
   @foreign_key_type Ecto.UUID
+  @timestamps_opts [type: :utc_datetime_usec]
 
   schema "messages" do
     field(:sender, :string)
@@ -11,10 +12,8 @@ defmodule ChatApp.Structs.Message do
 
     belongs_to(:room, ChatApp.Structs.Room, references: :id)
 
-    field(:timestamp, :utc_datetime)
     field(:is_deleted, :boolean)
     field(:is_edited, :boolean)
-    field(:seq_number, :integer)
 
     timestamps()
   end

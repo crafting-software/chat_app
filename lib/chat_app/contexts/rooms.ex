@@ -8,7 +8,8 @@ defmodule ChatApp.Contexts.Rooms do
 
   def get_room_messages(id) do
     room = Repo.get(Room, id) |> Repo.preload([:messages])
-    room.messages
+    comparator = fn x, y -> DateTime.compare(x.inserted_at, y.inserted_at) == :gt end
+    Enum.sort(room.messages, comparator)
   end
 
   def get_room_users(id) do
