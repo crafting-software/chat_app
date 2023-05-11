@@ -27,6 +27,7 @@ defmodule ChatAppWeb.HomeLive do
             </.link>
           </:action>
         </.table>
+        <div id="gradient"></div>
       </div>
 
       <form>

@@ -67,6 +67,15 @@ tbody#rooms {
   color: #329325;
 }
 
+div#gradient {
+  background: #edffec;
+  background: linear-gradient(180deg, rgba(237,255,236,0) 0%, rgba(237,255,236,1) 100%);  
+  padding: 50px;
+  position: sticky; 
+  bottom: 0;
+  z-index: 1;
+}
+
 .drawing {
   position: fixed;
   transform: translate(-50%, -50%);
