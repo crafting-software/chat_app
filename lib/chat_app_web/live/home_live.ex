@@ -15,10 +15,9 @@ defmodule ChatAppWeb.HomeLive do
   def render(assigns) do
     ~H"""
     <div class="hd">
-    <.header class="hd">Public Rooms</.header>
-    <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
+      <.header class="hd">Public Rooms</.header>
+      <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
     </div>
-
 
     <.table id="rooms" rows={@rooms}>
       <:col :let={room}><%= room.id %></:col>
@@ -32,7 +31,7 @@ defmodule ChatAppWeb.HomeLive do
     </.table>
 
     <form class="jn">
-      <.input id="roomcode" name="roomcode" value="" placeholder="room code here"/>
+      <.input id="roomcode" name="roomcode" value="" placeholder="room code here" />
       <.button id="join">Join</.button>
     </form>
 
@@ -73,6 +72,6 @@ defmodule ChatAppWeb.HomeLive do
 
     {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
 
-    {:noreply, socket |> push_redirect(to: "/rooms/#{result.id}")}
+    {:noreply, socket |> push_navigate(to: "/rooms/#{result.id}")}
   end
 end

@@ -1,10 +1,10 @@
 function adaptUtcTimestampToUserTimezone(component) {
-    dateElement = document.getElementById(component.el.id)
-    utcTimestamp = dateElement.innerHTML
-    dateElement.innerHTML = new Date(utcTimestamp).toLocaleString().replace(",", "")
+    const dateElement = document.getElementById(component.el.id)
+    const utcTimestamp = dateElement.innerHTML.trim()
+    dateElement.innerHTML = new Date(utcTimestamp).toLocaleString('en-GB')
 }
 
-HandleTimestampTimezone = {
+const HandleTimestampTimezone = {
     mounted() {
         adaptUtcTimestampToUserTimezone(this)
     },

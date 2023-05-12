@@ -16,7 +16,7 @@ function addPointerLeaveListenerOnMessageSettingsPopup(component) {
     })
 }
 
-CloseMessageSettings = {
+const CloseMessageSettings = {
     mounted() {
         addClickEventListenerOnMessageSettingsPopup(this)
         addPointerLeaveListenerOnMessageSettingsPopup(this)
