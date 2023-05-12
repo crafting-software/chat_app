@@ -16,6 +16,7 @@ defmodule ChatAppWeb.HomeLive do
         <.header>Public Rooms</.header>
         <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
       </div>
+
       <div id="container" class="overflow-y-auto w-full mt-8">
         <div id="divrooms" class="overflow-y-auto w-full">
           <.table id="rooms" rows={@rooms}>
@@ -30,15 +31,11 @@ defmodule ChatAppWeb.HomeLive do
         </div>
         <div id="gradient"></div>
       </div>
+
       <form>
         <.input id="roomcode" name="roomcode" value="" placeholder="room code here" />
         <.button id="join">Join</.button>
       </form>
-
-      <div class="drawing">
-        <div class="draw" id="jos"></div>
-        <div class="draw" id="sus"></div>
-      </div>
 
       <div class="drawing">
         <div class="draw" id="downleft"></div>

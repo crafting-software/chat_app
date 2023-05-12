@@ -24,110 +24,7 @@ import topbar from "../vendor/topbar"
 import { Picker } from 'emoji-picker-element'
 import { Hooks } from './hooks'
 
-<<<<<<< HEAD
 import "./room-modal"
-=======
-import "./room-modal.js"
-// let Hooks = {}
-
-function extractActionAndMessageIdFromDomElementId(element) {
-    return element.id.split(/-(.*)/s)
-}
-
-function triggerMessageDeletionEvent(event, component) {
-    if (event.relatedTarget != undefined) {
-        elementType = event.relatedTarget.localName 
-        elementAction = extractActionAndMessageIdFromDomElementId(event.relatedTarget)[0]
-        if (elementType != undefined && elementType == "button" && elementAction == "delete") {
-            component.pushEvent("delete_message", {"id": extractActionAndMessageIdFromDomElementId(event.srcElement)[1]}) 
-        }
-    }
-}
-
-function addClickEventListenerOnMessageSettingsButton(component) {
-    component.el.addEventListener("click", event => {
-        event.target.focus()
-        elementId = "settings-" + extractActionAndMessageIdFromDomElementId(event.srcElement)[1]
-        document.getElementById(elementId).toggleAttribute("hidden")
-    })
-}
-
-function addFocusOutEventListenerOnMessageSettingsButton(component) {
-    component.el.addEventListener("focusout", event => {
-        elementId = "settings-" + extractActionAndMessageIdFromDomElementId(event.srcElement)[1]
-        document.getElementById(elementId).setAttribute("hidden", "hidden")
-        triggerMessageDeletionEvent(event, component)
-    })
-}
-
-function addClickEventListenerOnMessageSettingsPopup(component) {
-    component.el.addEventListener("click", event => {
-        event.target.focus()
-        elementId = "settings-" + extractActionAndMessageIdFromDomElementId(event.srcElement)[1]
-        document.getElementById(elementId).setAttribute("hidden", "hidden")
-    })
-}
-
-function addPointerLeaveListenerOnMessageSettingsPopup(component) {
-    component.el.addEventListener("pointerleave", event => {
-        messageId = extractActionAndMessageIdFromDomElementId(event.srcElement)[1]
-        document.getElementById("settings-" + messageId).setAttribute("hidden", "hidden")
-        document.getElementById("button-" + messageId).blur()
-    })
-}
-
-function adaptUtcTimestampToUserTimezone(component) {
-    dateElement = document.getElementById(component.el.id)
-    utcTimestamp = dateElement.innerHTML
-    dateElement.innerHTML = new Date(utcTimestamp).toLocaleString().replace(",", "")
-}
-
-Hooks.OpenMessageSettings = {
-    mounted() {
-        addClickEventListenerOnMessageSettingsButton(this)
-        addFocusOutEventListenerOnMessageSettingsButton(this)
-    } 
-}
-
-Hooks.CloseMessageSettings = {
-    mounted() {
-        addClickEventListenerOnMessageSettingsPopup(this)
-        addPointerLeaveListenerOnMessageSettingsPopup(this)
-    }
-}
-
-Hooks.HandleTimestampTimezone = {
-    mounted() {
-        adaptUtcTimestampToUserTimezone(this)
-    },
-
-    updated() {
-        adaptUtcTimestampToUserTimezone(this)
-    }
-}
-
-Hooks.SendMessageOnEnterKeyPress = {
-    mounted() {
-        this.el.addEventListener("keydown", (event) => {
-            if (event.which === 13 && !event.shiftKey) {
-                textareaElement = document.getElementById("message_textarea") 
-                this.pushEvent("save_message",  {"text": textareaElement.value})
-                textareaElement.value = ""
-                textareaElement.blur()
-            } 
-        })
-    }
-}
-<<<<<<< HEAD
-import { Picker } from 'emoji-picker-element'
-import { Hooks } from 'hooks'
-<<<<<<< HEAD
->>>>>>> 7d6b0e8 (feat(3): removed * selector css)
->>>>>>> e5d059c (feat(3): removed * selector css)
-=======
->>>>>>> ae72e07 (incorporated new room modal button)
-=======
->>>>>>> 52697a2 (feat(3): resolved merge conflicts)
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
@@ -150,28 +47,6 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
-<<<<<<< HEAD
-=======
-
-let textareaElement = document.getElementById("message_textarea")
-let emojiButton = document.getElementById("emoji_button")
-let emojiPopup = document.querySelector('emoji-picker')
-
-window.onclick = event => {
-    ids = ["emoji_button", "emoji_popup"]
-    if (!ids.includes(event.target.id))
-        emojiPopup.setAttribute("hidden", "hidden")
-}
-
-emojiButton.addEventListener("click", event => {
-    emojiPopup.toggleAttribute("hidden")
-})
-
-document.querySelector('emoji-picker').addEventListener('emoji-click', event => {
-    textareaElement.value += event.detail.unicode
-    emojiPopup.setAttribute("hidden", "hidden")
-})
-
 
 const container = document.querySelector('#container');
 const rooms = document.querySelector('#divrooms');
@@ -181,11 +56,9 @@ container.addEventListener('scroll', function() {
   const wrapperHeight = container.offsetHeight;
   const contentHeight = rooms.offsetHeight;
   const scrollPosition = container.scrollTop;
-
   if (scrollPosition + wrapperHeight >= contentHeight) {
     gradient.style.display = 'none';
   } else {
     gradient.style.display = 'block';
   }
 });
->>>>>>> be5d7df (feat(3): solved gradient div disappearing)
