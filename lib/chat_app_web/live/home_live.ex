@@ -16,20 +16,20 @@ defmodule ChatAppWeb.HomeLive do
         <.header>Public Rooms</.header>
         <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
       </div>
-
-      <div id="divrooms" class="overflow-y-auto w-full mt-8">
-        <.table id="rooms" rows={@rooms}>
-          <:col :let={room} label="Name"><%= room.room_name %></:col>
-          <:col :let={room} label="Max nr of participants"><%= room.max_participants %></:col>
-          <:action>
-            <.link method="join" class="join_link">
-              Join
-            </.link>
-          </:action>
-        </.table>
+      <div id="container" class="overflow-y-auto w-full mt-8">
+        <div id="divrooms" class="overflow-y-auto w-full">
+          <.table id="rooms" rows={@rooms}>
+            <:col :let={room} label="Name"><%= room.room_name %></:col>
+            <:col :let={room} label="Max nr of participants"><%= room.max_participants %></:col>
+            <:action>
+              <.link method="join">
+                Join
+              </.link>
+            </:action>
+          </.table>
+        </div>
         <div id="gradient"></div>
       </div>
-
       <form>
         <.input id="roomcode" name="roomcode" value="" placeholder="room code here" />
         <.button id="join">Join</.button>

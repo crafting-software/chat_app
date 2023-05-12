@@ -150,3 +150,42 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
+<<<<<<< HEAD
+=======
+
+let textareaElement = document.getElementById("message_textarea")
+let emojiButton = document.getElementById("emoji_button")
+let emojiPopup = document.querySelector('emoji-picker')
+
+window.onclick = event => {
+    ids = ["emoji_button", "emoji_popup"]
+    if (!ids.includes(event.target.id))
+        emojiPopup.setAttribute("hidden", "hidden")
+}
+
+emojiButton.addEventListener("click", event => {
+    emojiPopup.toggleAttribute("hidden")
+})
+
+document.querySelector('emoji-picker').addEventListener('emoji-click', event => {
+    textareaElement.value += event.detail.unicode
+    emojiPopup.setAttribute("hidden", "hidden")
+})
+
+
+const container = document.querySelector('#container');
+const rooms = document.querySelector('#divrooms');
+const gradient = document.querySelector('#gradient');
+
+container.addEventListener('scroll', function() {
+  const wrapperHeight = container.offsetHeight;
+  const contentHeight = rooms.offsetHeight;
+  const scrollPosition = container.scrollTop;
+
+  if (scrollPosition + wrapperHeight >= contentHeight) {
+    gradient.style.display = 'none';
+  } else {
+    gradient.style.display = 'block';
+  }
+});
+>>>>>>> be5d7df (feat(3): solved gradient div disappearing)

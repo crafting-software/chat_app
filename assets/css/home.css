@@ -67,12 +67,18 @@ tbody#rooms {
   color: #329325;
 }
 
+div#container{
+  height: 100%;
+  width: 100%;
+}
+
 div#gradient {
   background: #edffec;
   background: linear-gradient(180deg, rgba(237,255,236,0) 0%, rgba(237,255,236,1) 100%);  
-  padding: 50px;
-  position: sticky; 
+  height: 100px;
+  width: 80%;
   bottom: 0;
+  position: sticky; 
   z-index: 1;
 }
 
