@@ -31,7 +31,7 @@
 </.header>
 
 <div id="chatbox_container" class="rounded-2xl bg-green-100 ">
-  <div id="chatbox" class="h-80 rounded-2xl bg-green-100 overflow-y-auto mt-3">
+  <div id="chatbox" class="h-80 rounded-2xl bg-green-100 overflow-y-auto mt-3" phx-hook="ScrollingMechanism">
     <ul>
       <% number_of_messages = length(@messages) %>
       <%= if number_of_messages > 0 do %>
@@ -115,10 +115,10 @@
         users_enumeration_string = Map.keys(actual_users_typing) |> Enum.join(", ")
         correct_present_continuous_verb = if number_of_users_typing == 1, do: "is", else: "are"
       %>
-      <button id="message_notifier_button" hidden class="text-center text-white rounded-3xl bg-purple-800">
+      <button id="message_notifier_button" hidden class="text-center text-white rounded-3xl bg-purple-800" phx-hook="ZoomInAnimationTrigger">
         <span class="arrow_symbol">↓</span>
       </button>
-      <div id="chatbox_anchor">
+      <div id="chatbox_anchor" phx-hook="TypingIndicatorMechanism">
         <p>
         <%=
           cond do

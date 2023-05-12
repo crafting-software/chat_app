@@ -3,6 +3,7 @@ defmodule ChatAppWeb.SingleRoomLive do
   alias Bitwise
   alias Phoenix.PubSub
   alias ChatApp.LiveviewMonitor
+  alias Faker
   require Logger
 
   @impl true
@@ -57,7 +58,7 @@ defmodule ChatAppWeb.SingleRoomLive do
   def handle_event("save_message", %{"text" => new_message_text}, socket) do
     case Regex.match?(~r/^\s*$/, new_message_text) do
       false ->
-        message = ChatApp.Contexts.Messages.create_message_as_map(new_message_text, "anon", socket.assigns.room_id)
+        message = ChatApp.Contexts.Messages.create_message_as_map(new_message_text, socket.assigns.username, socket.assigns.room_id)
         ChatApp.Contexts.Messages.insert_message(message)
         PubSub.broadcast(ChatApp.PubSub, socket.assigns.topic, :refresh_messages)
         {:noreply, socket}
