@@ -1,5 +1,3 @@
-import { delay } from "../utils"
- 
 const CaptureKeyPress = {
     mounted() {
         this.el.addEventListener("keydown", event => {
@@ -14,8 +12,9 @@ const CaptureKeyPress = {
         })
 
         this.el.addEventListener("blur", async (event) => {
-            await delay(2000)
-            this.pushEvent("user_typing_indication_ended", {})
+            setTimeout(() => {
+                this.pushEvent("user_typing_indication_ended", {})
+            }, 2000)
         })
     }
 }
