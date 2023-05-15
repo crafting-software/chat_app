@@ -48,10 +48,10 @@
                 >
                 <%= message.inserted_at %>
               </span>
-              <%= if not message.is_deleted do %>
-                <div class="message_settings_container">
-                  <ul class="menu">
-                    <li>
+                <%= if not message.is_deleted and message.sender == @username do %>
+                  <div class="message_settings_container">
+                    <ul class="menu">
+                      <li>
                       <button
                         id={"button-#{message.id}"}
                         class="message_settings_button items-center p-1.5 text-sm font-medium text-center text-gray-900 hover:bg-green-200 focus:bg-green-200"
