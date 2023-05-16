@@ -4,14 +4,17 @@
 
 input, textarea, button, select, a {
     -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 .message {
     padding: 5px;
 }
 
-button:hover {
-    background: #9792E3;
+@media (hover: hover) and (pointer: fine) {
+    button:hover {
+        background: #9792E3;
+    }
 }
 
 .user-list-item {
@@ -23,7 +26,7 @@ button:hover {
 }
 
 emoji-picker {
-    --num-columns: 6;
+    --num-columns: 4;
     --emoji-size: 1rem;
     --border-size: 5px;
     --border-radius: 5px;
@@ -36,20 +39,38 @@ emoji-picker {
     left: 35px;
     z-index: 10;
     animation-duration: 0.1s;
-    animation-name: zoom;
+    animation-name: zoom-in;
 }
 
-#chatbox * {
-    overflow-anchor: none;
+#chatbox_container {
+    position: relative;
+}
+
+#chatbox {
+    position: relative;
 }
 
 #chatbox_anchor {
-    overflow-anchor: auto;
-    height: 1px;
+    height: 20px;
+    font-size: 8px;
+    padding-left: 16px;
+    bottom: -30px;
+    position: sticky;
+    animation-direction: normal;
+    animation-duration: 1s;
+    border-radius: 10px;
 }
 
-.message_content {
-    word-wrap: break-word;
+.opened_typing_indicator {
+    animation-name: slide-up;
+}
+
+pre {
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
 .message_content pre {
@@ -66,6 +87,10 @@ emoji-picker {
 
 .message_settings_container > menu > * {
     float: right;
+}
+
+.message:hover .message_settings_container {
+    display: block;
 }
 
 .menu div {
@@ -103,20 +128,47 @@ emoji-picker {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 0px;
     animation-duration: 0.1s;
-    animation-name: zoom;
+    animation-name: zoom-in;
 }
 
 .message_settings_container {
     display: none;
 }
 
-.message:hover .message_settings_container {
+.arrow_symbol {
+    font-size: 30px;
     display: block;
+    -webkit-transform: translate(0px, -3px);
+    -moz-transform: translate(0px, -3px);
+    -o-transform: translate(0px, -3px);
+    transform: translate(0px, -3px);
+    transition: transform 0.2s ease 0s, opacity 0.2s ease 0s;
 }
- 
-@keyframes zoom {
+
+#message_notifier_button {
+    bottom: 5%;
+    left: 50%;
+    position: sticky;
+    width: 40px;
+    height: 40px;
+    transform: translateX(-25%);
+    animation-direction: normal;
+    animation-duration: 0.1s;
+    z-index: 100;
+}
+
+.message_notifier_button_appearance {
+    animation-name: zoom-in;
+}
+
+.message_notifier_button_disappearance {
+    animation-name: slide-up;
+    animation-direction: reverse;
+}
+
+@keyframes zoom-in {
     0% {
-      transform: scale(0.1, 0.1);
+      transform: scale(0.01, 0.01);
     }
 
     25% {
@@ -135,3 +187,13 @@ emoji-picker {
       transform: scale(1, 1);
     }
 }
+
+@keyframes slide-up {
+    from {
+        transform: translateY(25%);
+    }
+    to {
+        transform: translateY(0%);
+    }
+}
+

@@ -50,7 +50,8 @@ defmodule ChatApp.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:etso, "~> 1.1.0"}
+      {:etso, "~> 1.1.0"},
+      {:faker, "~> 0.17"}
     ]
   end
 

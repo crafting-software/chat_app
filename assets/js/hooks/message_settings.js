@@ -10,7 +10,7 @@ function triggerMessageDeletionEvent(event, component) {
     }
 }
 
-function addClickEventListenerOnMessageSettingsButton(component) {
+function addOpeningClickEventListenerOnMessageSettingsButton(component) {
     component.el.addEventListener("click", event => {
         event.target.focus()
         elementId = "settings-" + extractActionAndMessageIdFromDomElementId(event.srcElement)[1]
@@ -26,11 +26,28 @@ function addFocusOutEventListenerOnMessageSettingsButton(component) {
     })
 }
 
-const OpenMessageSettings = {
+function addClickEventListenerOnMessageSettingsPopup(component) {
+    const messageId = extractActionAndMessageIdFromDomElementId(component.el)[1]
+    const messageSettingsPopup = document.getElementById("settings-" + messageId)
+    if (messageSettingsPopup != undefined) {
+        document.addEventListener("click", event => {
+            const isClickInside = messageSettingsPopup.contains(event.target) || component.el.contains(event.target)
+            if (!isClickInside) {
+                messageSettingsPopup.setAttribute("hidden", "hidden")
+            } else {
+                event.target.focus()
+                messageSettingsPopup.removeAttribute("hidden")
+            }
+        })
+    }
+}
+
+const MessageSettings = {
     mounted() {
-        addClickEventListenerOnMessageSettingsButton(this)
+        addOpeningClickEventListenerOnMessageSettingsButton(this)
         addFocusOutEventListenerOnMessageSettingsButton(this)
+        addClickEventListenerOnMessageSettingsPopup(this)
     } 
 }
 
-export { OpenMessageSettings }
+export { MessageSettings }

@@ -10,7 +10,7 @@ defmodule ChatApp.LiveviewMonitor do
     {:ok, %{views: %{}}}
   end
 
-  def monitor(pid, view_module, liveview_data) do
+  def monitor!(pid, view_module, liveview_data) do
     case Process.whereis(__MODULE__) do
       nil -> raise RuntimeError, message: "Monitor process is not alive."
       monitor_pid -> GenServer.call(monitor_pid, {:monitor, pid, view_module, liveview_data})

@@ -30,31 +30,32 @@
   </div>
 </.header>
 
-<div id="chatbox" class="h-80 rounded-2xl bg-green-100 overflow-y-auto mt-3">
-  <ul>
-    <% number_of_messages = length(@messages) %>
-    <%= if number_of_messages > 0 do %>
-      <%= for message_index <- number_of_messages-1..0 do %>
-        <% message = Enum.at(@messages, message_index) %>
-        <li class="message rounded-2xl p-2">
-          <%= if not is_nil(Map.get(message, :sender)) do %>
-            <div class="message_header">
-              <span class="message_username m-2 font-bold"><%= message.sender %></span>
-              <span
-                id={"message-datetime-#{message.id}"}
-                class="message_datetime"
-                phx-hook="HandleTimestampTimezone"
-              >
+<div id="chatbox_container" class="rounded-2xl bg-green-100 ">
+  <div id="chatbox" class="h-80 rounded-2xl bg-green-100 overflow-y-auto mt-3" phx-hook="ScrollingMechanism">
+    <ul>
+      <% number_of_messages = length(@messages) %>
+      <%= if number_of_messages > 0 do %>
+        <%= for message_index <- number_of_messages-1..0 do %>
+          <% message = Enum.at(@messages, message_index) %>
+          <li class="message rounded-2xl p-2">
+            <%= if not is_nil(Map.get(message, :sender)) do %>
+              <div class="message_header">
+                <span class="message_username m-2 font-bold"><%= message.sender %></span>
+                <span
+                  id={"message-datetime-#{message.id}"}
+                  class="message_datetime"
+                  phx-hook="HandleTimestampTimezone"
+                >
                 <%= message.inserted_at %>
               </span>
-              <%= if not message.is_deleted do %>
-                <div class="message_settings_container">
-                  <ul class="menu">
-                    <li>
+                <%= if not message.is_deleted and message.sender == @username do %>
+                  <div class="message_settings_container">
+                    <ul class="menu">
+                      <li>
                       <button
                         id={"button-#{message.id}"}
                         class="message_settings_button items-center p-1.5 text-sm font-medium text-center text-gray-900 hover:bg-green-200 focus:bg-green-200"
-                        phx-hook="OpenMessageSettings"
+                        phx-hook="MessageSettings"
                       >
                         <svg
                           id={"svg-#{message.id}"}
@@ -75,7 +76,6 @@
                         id={"settings-#{message.id}"}
                         hidden
                         class="message_settings_submenu p-1.5 bg-green-200 focus:bg-green-200"
-                        phx-hook="CloseMessageSettings"
                       >
                         <button
                           id={"edit-#{message.id}"}
@@ -103,30 +103,36 @@
               <% true -> %>
                 <pre><%= message.content %></pre>
             <% end %>
-          </div>
-        </li>
+            </div>
+          </li>
+        <% end %>
       <% end %>
-    <% end %>
-  </ul>
-  <div id="chatbox_anchor"></div>
+      </ul>
+      <%
+        number_of_users_typing = MapSet.size(@users_typing)
+        users_enumeration_string = MapSet.to_list(@users_typing) |> Enum.join(", ")
+        correct_present_continuous_verb = if number_of_users_typing == 1, do: "is", else: "are"
+      %>
+      <button id="message_notifier_button" hidden class="text-center text-white rounded-3xl bg-purple-800" phx-hook="NotifierButtonPress">
+        <span class="arrow_symbol">↓</span>
+      </button>
+      <div id="chatbox_anchor" phx-hook="TypingIndicatorMechanism">
+        <p>
+        <%=
+          case number_of_users_typing do
+            0 -> ""
+            x when x in 1..5 -> users_enumeration_string <> " " <> correct_present_continuous_verb <> " typing..."
+            _ -> "Many users are typing..."
+          end
+        %>
+        </p>
+      </div>
+  </div>
 </div>
 
 <form action="#" phx-submit="save_message" class="my-2 grid grid-cols-6 gap-2">
-  <textarea
-    name="text"
-    id="message_textarea"
-    maxlength="1000"
-    cols="50"
-    rows="2"
-    class="rounded-2xl bg-green-100 border-0 focus:border focus:border-purple-800 col-span-5 resize-none"
-    phx-hook="SendMessageOnEnterKeyPress"
-  ></textarea>
-  <button
-    type="submit"
-    class="rounded-2xl text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce float-right"
-  >
-    Send
-  </button>
+  <textarea name="text" id="message_textarea" maxlength="1000" cols="50" rows="2" class="rounded-2xl bg-green-100 border-0 focus:border focus:border-purple-800 col-span-5 resize-none" phx-hook="CaptureKeyPress"></textarea>
+  <button type="submit" class="rounded-2xl text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce float-right">Send</button>
 </form>
 
 <div id="emoji_utils_container" class="my-2 gap-2">
