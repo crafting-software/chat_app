@@ -11,8 +11,10 @@ input, textarea, button, select, a {
     padding: 5px;
 }
 
-button:hover {
-    background: #9792E3;
+@media (hover: hover) and (pointer: fine) {
+    button:hover {
+        background: #9792E3;
+    }
 }
 
 .user-list-item {
@@ -24,7 +26,7 @@ button:hover {
 }
 
 emoji-picker {
-    --num-columns: 6;
+    --num-columns: 4;
     --emoji-size: 1rem;
     --border-size: 5px;
     --border-radius: 5px;
@@ -87,6 +89,10 @@ pre {
     float: right;
 }
 
+.message:hover .message_settings_container {
+    display: block;
+}
+
 .menu div {
     width: 4.5rem;
 }
@@ -129,20 +135,23 @@ pre {
     display: none;
 }
 
-.message:hover .message_settings_container {
-    display: block;
-}
-
 .arrow_symbol {
     font-size: 30px;
+    display: block;
+    -webkit-transform: translate(0px, -3px);
+    -moz-transform: translate(0px, -3px);
+    -o-transform: translate(0px, -3px);
+    transform: translate(0px, -3px);
+    transition: transform 0.2s ease 0s, opacity 0.2s ease 0s;
 }
 
 #message_notifier_button {
-    bottom: 40%;
+    bottom: 5%;
     left: 50%;
-    position: fixed;
+    position: sticky;
     width: 40px;
     height: 40px;
+    transform: translateX(-25%);
     animation-direction: normal;
     animation-duration: 0.1s;
     z-index: 100;
@@ -156,7 +165,7 @@ pre {
     animation-name: slide-up;
     animation-direction: reverse;
 }
- 
+
 @keyframes zoom-in {
     0% {
       transform: scale(0.01, 0.01);

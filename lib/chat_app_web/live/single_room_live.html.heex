@@ -55,7 +55,7 @@
                       <button
                         id={"button-#{message.id}"}
                         class="message_settings_button items-center p-1.5 text-sm font-medium text-center text-gray-900 hover:bg-green-200 focus:bg-green-200"
-                        phx-hook="OpenMessageSettings"
+                        phx-hook="MessageSettings"
                       >
                         <svg
                           id={"svg-#{message.id}"}
@@ -76,7 +76,6 @@
                         id={"settings-#{message.id}"}
                         hidden
                         class="message_settings_submenu p-1.5 bg-green-200 focus:bg-green-200"
-                        phx-hook="CloseMessageSettings"
                       >
                         <button
                           id={"edit-#{message.id}"}
@@ -114,7 +113,7 @@
         users_enumeration_string = MapSet.to_list(@users_typing) |> Enum.join(", ")
         correct_present_continuous_verb = if number_of_users_typing == 1, do: "is", else: "are"
       %>
-      <button id="message_notifier_button" hidden class="text-center text-white rounded-3xl bg-purple-800" phx-hook="ZoomInAnimationTrigger">
+      <button id="message_notifier_button" hidden class="text-center text-white rounded-3xl bg-purple-800" phx-hook="NotifierButtonPress">
         <span class="arrow_symbol">↓</span>
       </button>
       <div id="chatbox_anchor" phx-hook="TypingIndicatorMechanism">

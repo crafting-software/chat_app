@@ -1,4 +1,4 @@
-const ZoomInAnimationTrigger = {
+const NotifierButtonPress = {
     mounted() {
         this.el.addEventListener("click", () => {
             const chatbox = document.getElementById("chatbox")
@@ -12,4 +12,4 @@ const ZoomInAnimationTrigger = {
     }
 }
 
-export { ZoomInAnimationTrigger }
+export { NotifierButtonPress }

@@ -3,7 +3,6 @@ const ScrollingMechanism = {
     mounted() {
         this.handleEvent("new_message", (event) => {
             const messageElementHeight = document.querySelector(".message").offsetHeight
-            console.log("NEW MESSAGE!")
             if (this.el.scrollTop > this.el.scrollHeight - 2 * this.el.clientHeight)
                 this.el.scrollTop = this.el.scrollHeight - messageElementHeight
         })
@@ -12,14 +11,12 @@ const ScrollingMechanism = {
             const messageNotifierButton = document.getElementById("message_notifier_button")
 
             if (this.el.scrollTop > lastScrollTopState && this.el.scrollTop > this.el.scrollHeight - 2 * this.el.clientHeight) {
-                console.log("scrolled down")
                 if (!messageNotifierButton.hasAttribute("hidden")) {
                     messageNotifierButton.setAttribute("hidden", "hidden") 
                     messageNotifierButton.classList.remove("message_notifier_button_appearance")
                     messageNotifierButton.classList.add("message_notifier_button_disappearance")
                 }
             } else if (this.el.scrollTop < lastScrollTopState && this.el.scrollTop < this.el.scrollHeight - 2 * this.el.clientHeight) {
-                console.log("scrolled up") 
                 if (messageNotifierButton.hasAttribute("hidden")) {
                     messageNotifierButton.classList.remove("message_notifier_button_disappearance")
                     messageNotifierButton.removeAttribute("hidden") 

@@ -112,9 +112,9 @@ defmodule ChatAppWeb.SingleRoomLive do
   end
 
   def handle_info({:users_typing, username, status}, socket) do
-    cond do
-      socket.assigns.username == username -> {:noreply, socket}
-      socket.assigns.username != username ->
+    case socket.assigns.username do
+      ^username -> {:noreply, socket}
+      _ ->
         current_status = MapSet.member?(socket.assigns.users_typing, username)
         animation_condition = current_status != status or current_status == status and current_status
         users_typing = socket.assigns.users_typing

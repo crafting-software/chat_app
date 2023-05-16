@@ -20,19 +20,24 @@ function addFocusOutEventListenerOnEmojiPopup() {
     })
 }
 
-function addPointerLeaveEventListenerOnEmojiPopup() {
+function addClickOffEventListenerForEmojiPopup(component) {
     const emojiPicker = document.querySelector('emoji-picker')
-    emojiPicker.addEventListener("pointerleave", event => {
-        emojiPicker.setAttribute("hidden", "hidden")
-    })
+    if (emojiPicker != undefined && component.el != undefined) {
+        document.addEventListener("click", event => {
+            const isClickInside = emojiPicker.contains(event.target) || component.el.contains(event.target)
+            if (!isClickInside) {
+                emojiPicker.setAttribute("hidden", "hidden")
+            }
+        })
+    }
 }
 
 const OpenEmojiPopup = {
     mounted() {
         addClickEventListenerOnEmojiButton(this)
         addClickEventListenerOnEmojiPopup(this)
+        addClickOffEventListenerForEmojiPopup(this)
         addFocusOutEventListenerOnEmojiPopup()
-        addPointerLeaveEventListenerOnEmojiPopup()
     }
 }
 
