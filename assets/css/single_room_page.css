@@ -28,8 +28,8 @@ input, textarea, button, select, a {
 emoji-picker {
     --num-columns: 4;
     --emoji-size: 1rem;
-    --border-size: 5px;
-    --border-radius: 5px;
+    --border-size: 1px;
+    --input-border-radius: 10px;
     --background: #dcfce7;
 }
 

@@ -32,8 +32,22 @@ function addClickOffEventListenerForEmojiPopup(component) {
     }
 }
 
+function roundEmojiPopupBorders() {
+    const emojiPicker = document.querySelector("emoji-picker")
+    if (emojiPicker != undefined) {
+        const style = document.createElement("style")
+        style.textContent = `
+            .picker {
+                border-radius: 20px;
+            }
+        `
+        emojiPicker.shadowRoot.appendChild(style)
+    }
+}
+
 const OpenEmojiPopup = {
     mounted() {
+        roundEmojiPopupBorders()
         addClickEventListenerOnEmojiButton(this)
         addClickEventListenerOnEmojiPopup(this)
         addClickOffEventListenerForEmojiPopup(this)
