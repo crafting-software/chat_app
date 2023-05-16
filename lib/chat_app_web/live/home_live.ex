@@ -3,7 +3,7 @@ defmodule ChatAppWeb.HomeLive do
 
   def mount(_params, _session, socket) do
     rooms = ChatApp.Contexts.Rooms.list_rooms()
-    |> Enum.filter(fn room -> room.is_private == false end)
+    |> Enum.filter(fn room -> not room.is_private end)
 
     socket = assign(socket, :rooms, rooms)
     {:ok, socket}
