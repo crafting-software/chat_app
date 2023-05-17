@@ -3,6 +3,4 @@
 @import "tailwindcss/utilities";
 @import "home.css";
 @import "single_room_page.css";
-@import "room-modal.css";
-
-/* This file is for your main application CSS */
+@import "room-modal.css"

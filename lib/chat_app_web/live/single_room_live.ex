@@ -98,17 +98,14 @@ defmodule ChatAppWeb.SingleRoomLive do
   end
 
   def handle_info({:delete_messages, message_id_from_client}, socket) do
-    {:noreply,
-     assign(socket,
-       messages:
-         Enum.map(socket.assigns.messages, fn message ->
-          if message.id == message_id_from_client do
-            %{message | is_deleted: true}
-          else
-            message
-          end
-        end)
-     )}
+    {:noreply, assign(socket, messages: Enum.map(socket.assigns.messages, fn {message_id, message} ->
+      cond do
+        message_id == message_id_from_client ->
+          {message_id, %{message | is_deleted: true}}
+        true ->
+          {message_id, message}
+      end
+    end))}
   end
 
   def handle_info({:users_typing, username, status}, socket) do

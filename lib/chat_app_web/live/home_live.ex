@@ -2,11 +2,8 @@ defmodule ChatAppWeb.HomeLive do
   use ChatAppWeb, :live_view
 
   def mount(_params, _session, socket) do
-    rooms = [
-      %{id: 1, name: "room1", description: "capybara numero uno"},
-      %{id: 2, name: "room2", description: "capybara numero dos"},
-      %{id: 3, name: "room3", description: "capybara numero tres"}
-    ]
+    rooms = ChatApp.Contexts.Rooms.list_rooms()
+    |> Enum.filter(fn room -> not room.is_private end)
 
     socket = assign(socket, :rooms, rooms)
     {:ok, socket}
@@ -14,30 +11,36 @@ defmodule ChatAppWeb.HomeLive do
 
   def render(assigns) do
     ~H"""
-    <div class="hd">
-      <.header class="hd">Public Rooms</.header>
-      <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
-    </div>
+    <div class="flex flex-col flex-1 h-full">
+      <div>
+        <.header>Public Rooms</.header>
+        <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
+      </div>
 
-    <.table id="rooms" rows={@rooms}>
-      <:col :let={room}><%= room.id %></:col>
-      <:col :let={room}><%= room.name %></:col>
-      <:col :let={room}><%= room.description %></:col>
-      <:action>
-        <.link method="join" class="join_link">
-          Join
-        </.link>
-      </:action>
-    </.table>
+      <div id="container" class="overflow-y-auto w-full mt-8">
+        <div id="divrooms" class="overflow-y-auto w-full">
+          <.table id="rooms" rows={@rooms}>
+            <:col :let={room} label="Name"><%= room.room_name %></:col>
+            <:col :let={room} label="Max nr of participants"><%= room.max_participants %></:col>
+            <:action>
+              <.link method="join">
+                Join
+              </.link>
+            </:action>
+          </.table>
+        </div>
+        <div id="gradient"></div>
+      </div>
 
-    <form class="jn">
-      <.input id="roomcode" name="roomcode" value="" placeholder="room code here" />
-      <.button id="join">Join</.button>
-    </form>
+      <form>
+        <.input id="roomcode" name="roomcode" value="" placeholder="room code here" />
+        <.button id="join">Join</.button>
+      </form>
 
-    <div class="drawing">
-      <div class="draw" id="jos"></div>
-      <div class="draw" id="sus"></div>
+      <div class="drawing">
+        <div class="draw" id="downleft"></div>
+        <div class="draw" id="upright"></div>
+      </div>
     </div>
     """
   end
