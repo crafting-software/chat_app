@@ -244,6 +244,20 @@ defmodule ChatAppWeb.SingleRoomLive do
      )}
   end
 
+  def handle_info({:edit_messages, %{"id" => message_id_from_client, "content" => content}}, socket) do
+    {:noreply,
+     assign(socket,
+       messages:
+         Enum.map(socket.assigns.messages, fn message ->
+          if message.id == message_id_from_client do
+            %{message | content: content, is_edited: true}
+          else
+            message
+          end
+        end)
+     )}
+  end
+
   def handle_info({:users_typing, username, status}, socket) do
     case socket.assigns.username do
       ^username ->
