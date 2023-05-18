@@ -17,9 +17,12 @@ defmodule ChatAppWeb.HomeLive do
   def render(assigns) do
     ~H"""
     <div class="flex flex-col flex-1 h-full">
-      <div>
+      <div id="homepage_header">
         <.header>Public Rooms</.header>
-        <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
+        <div id="modals">
+          <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
+          <.live_component module={ChatAppWeb.JoinRoomComponent} id="join-room-modal" />
+        </div>
       </div>
 
       <div id="container" class="overflow-y-auto w-full mt-8">
@@ -28,7 +31,7 @@ defmodule ChatAppWeb.HomeLive do
             <:col :let={room} label="Name"><%= room.room_name %></:col>
             <:col :let={room} label="Max nr of participants"><%= room.max_participants %></:col>
             <:action>
-              <.link method="join">
+              <.link>
                 Join
               </.link>
             </:action>
@@ -36,11 +39,6 @@ defmodule ChatAppWeb.HomeLive do
         </div>
         <div id="gradient"></div>
       </div>
-
-      <form>
-        <.input id="roomcode" name="roomcode" value="" placeholder="room code here" />
-        <.button id="join">Join</.button>
-      </form>
 
       <div class="drawing">
         <div class="draw" id="downleft"></div>
@@ -82,4 +80,25 @@ defmodule ChatAppWeb.HomeLive do
 
     {:noreply, socket |> push_navigate(to: "/rooms/#{result.id}")}
   end
+
+  def handle_event(
+        "join_room",
+        %{
+          "username" => username,
+          "room_id" => room_id
+        },
+        socket
+      ) do
+
+    user = %{
+      "username" => username,
+      "room_id" => room_id
+    }
+
+    {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
+
+    {:noreply, socket |> push_navigate(to: "/rooms/#{room_id}")}
+  end
+
+
 end
