@@ -72,6 +72,7 @@
                           </path>
                         </svg>
                       </button>
+                      <emoji-picker class="light" id={"message_reactions_popup-#{message.id}"} hidden phx-hook="HandleReactionPopup"></emoji-picker>
                       <div
                         id={"settings-#{message.id}"}
                         hidden
@@ -81,13 +82,19 @@
                           id={"edit-#{message.id}"}
                           class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"
                         >
-                          Edit
+                          ✎
                         </button>
                         <button
                           id={"delete-#{message.id}"}
                           class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"
                         >
-                          Delete
+                          🗑️
+                        </button>
+                        <button
+                          id={"reaction_button-#{message.id}"}
+                          class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"
+                        >
+                          😁
                         </button>
                       </div>
                     </li>

@@ -9,7 +9,7 @@ function addClickEventListenerOnEmojiPopup(component) {
     const emojiPicker = document.querySelector('emoji-picker')
     emojiPicker.addEventListener('emoji-click', event => {
         document.getElementById("message_textarea").value += event.detail.unicode
-        component.el.blur()
+        component.el.blur() 
     })
 }
 

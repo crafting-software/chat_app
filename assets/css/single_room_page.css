@@ -33,6 +33,17 @@ emoji-picker {
     --background: #dcfce7;
 }
 
+emoji-picker:not([id="emoji_popup"]) {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    height: 200px;
+    z-index: 100;
+    --num-columns: 3;
+    --border-size: 0px;
+    --background: #a7f3d0;
+}
+
 #emoji_popup {
     position: absolute;
     bottom: 0px;
@@ -44,10 +55,12 @@ emoji-picker {
 
 #chatbox_container {
     position: relative;
+    z-index: 0;
 }
 
 #chatbox {
     position: relative;
+    z-index: 0;
 }
 
 #chatbox_anchor {
@@ -94,7 +107,7 @@ pre {
 }
 
 .menu div {
-    width: 4.5rem;
+    width: 2.75rem;
 }
 
 .menu {
@@ -104,6 +117,7 @@ pre {
 .menu button {
     background: transparent;
     cursor: pointer;
+    font-size: 20px;
 }
 
 .message_settings_button {
@@ -121,8 +135,8 @@ pre {
 
 .message_settings_submenu {
     position: absolute;
-    left: -65px;
-    top: -40px;
+    left: -35px;
+    top: -72px;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -164,6 +178,10 @@ pre {
 .message_notifier_button_disappearance {
     animation-name: slide-up;
     animation-direction: reverse;
+}
+
+#emoji_button {
+    font-size: 20px;
 }
 
 @keyframes zoom-in {

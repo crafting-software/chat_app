@@ -70,11 +70,11 @@ defmodule ChatAppWeb.SingleRoomLive do
     end
   end
 
-  def handle_event("delete_message", %{"id" => message_id_from_client}, socket) do
-    deleted_message = ChatApp.Contexts.Messages.get_message(message_id_from_client)
+  def handle_event("delete_message", %{"id" => message_id}, socket) do
+    deleted_message = ChatApp.Contexts.Messages.get_message(message_id)
     ChatApp.Contexts.Messages.update_message(deleted_message, %{is_deleted: true})
 
-    broadcasted_message = {:delete_messages, message_id_from_client}
+    broadcasted_message = {:delete_messages, message_id}
     PubSub.broadcast(ChatApp.PubSub, socket.assigns.messages_topic, broadcasted_message)
     {:noreply, socket}
   end
@@ -85,6 +85,19 @@ defmodule ChatAppWeb.SingleRoomLive do
 
     broadcasted_message = {:edit_messages, %{"id" => message_id_from_client, "content" => content}}
     PubSub.broadcast(ChatApp.PubSub, socket.assigns.messages_topic, broadcasted_message)
+    {:noreply, socket}
+  end
+
+  def handle_event("add_reaction", %{"id" => message_id, "content" => content}, socket) do
+    message = ChatApp.Contexts.Messages.get_message(message_id)
+    reaction = %ChatApp.Structs.Reaction{
+      sender: socket.assigns.username,
+      content: content,
+      message_id: message.id
+    }
+    ChatApp.Contexts.Messages.insert_message_reaction(message, reaction)
+    updated_message = ChatApp.Contexts.Messages.get_message(message_id)
+    PubSub.broadcast(ChatApp.PubSub, socket.assigns.messages_topic, {:refresh_message_reactions, updated_message})
     {:noreply, socket}
   end
 
@@ -104,6 +117,11 @@ defmodule ChatAppWeb.SingleRoomLive do
   def handle_info(:refresh_messages, socket) do
     updated_socket = assign(socket, messages: ChatApp.Contexts.Rooms.get_room_messages(socket.assigns.room_id))
     {:noreply, push_event(updated_socket, "new_message", %{id: "chatbox"})}
+  end
+
+  def handle_info({:refresh_message_reactions, message}, socket) do
+    IO.inspect message, label: "Refreshed message reactions", limit: :infinity
+    {:noreply, socket}
   end
 
   def handle_info({:delete_messages, message_id_from_client}, socket) do
