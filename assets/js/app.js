@@ -26,6 +26,10 @@ import { Hooks } from './hooks'
 
 import "./room-modal"
 import "./homepage"
+<<<<<<< HEAD
+=======
+import "./join-room-modal"
+>>>>>>> 8b10874 (feat(19): added join room button functionality)
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
