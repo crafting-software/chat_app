@@ -1,15 +1,15 @@
 import { extractActionAndMessageIdFromDomElementId } from "../utils";
 
 function triggerMessageDeletionEvent(event, component) {
-  if (event.relatedTarget != undefined) {
-    elementType = event.relatedTarget.localName;
-    elementAction = extractActionAndMessageIdFromDomElementId(
+  if (event.relatedTarget) {
+    const elementType = event.relatedTarget.localName;
+    const elementAction = extractActionAndMessageIdFromDomElementId(
       event.relatedTarget
     )[0];
     if (
-      elementType != undefined &&
-      elementType == "button" &&
-      elementAction == "delete"
+      elementType &&
+      elementType === "button" &&
+      elementAction === "delete"
     ) {
       component.pushEvent("delete_message", {
         id: extractActionAndMessageIdFromDomElementId(event.srcElement)[1],
@@ -19,15 +19,15 @@ function triggerMessageDeletionEvent(event, component) {
 }
 
 function triggerMessageEditingEvent(event, component) {
-  if (event.relatedTarget != undefined) {
-    elementType = event.relatedTarget.localName;
-    elementAction = extractActionAndMessageIdFromDomElementId(
+  if (event.relatedTarget) {
+    const elementType = event.relatedTarget.localName;
+    const elementAction = extractActionAndMessageIdFromDomElementId(
       event.relatedTarget
     )[0];
     if (
-      elementType != undefined &&
-      elementType == "button" &&
-      elementAction == "edit"
+      elementType &&
+      elementType === "button" &&
+      elementAction === "edit"
     ) {
       const messageId = extractActionAndMessageIdFromDomElementId(
         event.relatedTarget
@@ -71,7 +71,7 @@ function triggerMessageEditingEvent(event, component) {
 function addOpeningClickEventListenerOnMessageSettingsButton(component) {
   component.el.addEventListener("click", (event) => {
     event.target.focus();
-    elementId =
+    const elementId =
       "settings-" +
       extractActionAndMessageIdFromDomElementId(event.srcElement)[1];
     document.getElementById(elementId).toggleAttribute("hidden");
@@ -80,7 +80,7 @@ function addOpeningClickEventListenerOnMessageSettingsButton(component) {
 
 function addFocusOutEventListenerOnMessageSettingsButton(component) {
   component.el.addEventListener("focusout", (event) => {
-    elementId =
+    const elementId =
       "settings-" +
       extractActionAndMessageIdFromDomElementId(event.srcElement)[1];
     document.getElementById(elementId).setAttribute("hidden", "hidden");
@@ -92,7 +92,7 @@ function addFocusOutEventListenerOnMessageSettingsButton(component) {
 function addClickEventListenerOnMessageSettingsPopup(component) {
   const messageId = extractActionAndMessageIdFromDomElementId(component.el)[1];
   const messageSettingsPopup = document.getElementById("settings-" + messageId);
-  if (messageSettingsPopup != undefined) {
+  if (messageSettingsPopup) {
     document.addEventListener("click", (event) => {
       const isClickInside =
         messageSettingsPopup.contains(event.target) ||
