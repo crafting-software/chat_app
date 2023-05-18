@@ -79,6 +79,15 @@ defmodule ChatAppWeb.SingleRoomLive do
     {:noreply, socket}
   end
 
+  def handle_event("edit_message", %{"id" => message_id_from_client, "content" => content}, socket) do
+    edited_message = ChatApp.Contexts.Messages.get_message(message_id_from_client)
+    ChatApp.Contexts.Messages.update_message(edited_message, %{content: content, is_edited: true})
+
+    broadcasted_message = {:edit_messages, %{"id" => message_id_from_client, "content" => content}}
+    PubSub.broadcast(ChatApp.PubSub, socket.assigns.messages_topic, broadcasted_message)
+    {:noreply, socket}
+  end
+
   def handle_event("user_typing_indication", _, socket) do
     Logger.info("#{socket.assigns.username} is typing...")
     PubSub.broadcast(ChatApp.PubSub, socket.assigns.typing_statuses_topic, {:users_typing, socket.assigns.username, true})
@@ -106,6 +115,20 @@ defmodule ChatAppWeb.SingleRoomLive do
           {message_id, message}
       end
     end))}
+  end
+
+  def handle_info({:edit_messages, %{"id" => message_id_from_client, "content" => content}}, socket) do
+    {:noreply,
+     assign(socket,
+       messages:
+         Enum.map(socket.assigns.messages, fn message ->
+          if message.id == message_id_from_client do
+            %{message | content: content, is_edited: true}
+          else
+            message
+          end
+        end)
+     )}
   end
 
   def handle_info({:users_typing, username, status}, socket) do

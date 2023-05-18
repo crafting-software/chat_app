@@ -101,7 +101,7 @@
               <% message.is_deleted -> %>
                 <i> This message has been deleted. </i> 🗑️
               <% true -> %>
-                <pre><%= message.content %></pre>
+                <pre><%= message.content %> <%= if message.is_edited do%><i style="font-size:12px;"> (edited)</i> <% end %></pre>
             <% end %>
             </div>
           </li>
