@@ -1,6 +1,11 @@
 var lastScrollTopState = 0
 const ScrollingMechanism = {
     mounted() {
+        this.el.scroll({
+            top: this.el.scrollHeight,
+            behavior: "smooth"
+        })
+
         this.handleEvent("new_message", (event) => {
             const messageElementHeight = document.querySelector(".message").offsetHeight
             if (this.el.scrollTop > this.el.scrollHeight - 2 * this.el.clientHeight)

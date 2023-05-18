@@ -88,14 +88,18 @@ defmodule ChatAppWeb.SingleRoomLive do
     {:noreply, socket}
   end
 
-  def handle_event("add_reaction", %{"id" => message_id, "content" => content}, socket) do
+  def handle_event("handle_reaction", %{"id" => message_id, "content" => content}, socket) do
     message = ChatApp.Contexts.Messages.get_message(message_id)
-    reaction = %ChatApp.Structs.Reaction{
-      sender: socket.assigns.username,
-      content: content,
-      message_id: message.id
-    }
-    ChatApp.Contexts.Messages.insert_message_reaction(message, reaction)
+    reaction = ChatApp.Contexts.Reactions.create_reaction_as_map(content, socket.assigns.username, message.id)
+
+    filter_condition = fn x -> x.sender == reaction.sender and x.content == reaction.content end
+    user_reaction_count = Enum.count(message.reactions, filter_condition)
+
+    case user_reaction_count do
+      0 -> ChatApp.Contexts.Reactions.insert_reaction(reaction)
+      _ -> ChatApp.Contexts.Reactions.delete_reaction(reaction)
+    end
+
     updated_message = ChatApp.Contexts.Messages.get_message(message_id)
     PubSub.broadcast(ChatApp.PubSub, socket.assigns.messages_topic, {:refresh_message_reactions, updated_message})
     {:noreply, socket}
@@ -121,7 +125,8 @@ defmodule ChatAppWeb.SingleRoomLive do
 
   def handle_info({:refresh_message_reactions, message}, socket) do
     IO.inspect message, label: "Refreshed message reactions", limit: :infinity
-    {:noreply, socket}
+    updated_socket = assign(socket, messages: ChatApp.Contexts.Rooms.get_room_messages(socket.assigns.room_id))
+    {:noreply, updated_socket}
   end
 
   def handle_info({:delete_messages, message_id_from_client}, socket) do

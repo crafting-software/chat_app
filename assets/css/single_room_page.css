@@ -104,6 +104,8 @@ pre {
 
 .message:hover .message_settings_container {
     display: block;
+    background-color:#a7f3d0;
+    border-radius: 10px; 
 }
 
 .menu div {
@@ -127,6 +129,10 @@ pre {
     border-bottom-right-radius: 10px;
 }
 
+.message_settings_button:hover {
+    background-color: #6ee7b7;
+}
+
 .menu div > button {
     margin: auto;
     max-width: fit-content;
@@ -135,12 +141,12 @@ pre {
 
 .message_settings_submenu {
     position: absolute;
-    left: -35px;
-    top: -72px;
+    left: 0px;
+    top: 0px;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 10px;
     animation-duration: 0.1s;
     animation-name: zoom-in;
 }
@@ -182,6 +188,37 @@ pre {
 
 #emoji_button {
     font-size: 20px;
+}
+
+.message_reactions_block > button {
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.message_reaction {
+    background-color: #6ee7b7;
+    color: #0f766e;
+    width: 45px;
+    height: 25px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.message_reaction_by_current_user {
+    background-color: #10b981;
+}
+
+.message_reaction:hover {
+    background-color: #34d399;
+    color: #0f766e;
+    border-width: 1px;
+    border-color: #15803d; 
+}
+
+.message_reaction:active{
+    background-color: #047857;
+    color: #0f766e;
 }
 
 @keyframes zoom-in {

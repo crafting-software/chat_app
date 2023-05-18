@@ -48,55 +48,59 @@
                 >
                 <%= message.inserted_at %>
               </span>
-                <%= if not message.is_deleted and message.sender == @username do %>
+                <%= if not message.is_deleted do %>
                   <div class="message_settings_container">
                     <ul class="menu">
                       <li>
-                      <button
-                        id={"button-#{message.id}"}
-                        class="message_settings_button items-center p-1.5 text-sm font-medium text-center text-gray-900 hover:bg-green-200 focus:bg-green-200"
-                        phx-hook="MessageSettings"
-                      >
-                        <svg
-                          id={"svg-#{message.id}"}
-                          class="w-6 h-6"
-                          aria-hidden="true"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            id={"path-#{message.id}"}
-                            d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
-                          >
-                          </path>
-                        </svg>
-                      </button>
                       <emoji-picker class="light" id={"message_reactions_popup-#{message.id}"} hidden phx-hook="HandleReactionPopup"></emoji-picker>
                       <div
                         id={"settings-#{message.id}"}
                         hidden
-                        class="message_settings_submenu p-1.5 bg-green-200 focus:bg-green-200"
+                        class="message_settings_submenu p-1.5 bg-emerald-200 focus:bg-emerald-200"
                       >
-                        <button
-                          id={"edit-#{message.id}"}
-                          class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"
-                        >
-                          ✎
-                        </button>
-                        <button
-                          id={"delete-#{message.id}"}
-                          class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"
-                        >
-                          🗑️
-                        </button>
-                        <button
-                          id={"reaction_button-#{message.id}"}
-                          class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"
-                        >
-                          😁
-                        </button>
+                          <button
+                            id={"edit-#{message.id}"}
+                            class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"
+                          >
+                            ✎
+                          </button>
+                          <button
+                            id={"delete-#{message.id}"}
+                            class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"
+                          >
+                            🗑️
+                          </button>
                       </div>
+                      <button
+                        id={"reaction_button-#{message.id}"}
+                        class="message_settings_button items-center p-1.5 text-sm font-medium text-center text-gray-900"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-6 h-6 bi bi-emoji-smile" viewBox="0 0 16 16"> <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/> <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/> </svg>
+                      </button>
+                      <%= if message.sender == @username do %>
+                        <button
+                          id={"button-#{message.id}"}
+                          class="message_settings_button items-center p-1.5 text-sm font-medium text-center text-gray-900"
+                          phx-hook="MessageSettings"
+                        >
+                          <svg
+                            id={"svg-#{message.id}"}
+                            class="w-6 h-6"
+                            aria-hidden="true"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              id={"path-#{message.id}"}
+                              d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
+                            >
+                            </path>
+                          </svg>
+                        </button>
+                      <% end %>
                     </li>
                   </ul>
                 </div>
@@ -110,7 +114,32 @@
               <% true -> %>
                 <pre><%= message.content %> <%= if message.is_edited do%><i style="font-size:12px;"> (edited)</i> <% end %></pre>
             <% end %>
+            <div class="message_reactions_block">
+            <%
+              reactions =
+                Enum.reduce(message.reactions, %{}, fn x, acc ->
+                  case Map.has_key?(acc, x.content) do
+                    false -> Map.put(acc, x.content, [x])
+                    _ -> Map.put(acc, x.content, [x | Map.get(acc, x.content)])
+                  end
+                end)
+                |> Enum.into([])
+              number_of_reactions = length(reactions)
+              IO.inspect number_of_reactions, label: "Number of reactions"
+            %>
+            <%= for reaction_instances_pair <- reactions do %>
+              <%
+                {reaction, instances} = reaction_instances_pair
+                user_reacted =
+                  Enum.map(instances, fn x -> x.sender end)
+                  |> Enum.member?(@username)
+              %>
+              <button class={"message_reaction #{if user_reacted, do: "message_reaction_by_current_user", else: ""}"} phx-click="handle_reaction" phx-value-id={message.id} phx-value-content={reaction}>
+                <%= reaction %> <%= length(instances) %>
+              </button>
+            <% end %>
             </div>
+          </div>
           </li>
         <% end %>
       <% end %>
