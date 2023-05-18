@@ -16,6 +16,14 @@ defmodule ChatApp.Contexts.Messages do
     |> Repo.insert()
   end
 
+  def insert_message_reaction(%Message{} = message, reaction) do
+    IO.inspect reaction, label: "Reaction from the context"
+    message
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:reactions, [reaction | message.reactions])
+    |> Repo.update()
+  end
+
   def delete_message(%Message{} = message), do: Repo.delete(message)
 
   def create_message_as_map(content, sender, room_id) do
