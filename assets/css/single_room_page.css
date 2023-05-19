@@ -209,16 +209,11 @@ pre {
     background-color: #10b981;
 }
 
-.message_reaction:hover {
+.message_reaction:hover, .message_reaction:active {
     background-color: #34d399;
     color: #0f766e;
     border-width: 1px;
     border-color: #15803d; 
-}
-
-.message_reaction:active{
-    background-color: #047857;
-    color: #0f766e;
 }
 
 @keyframes zoom-in {

@@ -1,18 +1,5 @@
 import { extractActionAndMessageIdFromDomElementId } from "../utils"
 
-function addBlurEventListener(component) {
-    component.el.addEventListener("blur", event => {
-        console.log("blur: left the reaction popup")
-        component.el.setAttribute("hidden", "hidden")
-    })
-}
-
-function addPointerLeaveEventListener(component) {
-    component.el.addEventListener("pointerleave", event => {
-        component.el.setAttribute("hidden", "hidden")
-    })
-}
-
 function roundReactionPopupBorders(component) {
     const style = document.createElement("style")
     style.textContent = `
@@ -34,22 +21,42 @@ function addClickEventListenerOnReactionsPopup(component) {
 
 function addClickEventListenerOnReactionButton(component) {
     const messageId = extractActionAndMessageIdFromDomElementId(component.el)[1]
-    const reactionButton = document.getElementById(`reaction_button-${messageId}`)
-    reactionButton.addEventListener("click", event => {
-        const popupId = "message_reactions_popup-" + messageId 
-        const reactionsPopup = document.getElementById(popupId)
-        reactionsPopup.removeAttribute("hidden")
-        reactionsPopup.focus()
+    document
+        .getElementById(`reaction_button-${messageId}`)
+        .addEventListener("click", event => {
+            event.target.focus()
+            document.getElementById(`message_reactions_popup-${messageId}`).toggleAttribute("hidden")
+        })
+}
+
+function addFocusOutEventListenerOnReactionPopup(component) {
+    const messageId = extractActionAndMessageIdFromDomElementId(component.el)[1]
+    const reactionPopup = document.getElementById(`message_reactions_popup-${messageId}`)
+    reactionPopup.addEventListener("focusout", event => {
+        reactionPopup.setAttribute("hidden", "hidden")
     })
+}
+
+function addClickOffEventListenerForReactionPopup(component) {
+    const messageId = extractActionAndMessageIdFromDomElementId(component.el)[1]
+    const reactionButton = document.getElementById(`reaction_button-${messageId}`)
+    if (reactionButton != undefined) {
+        document.addEventListener("click", event => {
+            const isClickInside = component.el.contains(event.target) || reactionButton.contains(event.target)
+            if (!isClickInside) {
+                component.el.setAttribute("hidden", "hidden")
+            }
+        })
+    }
 }
 
 const HandleReactionPopup = {
     mounted() {
-        addClickEventListenerOnReactionButton(this)
         roundReactionPopupBorders(this)
-        addBlurEventListener(this)
+        addClickEventListenerOnReactionButton(this)
         addClickEventListenerOnReactionsPopup(this)
-        addPointerLeaveEventListener(this)
+        addClickOffEventListenerForReactionPopup(this)
+        addFocusOutEventListenerOnReactionPopup(this)
     } 
 }
 

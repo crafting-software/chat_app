@@ -113,32 +113,32 @@
                 <i> This message has been deleted. </i> 🗑️
               <% true -> %>
                 <pre><%= message.content %> <%= if message.is_edited do%><i style="font-size:12px;"> (edited)</i> <% end %></pre>
+                <div class="message_reactions_block">
+                <%
+                  reactions =
+                    Enum.reduce(message.reactions, %{}, fn x, acc ->
+                      case Map.has_key?(acc, x.content) do
+                        false -> Map.put(acc, x.content, [x])
+                        _ -> Map.put(acc, x.content, [x | Map.get(acc, x.content)])
+                      end
+                    end)
+                    |> Enum.into([])
+                  number_of_reactions = length(reactions)
+                  IO.inspect number_of_reactions, label: "Number of reactions"
+                %>
+                <%= for reaction_instances_pair <- reactions do %>
+                  <%
+                    {reaction, instances} = reaction_instances_pair
+                    user_reacted =
+                      Enum.map(instances, fn x -> x.sender end)
+                      |> Enum.member?(@username)
+                  %>
+                  <button id={"message_reaction-#{message.id}-#{reaction}"} class={"message_reaction #{if user_reacted, do: "message_reaction_by_current_user", else: ""}"} phx-hook="ShowUsersReactionsList" phx-click="handle_reaction" phx-value-id={message.id} phx-value-content={reaction}>
+                    <%= reaction %> <%= length(instances) %>
+                  </button>
+                <% end %>
+                </div>
             <% end %>
-            <div class="message_reactions_block">
-            <%
-              reactions =
-                Enum.reduce(message.reactions, %{}, fn x, acc ->
-                  case Map.has_key?(acc, x.content) do
-                    false -> Map.put(acc, x.content, [x])
-                    _ -> Map.put(acc, x.content, [x | Map.get(acc, x.content)])
-                  end
-                end)
-                |> Enum.into([])
-              number_of_reactions = length(reactions)
-              IO.inspect number_of_reactions, label: "Number of reactions"
-            %>
-            <%= for reaction_instances_pair <- reactions do %>
-              <%
-                {reaction, instances} = reaction_instances_pair
-                user_reacted =
-                  Enum.map(instances, fn x -> x.sender end)
-                  |> Enum.member?(@username)
-              %>
-              <button class={"message_reaction #{if user_reacted, do: "message_reaction_by_current_user", else: ""}"} phx-click="handle_reaction" phx-value-id={message.id} phx-value-content={reaction}>
-                <%= reaction %> <%= length(instances) %>
-              </button>
-            <% end %>
-            </div>
           </div>
           </li>
         <% end %>
