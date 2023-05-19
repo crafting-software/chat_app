@@ -26,7 +26,6 @@ import { Hooks } from './hooks'
 
 import "./room-modal"
 import "./homepage"
-import "./join-room-modal"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {

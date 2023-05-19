@@ -30,10 +30,8 @@ defmodule ChatAppWeb.HomeLive do
           <.table id="rooms" rows={@rooms}>
             <:col :let={room} label="Name"><%= room.room_name %></:col>
             <:col :let={room} label="Max nr of participants"><%= room.max_participants %></:col>
-            <:action>
-              <.link>
-                Join
-              </.link>
+            <:action :let={room}>
+              <.link phx-click={JS.push("join_room", value: %{room_id: room.id})} >Join</.link>
             </:action>
           </.table>
         </div>
@@ -100,5 +98,18 @@ defmodule ChatAppWeb.HomeLive do
     {:noreply, socket |> push_navigate(to: "/rooms/#{room_id}")}
   end
 
+  def handle_event("join_room", room_id, socket), do:
+    username = show_modal("join-room-list-modal")
+    user = %{
+      "username" => username,
+      "room_id" => room_id
+    }
 
+    {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
+
+    {:noreply, socket |> push_navigate(to: "/rooms/#{room_id}")}
 end
+# <.link phx-click={JS.push("show_modal("join-room-list-modal")", value: %{roomid: room.id})}>Join</.link>
+
+# <p phx-click={JS.push("event_name", value: %{id: 1234}) |> show_modal("modal_id")}>open modal and send event</p>
+# <.link phx-click={show_modal("join-room-list-modal")}>Join</.link>
