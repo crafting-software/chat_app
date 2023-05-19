@@ -14,7 +14,7 @@ function addClickEventListenerOnReactionsPopup(component) {
     component.el.addEventListener('emoji-click', event => {
         console.log(`emoji: ${event.detail.unicode}`)
         const messageId = extractActionAndMessageIdFromDomElementId(component.el)[1]
-        component.pushEvent("handle_reaction", {"id": messageId, "content": event.detail.unicode})
+        component.pushEvent("handle_reaction", {"id": messageId, "content": event.detail.unicode, "shortcode": event.detail.emoji.shortcodes[0]})
         component.el.blur() 
     })
 }

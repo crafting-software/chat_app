@@ -9,6 +9,7 @@ defmodule ChatApp.Structs.Reaction do
   schema "reactions" do
     field(:sender, :string)
     field(:content, :string)
+    field(:shortcode, :string)
 
     belongs_to(:message, ChatApp.Structs.Message, references: :id)
 

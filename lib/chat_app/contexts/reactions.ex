@@ -17,9 +17,10 @@ defmodule ChatApp.Contexts.Reactions do
     |> Repo.delete_all()
   end
 
-  def create_reaction_as_map(content, sender, message_id) do
+  def create_reaction_as_map(content, shortcode, sender, message_id) do
     %{
       content: content,
+      shortcode: shortcode,
       sender: sender,
       message_id: message_id
     }

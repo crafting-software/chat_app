@@ -129,12 +129,27 @@
                 <%= for reaction_instances_pair <- reactions do %>
                   <%
                     {reaction, instances} = reaction_instances_pair
+                    [first_instance | other_instances] = instances
+                    shortcode = first_instance.shortcode
                     user_reacted =
                       Enum.map(instances, fn x -> x.sender end)
                       |> Enum.member?(@username)
                   %>
-                  <button id={"message_reaction-#{message.id}-#{reaction}"} class={"message_reaction #{if user_reacted, do: "message_reaction_by_current_user", else: ""}"} phx-hook="ShowUsersReactionsList" phx-click="handle_reaction" phx-value-id={message.id} phx-value-content={reaction}>
+                  <button id={"message_reaction-#{message.id}-#{reaction}"} class={"message_reaction #{if user_reacted, do: "message_reaction_by_current_user", else: ""}"} phx-hook="ShowUsersReactionsList" phx-click="handle_reaction" phx-value-id={message.id} phx-value-content={reaction} phx-value-shortcode={shortcode}>
                     <%= reaction %> <%= length(instances) %>
+                    <div id={"users_reaction_popup-#{message.id}-#{reaction}"} class="users_reaction_popup" hidden>
+                      <div>
+                        <%= reaction %>
+                      </div>
+                      <%
+                        users_who_reacted =
+                          Enum.map(instances, fn x -> x.sender end)
+                          |> Enum.join(", ")
+                      %>
+                      <%=
+                        users_who_reacted <> " reacted with :#{shortcode}:"
+                      %>
+                    </div>
                   </button>
                 <% end %>
                 </div>

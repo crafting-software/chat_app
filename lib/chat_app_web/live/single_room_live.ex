@@ -88,9 +88,9 @@ defmodule ChatAppWeb.SingleRoomLive do
     {:noreply, socket}
   end
 
-  def handle_event("handle_reaction", %{"id" => message_id, "content" => content}, socket) do
+  def handle_event("handle_reaction", %{"id" => message_id, "content" => content, "shortcode" => shortcode}, socket) do
     message = ChatApp.Contexts.Messages.get_message(message_id)
-    reaction = ChatApp.Contexts.Reactions.create_reaction_as_map(content, socket.assigns.username, message.id)
+    reaction = ChatApp.Contexts.Reactions.create_reaction_as_map(content, shortcode, socket.assigns.username, message.id)
 
     filter_condition = fn x -> x.sender == reaction.sender and x.content == reaction.content end
     user_reaction_count = Enum.count(message.reactions, filter_condition)
