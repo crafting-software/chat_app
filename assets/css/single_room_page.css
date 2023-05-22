@@ -213,6 +213,10 @@ pre {
     font-size: 40px;
 }
 
+.message_reactions_block {
+    width: 80%;
+}
+
 .message_reactions_block > button {
     display: inline;
     margin-top: 10px;

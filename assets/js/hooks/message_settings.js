@@ -1,52 +1,55 @@
 import { extractActionAndMessageIdFromDomElementId } from "../utils";
 
 function handleMessageAction(messageAction, component, event) {
-    const messageId = extractActionAndMessageIdFromDomElementId(event.relatedTarget)[1]
-    console.log("Handling message action...")
-    switch (messageAction) {
-        case "delete":
-            component.pushEvent("delete_message", {"id": extractActionAndMessageIdFromDomElementId(event.srcElement)[1]}) 
-            break;
-        case "edit":
-            const messageContainer = event.target.closest(".message")
-            const messageContent = messageContainer.querySelector(".message_content")
-            const originalContent = messageContent.innerText
+  const messageId = extractActionAndMessageIdFromDomElementId(event.relatedTarget)[1]
+  console.log("Handling message action...")
+  switch (messageAction) {
+    case "delete":
+      component.pushEvent("delete_message", {"id": extractActionAndMessageIdFromDomElementId(event.srcElement)[1]}) 
+      break;
+    case "edit":
+      buildInputForEditing(event, messageId, component)
+      break;
+    case "reaction_button":
+      const popupId = "message_reactions_popup-" + messageId 
+      const reactionsPopup = document.getElementById(popupId)
+      reactionsPopup.removeAttribute("hidden")
+      reactionsPopup.focus()
+      break;
+  }
+}
 
-            const editedSuffix = '(edited)'
-            const isAlreadyEdited = originalContent.endsWith(editedSuffix)
+function buildInputForEditing(event, messageId, component) {
+  const messageContainer = event.target.closest(".message")
+  const messageContent = messageContainer.querySelector(".message_content>pre")
+  const originalContent = messageContent.innerText
+  const editedSuffix = '(edited)'
+  const isAlreadyEdited = originalContent.endsWith(editedSuffix)
+  const inputField = document.createElement("input")
 
-            const inputField = document.createElement("input")
-            inputField.type = "text"
-            inputField.value = isAlreadyEdited ? originalContent.slice(0, -editedSuffix.length) : originalContent
-            inputField.classList.add('rounded-2xl', 'bg-green-100', 'border-0', 'focus:border', 'focus:border-purple-800', 'col-span-5', 'resize-none')
-            messageContent.innerHTML = ""
-            messageContent.appendChild(inputField)
-            inputField.focus()
+  inputField.type = "text"
+  inputField.value = isAlreadyEdited ? originalContent.slice(0, -editedSuffix.length) : originalContent
+  inputField.classList.add('rounded-2xl', 'bg-green-100', 'border-0', 'focus:border', 'focus:border-purple-800', 'col-span-5', 'resize-none')
+  messageContent.innerHTML = ""
+  messageContent.appendChild(inputField)
+  inputField.focus()
 
-            inputField.addEventListener("keydown", function (event) {
-              if (event.key === "Enter") {
-                event.preventDefault()
+  inputField.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault()
 
-                const updatedContent = inputField.value.trim()
+      const updatedContent = inputField.value.trim()
 
-                if (updatedContent === "") {
-                  messageContent.innerText = originalContent
-                } else {
-                  component.pushEvent("edit_message", {
-                    id: messageId,
-                    content: updatedContent,
-                  });
-                }
-              }
-            });
-            break;
-        case "reaction_button":
-            const popupId = "message_reactions_popup-" + messageId 
-            const reactionsPopup = document.getElementById(popupId)
-            reactionsPopup.removeAttribute("hidden")
-            reactionsPopup.focus()
-            break;
+      if (updatedContent === "") {
+        messageContent.innerText = originalContent
+      } else {
+        component.pushEvent("edit_message", {
+          id: messageId,
+          content: updatedContent,
+        })
+      }
     }
+  })
 }
 
 function triggerMessageEvent(event, component) {

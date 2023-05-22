@@ -13,7 +13,11 @@ defmodule ChatApp.Contexts.Reactions do
 
   def delete_reaction(reaction) do
     Reaction
-    |> where([x], x.sender == ^reaction.sender and x.content == ^reaction.content and x.message_id == ^reaction.message_id)
+    |> where(
+      [x],
+      x.sender == ^reaction.sender and x.content == ^reaction.content and
+        x.message_id == ^reaction.message_id
+    )
     |> Repo.delete_all()
   end
 

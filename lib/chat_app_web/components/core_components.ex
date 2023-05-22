@@ -452,15 +452,25 @@ defmodule ChatAppWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="w-full relative divide-y divide-zinc-100 border-zinc-200 text-sm leading-6 text-zinc-700">
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group-hover:bg-forestgreen group-hover:px-4 group-hover:rounded-3xl group hover:text-zinc-50">
+          class="w-full relative divide-y divide-zinc-100 border-zinc-200 text-sm leading-6 text-zinc-700"
+        >
+          <tr
+            :for={row <- @rows}
+            id={@row_id && @row_id.(row)}
+            class="group-hover:bg-forestgreen group-hover:px-4 group-hover:rounded-3xl group hover:text-zinc-50"
+          >
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
-              class={["relative p-0", @row_click && "hover:cursor-pointer group-hover:bg-forestgreen group-hover:text-zinc-50", i == 0 && "font-semibold"]}
+              class={[
+                "relative p-0",
+                @row_click &&
+                  "hover:cursor-pointer group-hover:bg-forestgreen group-hover:text-zinc-50",
+                i == 0 && "font-semibold"
+              ]}
             >
               <div class="relative py-4 group-hover:bg-forestgreen group-hover:text-zinc-50">
-                  <%= render_slot(col, @row_item.(row)) %>
+                <%= render_slot(col, @row_item.(row)) %>
               </div>
             </td>
             <td :if={@action != []} class="relative p-0">
@@ -520,6 +530,23 @@ defmodule ChatAppWeb.CoreComponents do
   def back(assigns) do
     ~H"""
     <div class="mt-16 float-right">
+      <.link
+        navigate={@navigate}
+        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+      >
+        <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
+        <%= render_slot(@inner_block) %>
+      </.link>
+    </div>
+    """
+  end
+
+  attr :navigate, :any, required: true
+  slot :inner_block, required: true
+
+  def custom_margin_back_link(assigns) do
+    ~H"""
+    <div class="mt-4 float-right">
       <.link
         navigate={@navigate}
         class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"

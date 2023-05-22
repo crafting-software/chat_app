@@ -2,11 +2,16 @@ defmodule ChatAppWeb.HomeLive do
   use ChatAppWeb, :live_view
 
   def mount(_params, _session, socket) do
-    rooms = ChatApp.Contexts.Rooms.list_rooms()
-    |> Enum.filter(fn room -> not room.is_private end)
+    rooms =
+      ChatApp.Contexts.Rooms.list_rooms()
+      |> Enum.filter(fn room -> not room.is_private end)
 
     socket = assign(socket, :rooms, rooms)
     {:ok, socket}
+  end
+
+  def handle_params(_params, url, socket) do
+    {:noreply, assign(socket, url: URI.parse(url))}
   end
 
   def render(assigns) do
