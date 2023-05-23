@@ -1,0 +1,56 @@
+#join-room-modal-container {
+    background-color: #edffec;
+}
+
+.modal modal {
+    background-color: #edffec;
+}
+
+.join-room-modal-title {
+    font-size: 32px;
+    text-align: center;
+  }
+
+input#roomcode {
+    width: 70%;
+    float: left;
+}
+
+input#roomcode::placeholder {
+    color: #48435c;
+    opacity: 0.3;
+}
+
+#join-room-button {
+    float: right;
+    background-color: #9792e3;
+}
+
+#join-room-button:hover {
+    background-color: #8d88d3;
+}
+
+.join-room-modal-form-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.join-room-modal-input-group {
+    flex-basis: 100%;
+    margin-bottom: 10px;
+}
+
+.join-room-modal-input-group input {
+    width: 100%;
+    margin-left: 10px;
+}
+
+.join-room-modal-button-group button {
+    background-color: #9792e3;
+}
+
+.join-room-modal-button-group button:hover {
+    background-color: #8d88d3;
+}

@@ -14,11 +14,12 @@ defmodule ChatAppWeb.JoinRoomListComponent do
   def render(assigns) do
     ~H"""
     <div class="modal">
-      <.modal id="join-room-list-modal">
-        <h2 id="join-room-modal-title">Join Room</h2>
-        <form phx-value-username="username">
+      <.modal id={"join-room-list-#{assigns.room_id}"}>
+        <h2 class="join-room-modal-title">Join Room</h2>
+        <form phx-submit="join_room">
           <div class="join-room-modal-form-group">
             <div class="join-room-modal-input-group">
+              <input type="hidden" id="room_id" name="room_id" value={assigns.room_id} />
               <label for="username">User Name:</label>
               <input type="text" id="username" name="username" required />
             </div>
@@ -29,6 +30,7 @@ defmodule ChatAppWeb.JoinRoomListComponent do
           </div>
         </form>
       </.modal>
+      <.button type="button" phx-click={show_modal("join-room-list-#{assigns.room_id}")}>Join</.button>
     </div>
     """
   end

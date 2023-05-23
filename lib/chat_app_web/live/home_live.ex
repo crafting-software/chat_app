@@ -31,7 +31,7 @@ defmodule ChatAppWeb.HomeLive do
             <:col :let={room} label="Name"><%= room.room_name %></:col>
             <:col :let={room} label="Max nr of participants"><%= room.max_participants %></:col>
             <:action :let={room}>
-              <.link phx-click={JS.push("join_room", value: %{room_id: room.id})} >Join</.link>
+              <.live_component module={ChatAppWeb.JoinRoomListComponent} id={"join-room-list-#{room.id}"} room_id={room.id} />
             </:action>
           </.table>
         </div>
@@ -88,6 +88,8 @@ defmodule ChatAppWeb.HomeLive do
         socket
       ) do
 
+    IO.inspect("elu")
+
     user = %{
       "username" => username,
       "room_id" => room_id
@@ -95,19 +97,9 @@ defmodule ChatAppWeb.HomeLive do
 
     {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
 
-    {:noreply, socket |> push_navigate(to: "/rooms/#{room_id}")}
+
+    {:noreply, socket |> assign(:username, username) |> push_navigate(to: "/rooms/#{room_id}")}
   end
-
-  def handle_event("join_room", room_id, socket), do:
-    username = show_modal("join-room-list-modal")
-    user = %{
-      "username" => username,
-      "room_id" => room_id
-    }
-
-    {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
-
-    {:noreply, socket |> push_navigate(to: "/rooms/#{room_id}")}
 end
 # <.link phx-click={JS.push("show_modal("join-room-list-modal")", value: %{roomid: room.id})}>Join</.link>
 
