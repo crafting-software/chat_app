@@ -28,9 +28,22 @@ input, textarea, button, select, a {
 emoji-picker {
     --num-columns: 4;
     --emoji-size: 1rem;
-    --border-size: 5px;
-    --border-radius: 5px;
+    --border-size: 1px;
+    --input-border-radius: 10px;
     --background: #dcfce7;
+}
+
+emoji-picker:not([id="emoji_popup"]) {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    height: 200px;
+    z-index: 100;
+    --num-columns: 3;
+    --border-size: 0px;
+    --background: #a7f3d0;
+    animation-duration: 0.1s;
+    animation-name: zoom-in;
 }
 
 #emoji_popup {
@@ -44,10 +57,12 @@ emoji-picker {
 
 #chatbox_container {
     position: relative;
+    z-index: 0;
 }
 
 #chatbox {
     position: relative;
+    z-index: 0;
 }
 
 #chatbox_anchor {
@@ -91,10 +106,12 @@ pre {
 
 .message:hover .message_settings_container {
     display: block;
+    background-color:#a7f3d0;
+    border-radius: 10px; 
 }
 
 .menu div {
-    width: 4.5rem;
+    width: 2.75rem;
 }
 
 .menu {
@@ -104,6 +121,7 @@ pre {
 .menu button {
     background: transparent;
     cursor: pointer;
+    font-size: 20px;
 }
 
 .message_settings_button {
@@ -111,6 +129,10 @@ pre {
     border-bottom-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
+}
+
+.message_settings_button:hover {
+    background-color: #6ee7b7;
 }
 
 .menu div > button {
@@ -121,12 +143,12 @@ pre {
 
 .message_settings_submenu {
     position: absolute;
-    left: -65px;
-    top: -40px;
+    left: 0px;
+    bottom: 0px;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-top-right-radius: 10px;
-    border-bottom-right-radius: 0px;
+    border-bottom-right-radius: 10px;
     animation-duration: 0.1s;
     animation-name: zoom-in;
 }
@@ -164,6 +186,64 @@ pre {
 .message_notifier_button_disappearance {
     animation-name: slide-up;
     animation-direction: reverse;
+}
+
+#emoji_button {
+    font-size: 20px;
+}
+
+.users_reaction_popup {
+    display: inline-block;
+    left: 0px;
+    bottom: 30px;
+    position: absolute;
+    width: 500%;
+    z-index: 100;
+    animation-duration: 0.1s;
+    animation-name: zoom-in;
+    background-color: #6ee7b7;
+    border-radius: 10px;
+    padding: 10px;
+    border-width: 1px;
+    border-color: #15803d; 
+    font-size: 10px;
+}
+
+.users_reaction_popup > div {
+    font-size: 40px;
+}
+
+.message_reactions_block {
+    width: 80%;
+}
+
+.message_reactions_block > button {
+    display: inline;
+    margin-top: 10px;
+}
+
+.message_reaction {
+    position: relative;
+    background-color: #6ee7b7;
+    color: #0f766e;
+    width: 45px;
+    height: 25px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 600;
+    animation-duration: 0.1s;
+    animation-name: zoom-in;
+}
+
+.message_reaction_by_current_user {
+    background-color: #10b981;
+}
+
+.message_reaction:hover /*, .message_reaction:active */ {
+    background-color: #34d399;
+    color: #0f766e;
+    border-width: 1px;
+    border-color: #15803d; 
 }
 
 @keyframes zoom-in {

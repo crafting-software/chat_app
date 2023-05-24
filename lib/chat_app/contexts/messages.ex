@@ -2,7 +2,7 @@ defmodule ChatApp.Contexts.Messages do
   alias ChatApp.Structs.Message
   alias ChatApp.Repo
 
-  def get_message(id), do: Repo.get(Message, id)
+  def get_message(id), do: Repo.get(Message, id) |> Repo.preload([:reactions])
 
   def update_message(%Message{} = message, attrs) do
     message

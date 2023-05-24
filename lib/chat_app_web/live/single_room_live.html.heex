@@ -2,7 +2,7 @@
   <div>
     Room "<%= @room.room_name %>"
     <div class="float-right">
-      <button class="rounded-2xl hover:animate-pulse hover:motion-reduce bg-purple-800 p-1 px-5 text-white text-base peer">
+      <button class="rounded-2xl hover:animate-pulse hover:motion-reduce bg-purple-800 p-1 mb-2 px-5 text-white text-base peer">
         Users
       </button>
       <aside class="border border border-emerald-300 z-10 grid fixed top-0 bg-green-100 w-[233px] h-full -left-[233px] peer-focus:left-0 ease-out delay-150 duration-300 rounded-r-[25px]">
@@ -30,8 +30,12 @@
   </div>
 </.header>
 
-<div id="chatbox_container" class="rounded-2xl bg-green-100 ">
-  <div id="chatbox" class="h-80 rounded-2xl bg-green-100 overflow-y-auto mt-3" phx-hook="ScrollingMechanism">
+<div id="chatbox_container" class="rounded-2xl bg-green-100">
+  <div
+    id="chatbox"
+    class="h-96 rounded-2xl bg-green-100 overflow-y-auto mt-3"
+    phx-hook="ScrollingMechanism"
+  >
     <ul>
       <% number_of_messages = length(@messages) %>
       <%= if number_of_messages > 0 do %>
@@ -46,93 +50,185 @@
                   class="message_datetime"
                   phx-hook="HandleTimestampTimezone"
                 >
-                <%= message.inserted_at %>
-              </span>
-                <%= if not message.is_deleted and message.sender == @username do %>
+                  <%= message.inserted_at %>
+                </span>
+                <%= if not message.is_deleted do %>
                   <div class="message_settings_container">
                     <ul class="menu">
                       <li>
-                      <button
-                        id={"button-#{message.id}"}
-                        class="message_settings_button items-center p-1.5 text-sm font-medium text-center text-gray-900 hover:bg-green-200 focus:bg-green-200"
-                        phx-hook="MessageSettings"
-                      >
-                        <svg
-                          id={"svg-#{message.id}"}
-                          class="w-6 h-6"
-                          aria-hidden="true"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
+                        <emoji-picker
+                          class="light"
+                          id={"message_reactions_popup-#{message.id}"}
+                          hidden
+                          phx-hook="HandleReactionPopup"
                         >
-                          <path
-                            id={"path-#{message.id}"}
-                            d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
+                        </emoji-picker>
+                        <div
+                          id={"settings-#{message.id}"}
+                          hidden
+                          class="message_settings_submenu p-1.5 bg-emerald-200 focus:bg-emerald-200"
+                        >
+                          <button
+                            id={"edit-#{message.id}"}
+                            class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"
                           >
-                          </path>
-                        </svg>
-                      </button>
-                      <div
-                        id={"settings-#{message.id}"}
-                        hidden
-                        class="message_settings_submenu p-1.5 bg-green-200 focus:bg-green-200"
-                      >
+                            ✎
+                          </button>
+                          <button
+                            id={"delete-#{message.id}"}
+                            class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"
+                          >
+                            🗑️
+                          </button>
+                        </div>
                         <button
-                          id={"edit-#{message.id}"}
-                          class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"
+                          id={"reaction_button-#{message.id}"}
+                          class="message_settings_button items-center p-1.5 text-sm font-medium text-center text-gray-900"
                         >
-                          Edit
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="w-6 h-6 bi bi-emoji-smile"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                            <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z" />
+                          </svg>
                         </button>
-                        <button
-                          id={"delete-#{message.id}"}
-                          class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
-          <div class="message_content m-2">
-            <%= cond do %>
-              <% message.is_deleted -> %>
-                <i> This message has been deleted. </i> 🗑️
-              <% true -> %>
-                <pre><%= message.content %> <%= if message.is_edited do%><i style="font-size:12px;"> (edited)</i> <% end %></pre>
+                        <%= if message.sender == @username do %>
+                          <button
+                            id={"button-#{message.id}"}
+                            class="message_settings_button items-center p-1.5 text-sm font-medium text-center text-gray-900"
+                            phx-hook="MessageSettings"
+                          >
+                            <svg
+                              id={"svg-#{message.id}"}
+                              class="w-6 h-6"
+                              aria-hidden="true"
+                              width="16"
+                              height="16"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                id={"path-#{message.id}"}
+                                d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
+                              >
+                              </path>
+                            </svg>
+                          </button>
+                        <% end %>
+                      </li>
+                    </ul>
+                  </div>
+                <% end %>
+              </div>
             <% end %>
+            <div class="message_content m-2">
+              <%= cond do %>
+                <% message.is_deleted -> %>
+                  <i> This message has been deleted. </i> 🗑️
+                <% true -> %>
+                  <pre><%= message.content %><%= if message.is_edited do%><i style="font-size:12px;"> (edited)</i><% end %></pre>
+                  <div class="message_reactions_block">
+                    <% reactions =
+                      Enum.reduce(message.reactions, %{}, fn x, acc ->
+                        case Map.has_key?(acc, x.content) do
+                          false -> Map.put(acc, x.content, [x])
+                          _ -> Map.put(acc, x.content, [x | Map.get(acc, x.content)])
+                        end
+                      end)
+                      |> Enum.into([])
+
+                    number_of_reactions = length(reactions)
+                    IO.inspect(number_of_reactions, label: "Number of reactions") %>
+                    <%= for reaction_instances_pair <- reactions do %>
+                      <% {reaction, instances} = reaction_instances_pair
+                      [first_instance | other_instances] = instances
+                      shortcode = first_instance.shortcode
+
+                      user_reacted =
+                        Enum.map(instances, fn x -> x.sender end)
+                        |> Enum.member?(@username) %>
+                      <button
+                        id={"message_reaction-#{message.id}-#{reaction}"}
+                        class={"message_reaction #{if user_reacted, do: "message_reaction_by_current_user", else: ""}"}
+                        phx-hook="ShowUsersReactionsList"
+                        phx-click="handle_reaction"
+                        phx-value-id={message.id}
+                        phx-value-content={reaction}
+                        phx-value-shortcode={shortcode}
+                      >
+                        <%= reaction %> <%= length(instances) %>
+                        <div
+                          id={"users_reaction_popup-#{message.id}-#{reaction}"}
+                          class="users_reaction_popup"
+                          hidden
+                        >
+                          <div>
+                            <%= reaction %>
+                          </div>
+                          <% users_who_reacted =
+                            Enum.map(instances, fn x -> x.sender end)
+                            |> Enum.join(", ") %>
+                          <%= users_who_reacted <> " reacted with :#{shortcode}:" %>
+                        </div>
+                      </button>
+                    <% end %>
+                  </div>
+              <% end %>
             </div>
           </li>
         <% end %>
       <% end %>
-      </ul>
-      <%
-        number_of_users_typing = MapSet.size(@users_typing)
-        users_enumeration_string = MapSet.to_list(@users_typing) |> Enum.join(", ")
-        correct_present_continuous_verb = if number_of_users_typing == 1, do: "is", else: "are"
-      %>
-      <button id="message_notifier_button" hidden class="text-center text-white rounded-3xl bg-purple-800" phx-hook="NotifierButtonPress">
-        <span class="arrow_symbol">↓</span>
-      </button>
-      <div id="chatbox_anchor" phx-hook="TypingIndicatorMechanism">
-        <p>
-        <%=
-          case number_of_users_typing do
-            0 -> ""
-            x when x in 1..5 -> users_enumeration_string <> " " <> correct_present_continuous_verb <> " typing..."
-            _ -> "Many users are typing..."
-          end
-        %>
-        </p>
-      </div>
+    </ul>
+    <% number_of_users_typing = MapSet.size(@users_typing)
+    users_enumeration_string = MapSet.to_list(@users_typing) |> Enum.join(", ")
+    correct_present_continuous_verb = if number_of_users_typing == 1, do: "is", else: "are" %>
+    <button
+      id="message_notifier_button"
+      hidden
+      class="text-center text-white rounded-3xl bg-purple-800"
+      phx-hook="NotifierButtonPress"
+    >
+      <span class="arrow_symbol">↓</span>
+    </button>
+    <div id="chatbox_anchor" phx-hook="TypingIndicatorMechanism">
+      <p>
+        <%= case number_of_users_typing do
+          0 ->
+            ""
+
+          x when x in 1..5 ->
+            users_enumeration_string <> " " <> correct_present_continuous_verb <> " typing..."
+
+          _ ->
+            "Many users are typing..."
+        end %>
+      </p>
+    </div>
   </div>
 </div>
 
 <form action="#" phx-submit="save_message" class="my-2 grid grid-cols-6 gap-2">
-  <textarea name="text" id="message_textarea" maxlength="1000" cols="50" rows="2" class="rounded-2xl bg-green-100 border-0 focus:border focus:border-purple-800 col-span-5 resize-none" phx-hook="CaptureKeyPress"></textarea>
-  <button type="submit" class="rounded-2xl text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce float-right">Send</button>
+  <textarea
+    name="text"
+    id="message_textarea"
+    maxlength="1000"
+    cols="50"
+    rows="2"
+    class="rounded-2xl bg-green-100 border-0 focus:border focus:border-purple-800 col-span-5 resize-none"
+    phx-hook="CaptureKeyPress"
+  ></textarea>
+  <button
+    type="submit"
+    class="rounded-2xl text-white text-base bg-purple-800 hover:animate-pulse hover:motion-reduce float-right"
+  >
+    Send
+  </button>
 </form>
 
 <div id="emoji_utils_container" class="my-2 gap-2">
@@ -144,5 +240,5 @@
     😁
   </button>
   <emoji-picker class="light" id="emoji_popup" hidden></emoji-picker>
-  <.back navigate={~p"/"}>Back to room list</.back>
+  <.custom_margin_back_link navigate={~p"/"}>Back to room list</.custom_margin_back_link>
 </div>

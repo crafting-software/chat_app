@@ -6,22 +6,22 @@ function addClickEventListenerOnEmojiButton(component) {
 }
 
 function addClickEventListenerOnEmojiPopup(component) {
-    const emojiPicker = document.querySelector('emoji-picker')
+    const emojiPicker = document.getElementById("emoji_popup")
     emojiPicker.addEventListener('emoji-click', event => {
         document.getElementById("message_textarea").value += event.detail.unicode
-        component.el.blur()
+        component.el.blur() 
     })
 }
 
 function addFocusOutEventListenerOnEmojiPopup() {
-    const emojiPicker = document.querySelector('emoji-picker')
+    const emojiPicker = document.getElementById("emoji_popup")
     emojiPicker.addEventListener("focusout", event => {
         emojiPicker.setAttribute("hidden", "hidden")
     })
 }
 
 function addClickOffEventListenerForEmojiPopup(component) {
-    const emojiPicker = document.querySelector('emoji-picker')
+    const emojiPicker = document.getElementById("emoji_popup")
     if (emojiPicker != undefined && component.el != undefined) {
         document.addEventListener("click", event => {
             const isClickInside = emojiPicker.contains(event.target) || component.el.contains(event.target)
@@ -32,8 +32,22 @@ function addClickOffEventListenerForEmojiPopup(component) {
     }
 }
 
+function roundEmojiPopupBorders() {
+    const emojiPicker = document.getElementById("emoji_popup")
+    if (emojiPicker != undefined) {
+        const style = document.createElement("style")
+        style.textContent = `
+            .picker {
+                border-radius: 20px;
+            }
+        `
+        emojiPicker.shadowRoot.appendChild(style)
+    }
+}
+
 const OpenEmojiPopup = {
     mounted() {
+        roundEmojiPopupBorders()
         addClickEventListenerOnEmojiButton(this)
         addClickEventListenerOnEmojiPopup(this)
         addClickOffEventListenerForEmojiPopup(this)

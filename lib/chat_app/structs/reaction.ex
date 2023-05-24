@@ -1,4 +1,4 @@
-defmodule ChatApp.Structs.Message do
+defmodule ChatApp.Structs.Reaction do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -6,15 +6,12 @@ defmodule ChatApp.Structs.Message do
   @foreign_key_type Ecto.UUID
   @timestamps_opts [type: :utc_datetime_usec]
 
-  schema "messages" do
+  schema "reactions" do
     field(:sender, :string)
     field(:content, :string)
+    field(:shortcode, :string)
 
-    belongs_to(:room, ChatApp.Structs.Room, references: :id)
-    has_many(:reactions, ChatApp.Structs.Reaction, references: :id, on_delete: :delete_all)
-
-    field(:is_deleted, :boolean)
-    field(:is_edited, :boolean)
+    belongs_to(:message, ChatApp.Structs.Message, references: :id)
 
     timestamps()
   end

@@ -5,6 +5,8 @@ import { OpenEmojiPopup } from "./hooks/open_emoji_popup"
 import { TypingIndicatorMechanism } from "./hooks/typing_indicator_mechanism"
 import { ScrollingMechanism } from "./hooks/scrolling_mechanism"
 import { NotifierButtonPress } from "./hooks/message_notifier_button"
+import { HandleReactionPopup } from "./hooks/handle_reaction_popup"
+import { ShowUsersReactionsList } from "./hooks/show_users_reactions_list"
 
 let Hooks = {
     MessageSettings,
@@ -13,7 +15,9 @@ let Hooks = {
     OpenEmojiPopup,
     TypingIndicatorMechanism,
     ScrollingMechanism,
-    NotifierButtonPress
+    NotifierButtonPress,
+    HandleReactionPopup,
+    ShowUsersReactionsList
 }
 
 export { Hooks }
