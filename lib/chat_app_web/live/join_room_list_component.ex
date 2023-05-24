@@ -30,7 +30,7 @@ defmodule ChatAppWeb.JoinRoomListComponent do
           </div>
         </form>
       </.modal>
-      <.button type="button" phx-click={show_modal("join-room-list-#{assigns.room_id}")}>Join</.button>
+      <.link phx-click={show_modal("join-room-list-#{assigns.room_id}")}>Join</.link>
     </div>
     """
   end

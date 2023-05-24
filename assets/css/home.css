@@ -48,12 +48,18 @@ tbody#rooms {
   border-bottom-right-radius: 12px;
 }
 
-#divrooms td:last-of-type div {
-  padding-right: 16px;
+#divrooms td:last-of-type > div > span > div {
+  width: 100%;
 }
 
 #divrooms td:last-of-type:hover div span a{
   color: #329325;
+}
+
+#divrooms td:last-of-type div span {
+  padding-right: 16px;
+  display: flex;
+  align-items: center;
 }
 
 div#container{

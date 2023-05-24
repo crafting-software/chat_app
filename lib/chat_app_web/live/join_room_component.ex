@@ -15,11 +15,11 @@ defmodule ChatAppWeb.JoinRoomComponent do
     ~H"""
     <div class="modal">
       <.modal id="join-room-modal">
-        <h2 id="join-room-modal-title">Join Room</h2>
+        <h2 class="join-room-modal-title">Join Room</h2>
         <form phx-submit="join_room">
           <div class="join-room-modal-form-group">
             <div class="join-room-modal-input-group">
-              <input id="room_id" name="room_id" value="" placeholder="room code here" />
+              <input type="text" id="room_id" name="room_id" value="" placeholder="room code here" />
               <label for="username">User Name:</label>
               <input type="text" id="username" name="username" required />
             </div>
