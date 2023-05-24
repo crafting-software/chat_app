@@ -40,7 +40,7 @@ function addFocusOutEventListenerOnReactionPopup(component) {
 function addClickOffEventListenerForReactionPopup(component) {
     const messageId = extractActionAndMessageIdFromDomElementId(component.el)[1]
     const reactionButton = document.getElementById(`reaction_button-${messageId}`)
-    if (reactionButton != undefined) {
+    if (reactionButton) {
         document.addEventListener("click", event => {
             const isClickInside = component.el.contains(event.target) || reactionButton.contains(event.target)
             if (!isClickInside) {

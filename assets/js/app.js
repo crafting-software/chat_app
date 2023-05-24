@@ -57,10 +57,6 @@ if (container) {
     const wrapperHeight = container.offsetHeight
     const contentHeight = rooms.offsetHeight
     const scrollPosition = container.scrollTop
-    if (scrollPosition + wrapperHeight >= contentHeight) {
-      gradient.style.display = 'none'
-    } else {
-      gradient.style.display = 'block'
-    }
+    gradient.style.display = scrollPosition + wrapperHeight >= contentHeight ? 'none' : 'block'
   })
 }
