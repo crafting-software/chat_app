@@ -46,6 +46,13 @@ input#roomcode::placeholder {
 .join-room-modal-input-group input {
     width: 100%;
     margin-left: 10px;
+    font-size: medium;
+    font-weight: normal;
+}
+
+.join-room-modal-input-group label {
+    font-size: medium;
+    font-weight: normal;
 }
 
 .join-room-modal-button-group button {
