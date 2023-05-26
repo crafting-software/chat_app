@@ -88,20 +88,18 @@ defmodule ChatAppWeb.HomeLive do
         socket
       ) do
 
-    IO.inspect("elu")
+    usernames = ChatApp.Contexts.Rooms.get_room_users(room_id)
+    |> Enum.map(fn user -> user.username end)
 
     user = %{
       "username" => username,
       "room_id" => room_id
     }
 
-    {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
-
-
-    {:noreply, socket |> assign(:username, username) |> push_navigate(to: "/rooms/#{room_id}")}
+    cond do
+      username not in usernames -> {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
+                               {:noreply, socket |> push_navigate(to: "/rooms/#{room_id}")}
+      true -> {:noreply, socket |> push_navigate(to: "/")}
+    end
   end
 end
-# <.link phx-click={JS.push("show_modal("join-room-list-modal")", value: %{roomid: room.id})}>Join</.link>
-
-# <p phx-click={JS.push("event_name", value: %{id: 1234}) |> show_modal("modal_id")}>open modal and send event</p>
-# <.link phx-click={show_modal("join-room-list-modal")}>Join</.link>
