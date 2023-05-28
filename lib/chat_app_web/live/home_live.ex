@@ -99,7 +99,7 @@ defmodule ChatAppWeb.HomeLive do
     cond do
       username not in usernames -> {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
                                {:noreply, socket |> push_navigate(to: "/rooms/#{room_id}")}
-      true -> {:noreply, socket |> push_navigate(to: "/")}
+      true -> {:noreply, socket |> put_flash(:error, "Username already taken")}
     end
   end
 end

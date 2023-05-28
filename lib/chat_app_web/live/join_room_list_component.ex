@@ -26,7 +26,7 @@ defmodule ChatAppWeb.JoinRoomListComponent do
           </div>
           <div class="join-room-modal-button-group">
             <.button type="submit">Join</.button>
-            <.button type="button" phx-click={hide_modal("join-room-list-modal")}>Cancel</.button>
+            <.button type="button" phx-click={hide_modal("join-room-list-#{assigns.room_id}")}>Cancel</.button>
           </div>
         </form>
       </.modal>

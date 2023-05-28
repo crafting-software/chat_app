@@ -4,8 +4,8 @@
 @import "home.css";
 @import "single_room_page.css";
 @import "room-modal.css";
-<<<<<<< HEAD
 @import "join-room-modal.css";
-=======
-@import "join-room-modal.css";
->>>>>>> 8b10874 (feat(19): added join room button functionality)
+
+#flash, #disconnected {
+    z-index: 60;
+}
