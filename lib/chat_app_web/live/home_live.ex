@@ -72,12 +72,12 @@ defmodule ChatAppWeb.HomeLive do
 
     cond do
       room_name not in room_names ->  {:ok, result} = ChatApp.Contexts.Rooms.insert_room(room)
-                  user = %{
-                    "username" => owner_name,
-                    "room_id" => result.id
-                  }
-                  {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
-                  {:noreply, socket |> push_navigate(to: "/rooms/#{result.id}")}
+        user = %{
+          "username" => owner_name,
+          "room_id" => result.id
+        }
+        {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
+        {:noreply, socket |> push_navigate(to: "/rooms/#{result.id}")}
       true -> {:noreply, socket |> put_flash(:error, "Room name already taken")}
     end
   end
@@ -91,18 +91,22 @@ defmodule ChatAppWeb.HomeLive do
         socket
       ) do
 
-    usernames = ChatApp.Contexts.Rooms.get_room_users(room_id)
-    |> Enum.map(fn user -> user.username end)
-
-    user = %{
-      "username" => username,
-      "room_id" => room_id
-    }
-
+    room_ids = ChatApp.Contexts.Rooms.list_rooms()|> Enum.map(fn room -> room.room_id end)
     cond do
-      username not in usernames -> {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
-                               {:noreply, socket |> push_navigate(to: "/rooms/#{room_id}")}
-      true -> {:noreply, socket |> put_flash(:error, "Username already taken")}
-    end
+      room_id not in room_ids ->
+        {:noreply, socket |> put_flash(:error, "Room not found")}
+      true ->
+          usernames = ChatApp.Contexts.Rooms.get_room_users(room_id)
+          |> Enum.map(fn user -> user.username end)
+          cond do
+            username not in usernames ->  user = %{
+                                            "username" => username,
+                                            "room_id" => room_id
+                                          }
+              {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
+              {:noreply, socket |> push_navigate(to: "/rooms/#{room_id}")}
+            true -> {:noreply, socket |> put_flash(:error, "Username already taken")}
+          end
+  end
   end
 end
