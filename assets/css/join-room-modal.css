@@ -26,13 +26,6 @@ input#roomcode::placeholder {
 #join-room-button:hover {
     background-color: #8d88d3;
 }
-/* 
-.join-room-modal-form-group {
-    display: grid;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: center;
-} */
 
 .join-room-modal-input-group {
     display: flex;

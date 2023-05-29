@@ -39,18 +39,21 @@ defmodule ChatAppWeb.SingleRoomLive do
     end
 
     room = ChatApp.Contexts.Rooms.get_room(room_id)
-
-    {:ok,
-     assign(socket,
-       room_id: room_id,
-       room: room,
-       messages: ChatApp.Contexts.Rooms.get_room_messages(room_id),
-       messages_topic: messages_topic,
-       typing_statuses_topic: typing_statuses_topic,
-       users: ChatApp.Contexts.Rooms.get_room_users(room_id),
-       username: username,
-       users_typing: MapSet.new()
-     )}
+    if room == nil do
+      {:ok, socket |> push_navigate(to: "/") |> put_flash(:error, "Room not found")}
+    else
+      {:ok,
+      assign(socket,
+        room_id: room_id,
+        room: room,
+        messages: ChatApp.Contexts.Rooms.get_room_messages(room_id),
+        messages_topic: messages_topic,
+        typing_statuses_topic: typing_statuses_topic,
+        users: ChatApp.Contexts.Rooms.get_room_users(room_id),
+        username: username,
+        users_typing: MapSet.new()
+      )}
+    end
   end
 
   def unmount(%{id: liveview_id, room_id: room_id, username: username}, _reason) do

@@ -67,16 +67,19 @@ defmodule ChatAppWeb.HomeLive do
       "expiry_timestamp" => DateTime.utc_now() |> DateTime.add(12, :hour)
     }
 
-    {:ok, result} = ChatApp.Contexts.Rooms.insert_room(room)
+    room_names = ChatApp.Contexts.Rooms.list_rooms()
+    |> Enum.map(fn room -> room.room_name end)
 
-    user = %{
-      "username" => owner_name,
-      "room_id" => result.id
-    }
-
-    {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
-
-    {:noreply, socket |> push_navigate(to: "/rooms/#{result.id}")}
+    cond do
+      room_name not in room_names ->  {:ok, result} = ChatApp.Contexts.Rooms.insert_room(room)
+                  user = %{
+                    "username" => owner_name,
+                    "room_id" => result.id
+                  }
+                  {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
+                  {:noreply, socket |> push_navigate(to: "/rooms/#{result.id}")}
+      true -> {:noreply, socket |> put_flash(:error, "Room name already taken")}
+    end
   end
 
   def handle_event(
