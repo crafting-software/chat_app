@@ -19,13 +19,13 @@ defmodule ChatAppWeb.JoinRoomComponent do
         <form phx-submit="join_room">
           <div class="join-room-modal-form-group">
             <div class="join-room-modal-input-group">
-              <input type="text" id="room_id" name="room_id" value="" placeholder="room code here" />
+              <input type="text" id="room_id_at_join" name="room_id" value="" placeholder="room code here" />
               <label for="username">User Name:</label>
-              <input type="text" id="username" name="username" required />
+              <input type="text" id="join_room_username" name="username" required phx-hook="SetUsernameOnRoomJoinThroughLink"/>
             </div>
           </div>
           <div class="join-room-modal-button-group">
-            <.button type="submit">Join</.button>
+            <.button id="room_join_button" type="submit">Join</.button>
             <.button type="button" phx-click={hide_modal("join-room-modal")}>Cancel</.button>
           </div>
         </form>

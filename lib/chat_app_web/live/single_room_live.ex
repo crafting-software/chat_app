@@ -10,30 +10,10 @@ defmodule ChatAppWeb.SingleRoomLive do
   def mount(%{"id" => room_id}, _session, socket) do
     messages_topic = "messages:room:" <> room_id
     typing_statuses_topic = "typing_statuses:room:" <> room_id
-    username = Faker.Person.name()
-
     if connected?(socket) do
       Logger.info("Liveview's second mount() call")
-
-      LiveviewMonitor.monitor!(self(), __MODULE__, %{
-        id: socket.id,
-        room_id: room_id,
-        username: username,
-        users_typing: MapSet.new()
-      })
-
       PubSub.subscribe(ChatApp.PubSub, messages_topic)
       PubSub.subscribe(ChatApp.PubSub, typing_statuses_topic)
-
-      message =
-        ChatApp.Contexts.Messages.create_message_as_map(
-          "#{username} joined the chat",
-          "",
-          room_id
-        )
-
-      ChatApp.Contexts.Messages.insert_message(message)
-      PubSub.broadcast(ChatApp.PubSub, messages_topic, :refresh_messages)
     else
       Logger.info("Liveview's first mount() call")
     end
@@ -50,7 +30,7 @@ defmodule ChatAppWeb.SingleRoomLive do
         messages_topic: messages_topic,
         typing_statuses_topic: typing_statuses_topic,
         users: ChatApp.Contexts.Rooms.get_room_users(room_id),
-        username: username,
+        username: Faker.Person.name(),
         users_typing: MapSet.new()
       )}
     end
@@ -183,6 +163,16 @@ defmodule ChatAppWeb.SingleRoomLive do
     )
 
     {:noreply, socket}
+  end
+
+  def handle_event("get_username", %{"username" => username}, socket) do
+    IO.inspect username, label: "THE USERNAME"
+    room_id = socket.assigns.room_id
+    LiveviewMonitor.monitor!(self(), __MODULE__, %{id: socket.id, room_id: room_id, username: username, users_typing: MapSet.new()})
+    message = ChatApp.Contexts.Messages.create_message_as_map("#{username} joined the chat", "", socket.assigns.room_id)
+    ChatApp.Contexts.Messages.insert_message(message)
+    PubSub.broadcast(ChatApp.PubSub, "messages:room:#{room_id}", :refresh_messages)
+    {:noreply, assign(socket, username: username)}
   end
 
   @impl true

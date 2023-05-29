@@ -30,12 +30,8 @@
   </div>
 </.header>
 
-<div id="chatbox_container" class="rounded-2xl bg-green-100">
-  <div
-    id="chatbox"
-    class="h-96 rounded-2xl bg-green-100 overflow-y-auto mt-3"
-    phx-hook="ScrollingMechanism"
-  >
+<div id="chatbox_container" class="rounded-2xl bg-green-100" phx-hook="GetUsername">
+  <div id="chatbox" class="h-80 rounded-2xl bg-green-100 overflow-y-auto mt-3" phx-hook="ScrollingMechanism">
     <ul>
       <% number_of_messages = length(@messages) %>
       <%= if number_of_messages > 0 do %>
@@ -45,54 +41,25 @@
             <%= if not is_nil(Map.get(message, :sender)) do %>
               <div class="message_header">
                 <span class="message_username m-2 font-bold"><%= message.sender %></span>
-                <span
-                  id={"message-datetime-#{message.id}"}
-                  class="message_datetime"
-                  phx-hook="HandleTimestampTimezone"
-                >
+                <span id={"message-datetime-#{message.id}"} class="message_datetime" phx-hook="HandleTimestampTimezone">
                   <%= message.inserted_at %>
                 </span>
                 <%= if not message.is_deleted do %>
                   <div class="message_settings_container">
                     <ul class="menu">
                       <li>
-                        <emoji-picker
-                          class="light"
-                          id={"message_reactions_popup-#{message.id}"}
-                          hidden
-                          phx-hook="HandleReactionPopup"
-                        >
-                        </emoji-picker>
-                        <div
-                          id={"settings-#{message.id}"}
-                          hidden
-                          class="message_settings_submenu p-1.5 bg-emerald-200 focus:bg-emerald-200"
-                        >
-                          <button
-                            id={"edit-#{message.id}"}
-                            class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"
-                          >
-                            ✎
+                        <emoji-picker class="light" id={"message_reactions_popup-#{message.id}"} hidden phx-hook="HandleReactionPopup"></emoji-picker>
+                        <div id={"settings-#{message.id}"} hidden class="message_settings_submenu p-1.5 bg-emerald-200 focus:bg-emerald-200">
+                          <button id={"edit-#{message.id}"} class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"> ✎
                           </button>
-                          <button
-                            id={"delete-#{message.id}"}
-                            class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm"
-                          >
+                          <button id={"delete-#{message.id}"} class="hover:bg-emerald-300 rounded-lg p-1.5 text-sm">
                             🗑️
                           </button>
                         </div>
                         <button
                           id={"reaction_button-#{message.id}"}
-                          class="message_settings_button items-center p-1.5 text-sm font-medium text-center text-gray-900"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            class="w-6 h-6 bi bi-emoji-smile"
-                            viewBox="0 0 16 16"
-                          >
+                          class="message_settings_button items-center p-1.5 text-sm font-medium text-center text-gray-900">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-6 h-6 bi bi-emoji-smile" viewBox="0 0 16 16">
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                             <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z" />
                           </svg>
@@ -240,5 +207,5 @@
     😁
   </button>
   <emoji-picker class="light" id="emoji_popup" hidden></emoji-picker>
-  <.custom_margin_back_link navigate={~p"/"}>Back to room list</.custom_margin_back_link>
+  <.back navigate={~p"/"} id="back_link">Back to room list</.back>
 </div>
