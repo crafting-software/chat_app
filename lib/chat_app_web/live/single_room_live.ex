@@ -59,7 +59,6 @@ defmodule ChatAppWeb.SingleRoomLive do
 
   @impl true
   def handle_params(_params, url, socket) do
-    IO.inspect(URI.parse(url), label: "URL")
     {:noreply, assign(socket, url: URI.parse(url))}
   end
 
@@ -166,7 +165,6 @@ defmodule ChatAppWeb.SingleRoomLive do
   end
 
   def handle_event("get_username", %{"username" => username}, socket) do
-    IO.inspect username, label: "THE USERNAME"
     room_id = socket.assigns.room_id
     LiveviewMonitor.monitor!(self(), __MODULE__, %{id: socket.id, room_id: room_id, username: username, users_typing: MapSet.new()})
     message = ChatApp.Contexts.Messages.create_message_as_map("#{username} joined the chat", "", socket.assigns.room_id)
@@ -184,8 +182,6 @@ defmodule ChatAppWeb.SingleRoomLive do
   end
 
   def handle_info({:refresh_message_reactions, message}, socket) do
-    IO.inspect(message, label: "Refreshed message reactions", limit: :infinity)
-
     updated_socket =
       assign(socket, messages: ChatApp.Contexts.Rooms.get_room_messages(socket.assigns.room_id))
 

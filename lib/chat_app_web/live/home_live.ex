@@ -91,7 +91,6 @@ defmodule ChatAppWeb.HomeLive do
         socket
       ) do
 
-    IO.inspect ChatApp.Contexts.Rooms.list_rooms(), label: "Rooms"
     room_ids = ChatApp.Contexts.Rooms.list_rooms()|> Enum.map(fn room -> room.id end)
 
     cond do
