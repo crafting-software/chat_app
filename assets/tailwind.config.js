@@ -16,7 +16,11 @@ module.exports = {
     extend: {
       colors: {
         brand: "#FD4F00",
+        'lightgreen': "#edffec",
         'forestgreen': "#329325",
+        'lightpurple': "#9792e3",
+        'hoverpurple': "#8d88d3",
+        'textpurple': "#48435c",
       }
     },
   },

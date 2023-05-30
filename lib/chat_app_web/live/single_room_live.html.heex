@@ -2,11 +2,11 @@
   <div>
     Room "<%= @room.room_name %>"
     <div class="float-right">
-      <button class="rounded-lg bg-[#9792e3] hover:bg-[#8d88d3] py-1 px-3 mb-2 text-sm font-semibold leading-6 text-white active:text-white/80 text-base peer">
+      <button class="rounded-lg bg-lightpurple hover:bg-hoverpurple py-1 px-3 mb-2 text-sm font-semibold leading-6 text-white active:text-white/80 text-base peer">
         Users
       </button>
-      <aside class="border-r-8 border-[#EDFFEC] z-10 grid fixed top-0 bg-green-100 w-[233px] h-full -left-[233px] peer-focus:left-0 ease-out delay-150 duration-300">
-        <h1 class="text-[#48435c] bold text-[15px] mt-8 text-center uppercase">
+      <aside class="border-r-8 border-lightgreen z-10 grid fixed top-0 bg-green-100 w-[233px] h-full -left-[233px] peer-focus:left-0 ease-out delay-150 duration-300">
+        <h1 class="text-textpurple bold text-[15px] mt-8 text-center uppercase">
           Users in room "<%= @room.room_name %>"
         </h1>
         <ul>
@@ -191,7 +191,7 @@
     <button
       id="message_notifier_button"
       hidden
-      class="text-center text-white rounded-3xl bg-[#9792e3] hover:bg-[#8d88d3]"
+      class="text-center text-white rounded-3xl bg-lightpurple hover:bg-hoverpurple"
       phx-hook="NotifierButtonPress"
     >
       <span class="arrow_symbol">↓</span>
@@ -220,12 +220,12 @@
     maxlength="1000"
     cols="50"
     rows="2"
-    class="rounded-2xl bg-green-100 border-0 focus:border focus:border-[#48435c] col-span-5 resize-none"
+    class="rounded-2xl bg-green-100 border-0 focus:border focus:border-textpurple col-span-5 resize-none"
     phx-hook="CaptureKeyPress"
   ></textarea>
   <button
     type="submit"
-    class="rounded-2xl text-white text-base bg-purple-800 hover:bg-[#8d88d3] float-right"
+    class="rounded-2xl text-white text-base bg-purple-800 hover:bg-hoverpurple float-right"
   >
     Send
   </button>
@@ -234,7 +234,7 @@
 <div id="emoji_utils_container" class="my-2 gap-2">
   <button
     id="emoji_button"
-    class="rounded-2xl px-2 text-white text-base bg-[#9792e3] hover:bg-[#8d88d3]"
+    class="rounded-2xl px-2 text-white text-base bg-lightpurple hover:bg-hoverpurple"
     phx-hook="OpenEmojiPopup"
   >
     😁
