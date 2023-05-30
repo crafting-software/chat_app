@@ -91,7 +91,9 @@ defmodule ChatAppWeb.HomeLive do
         socket
       ) do
 
-    room_ids = ChatApp.Contexts.Rooms.list_rooms()|> Enum.map(fn room -> room.room_id end)
+    IO.inspect ChatApp.Contexts.Rooms.list_rooms(), label: "Rooms"
+    room_ids = ChatApp.Contexts.Rooms.list_rooms()|> Enum.map(fn room -> room.id end)
+
     cond do
       room_id not in room_ids ->
         {:noreply, socket |> put_flash(:error, "Room not found")}
@@ -107,6 +109,6 @@ defmodule ChatAppWeb.HomeLive do
               {:noreply, socket |> push_navigate(to: "/rooms/#{room_id}")}
             true -> {:noreply, socket |> put_flash(:error, "Username already taken")}
           end
-  end
+    end
   end
 end
