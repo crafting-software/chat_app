@@ -25,6 +25,7 @@ import { Picker } from 'emoji-picker-element'
 import { Hooks } from './hooks'
 
 import "./room-modal"
+import "./homepage"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
@@ -47,20 +48,3 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
-
-const container = document.querySelector('#container')
-const rooms = document.querySelector('#divrooms')
-const gradient = document.querySelector('#gradient')
-
-if (container) {
-  container.addEventListener('scroll', function() {
-    const wrapperHeight = container.offsetHeight
-    const contentHeight = rooms.offsetHeight
-    const scrollPosition = container.scrollTop
-    if (scrollPosition + wrapperHeight >= contentHeight) {
-      gradient.style.display = 'none'
-    } else {
-      gradient.style.display = 'block'
-    }
-  })
-}

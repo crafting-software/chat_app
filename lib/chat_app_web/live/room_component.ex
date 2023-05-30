@@ -24,7 +24,7 @@ defmodule ChatAppWeb.RoomComponent do
             </div>
             <div class="room-modal-input-group">
               <label for="owner-name">User Name:</label>
-              <input type="text" id="owner-name" name="owner_name" required />
+              <input type="text" id="owner-name" name="owner_name" required phx-hook="SaveUsernameAtRoomCreation"/>
             </div>
             <div class="room-modal-input-group">
               <label for="max-participants">Maximum Users Allowed:</label>
@@ -40,7 +40,7 @@ defmodule ChatAppWeb.RoomComponent do
             </div>
           </div>
           <div class="room-modal-button-group">
-            <.button type="submit">Create Room</.button>
+            <.button id="create-new-room-button" type="submit">Create Room</.button>
             <.button type="button" phx-click={hide_modal("new-room-modal")}>Cancel</.button>
           </div>
         </form>

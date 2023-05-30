@@ -3,4 +3,9 @@
 @import "tailwindcss/utilities";
 @import "home.css";
 @import "single_room_page.css";
-@import "room-modal.css"
+@import "room-modal.css";
+@import "join-room-modal.css";
+
+#flash, #disconnected {
+    z-index: 60;
+}

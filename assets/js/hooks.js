@@ -7,6 +7,8 @@ import { ScrollingMechanism } from "./hooks/scrolling_mechanism"
 import { NotifierButtonPress } from "./hooks/message_notifier_button"
 import { HandleReactionPopup } from "./hooks/handle_reaction_popup"
 import { ShowUsersReactionsList } from "./hooks/show_users_reactions_list"
+import { SetUsernameOnRoomJoinFromList, SetUsernameOnRoomJoinThroughLink, SaveUsernameAtRoomCreation } from "./hooks/set_username"
+import { GetUsername } from "./hooks/get_username"
 
 let Hooks = {
     MessageSettings,
@@ -15,9 +17,13 @@ let Hooks = {
     OpenEmojiPopup,
     TypingIndicatorMechanism,
     ScrollingMechanism,
-    NotifierButtonPress,
     HandleReactionPopup,
-    ShowUsersReactionsList
+    ShowUsersReactionsList,
+    NotifierButtonPress, 
+    SetUsernameOnRoomJoinFromList, 
+    SetUsernameOnRoomJoinThroughLink, 
+    SaveUsernameAtRoomCreation,
+    GetUsername
 }
 
 export { Hooks }

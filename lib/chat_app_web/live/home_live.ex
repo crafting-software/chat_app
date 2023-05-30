@@ -17,9 +17,12 @@ defmodule ChatAppWeb.HomeLive do
   def render(assigns) do
     ~H"""
     <div class="flex flex-col flex-1 h-full">
-      <div>
+      <div id="homepage_header">
         <.header>Public Rooms</.header>
-        <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
+        <div id="modals">
+          <.live_component module={ChatAppWeb.RoomComponent} id="modal" />
+          <.live_component module={ChatAppWeb.JoinRoomComponent} id="join-room-modal" />
+        </div>
       </div>
 
       <div id="container" class="overflow-y-auto w-full mt-8">
@@ -27,20 +30,13 @@ defmodule ChatAppWeb.HomeLive do
           <.table id="rooms" rows={@rooms}>
             <:col :let={room} label="Name"><%= room.room_name %></:col>
             <:col :let={room} label="Max nr of participants"><%= room.max_participants %></:col>
-            <:action>
-              <.link method="join">
-                Join
-              </.link>
+            <:action :let={room}>
+              <.live_component module={ChatAppWeb.JoinRoomListComponent} id={"join-room-list-#{room.id}"} room_id={room.id} />
             </:action>
           </.table>
         </div>
         <div id="gradient"></div>
       </div>
-
-      <form>
-        <.input id="roomcode" name="roomcode" value="" placeholder="room code here" />
-        <.button id="join">Join</.button>
-      </form>
 
       <div class="drawing">
         <div class="draw" id="downleft"></div>
@@ -71,15 +67,47 @@ defmodule ChatAppWeb.HomeLive do
       "expiry_timestamp" => DateTime.utc_now() |> DateTime.add(12, :hour)
     }
 
-    {:ok, result} = ChatApp.Contexts.Rooms.insert_room(room)
+    room_names = ChatApp.Contexts.Rooms.list_rooms()
+    |> Enum.map(fn room -> room.room_name end)
 
-    user = %{
-      "username" => owner_name,
-      "room_id" => result.id
-    }
+    cond do
+      room_name not in room_names ->  {:ok, result} = ChatApp.Contexts.Rooms.insert_room(room)
+        user = %{
+          "username" => owner_name,
+          "room_id" => result.id
+        }
+        {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
+        {:noreply, socket |> push_navigate(to: "/rooms/#{result.id}")}
+      true -> {:noreply, socket |> put_flash(:error, "Room name already taken")}
+    end
+  end
 
-    {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
+  def handle_event(
+        "join_room",
+        %{
+          "username" => username,
+          "room_id" => room_id
+        },
+        socket
+      ) do
 
-    {:noreply, socket |> push_navigate(to: "/rooms/#{result.id}")}
+    room_ids = ChatApp.Contexts.Rooms.list_rooms()|> Enum.map(fn room -> room.id end)
+
+    cond do
+      room_id not in room_ids ->
+        {:noreply, socket |> put_flash(:error, "Room not found")}
+      true ->
+          usernames = ChatApp.Contexts.Rooms.get_room_users(room_id)
+          |> Enum.map(fn user -> user.username end)
+          cond do
+            username not in usernames ->  user = %{
+                                            "username" => username,
+                                            "room_id" => room_id
+                                          }
+              {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
+              {:noreply, socket |> push_navigate(to: "/rooms/#{room_id}")}
+            true -> {:noreply, socket |> put_flash(:error, "Username already taken")}
+          end
+    end
   end
 end

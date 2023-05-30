@@ -3,33 +3,22 @@
   height: 100%;
 }
 
-header.hd h1 {
-  font-weight: 700;
+#homepage_header header h1 {
+  padding: 8px;
   color: #48435c;
 }
 
-input#roomcode {
-  margin-top: 50px;
-  width: 70%;
-  float: left;
+#homepage_header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-input#roomcode::placeholder {
-  color: #48435c;
-  opacity: 0.3;
-}
-
-button#join {
-  float: right;
-  margin-top: 50px;
-  background: #9792e3;
-  color: #edffec;
-}
-
-button#newroom {
-  float: right;
-  background: #9792e3;
-  color: #edffec;
+#modals{
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 tbody#rooms {
@@ -59,12 +48,18 @@ tbody#rooms {
   border-bottom-right-radius: 12px;
 }
 
-#divrooms td:last-of-type div {
-  padding-right: 16px;
+#divrooms td:last-of-type > div > span > div {
+  width: 100%;
 }
 
 #divrooms td:last-of-type:hover div span a{
   color: #329325;
+}
+
+#divrooms td:last-of-type div span {
+  padding-right: 16px;
+  display: flex;
+  align-items: center;
 }
 
 div#container{

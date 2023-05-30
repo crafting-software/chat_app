@@ -10,47 +10,30 @@ defmodule ChatAppWeb.SingleRoomLive do
   def mount(%{"id" => room_id}, _session, socket) do
     messages_topic = "messages:room:" <> room_id
     typing_statuses_topic = "typing_statuses:room:" <> room_id
-    username = Faker.Person.name()
-
     if connected?(socket) do
       Logger.info("Liveview's second mount() call")
-
-      LiveviewMonitor.monitor!(self(), __MODULE__, %{
-        id: socket.id,
-        room_id: room_id,
-        username: username,
-        users_typing: MapSet.new()
-      })
-
       PubSub.subscribe(ChatApp.PubSub, messages_topic)
       PubSub.subscribe(ChatApp.PubSub, typing_statuses_topic)
-
-      message =
-        ChatApp.Contexts.Messages.create_message_as_map(
-          "#{username} joined the chat",
-          "",
-          room_id
-        )
-
-      ChatApp.Contexts.Messages.insert_message(message)
-      PubSub.broadcast(ChatApp.PubSub, messages_topic, :refresh_messages)
     else
       Logger.info("Liveview's first mount() call")
     end
 
     room = ChatApp.Contexts.Rooms.get_room(room_id)
-
-    {:ok,
-     assign(socket,
-       room_id: room_id,
-       room: room,
-       messages: ChatApp.Contexts.Rooms.get_room_messages(room_id),
-       messages_topic: messages_topic,
-       typing_statuses_topic: typing_statuses_topic,
-       users: ChatApp.Contexts.Rooms.get_room_users(room_id),
-       username: username,
-       users_typing: MapSet.new()
-     )}
+    if room == nil do
+      {:ok, socket |> push_navigate(to: "/") |> put_flash(:error, "Room not found")}
+    else
+      {:ok,
+      assign(socket,
+        room_id: room_id,
+        room: room,
+        messages: ChatApp.Contexts.Rooms.get_room_messages(room_id),
+        messages_topic: messages_topic,
+        typing_statuses_topic: typing_statuses_topic,
+        users: ChatApp.Contexts.Rooms.get_room_users(room_id),
+        username: Faker.Person.name(),
+        users_typing: MapSet.new()
+      )}
+    end
   end
 
   def unmount(%{id: liveview_id, room_id: room_id, username: username}, _reason) do
@@ -76,7 +59,6 @@ defmodule ChatAppWeb.SingleRoomLive do
 
   @impl true
   def handle_params(_params, url, socket) do
-    IO.inspect(URI.parse(url), label: "URL")
     {:noreply, assign(socket, url: URI.parse(url))}
   end
 
@@ -182,6 +164,15 @@ defmodule ChatAppWeb.SingleRoomLive do
     {:noreply, socket}
   end
 
+  def handle_event("get_username", %{"username" => username}, socket) do
+    room_id = socket.assigns.room_id
+    LiveviewMonitor.monitor!(self(), __MODULE__, %{id: socket.id, room_id: room_id, username: username, users_typing: MapSet.new()})
+    message = ChatApp.Contexts.Messages.create_message_as_map("#{username} joined the chat", "", socket.assigns.room_id)
+    ChatApp.Contexts.Messages.insert_message(message)
+    PubSub.broadcast(ChatApp.PubSub, "messages:room:#{room_id}", :refresh_messages)
+    {:noreply, assign(socket, username: username)}
+  end
+
   @impl true
   def handle_info(:refresh_messages, socket) do
     updated_socket =
@@ -191,8 +182,6 @@ defmodule ChatAppWeb.SingleRoomLive do
   end
 
   def handle_info({:refresh_message_reactions, message}, socket) do
-    IO.inspect(message, label: "Refreshed message reactions", limit: :infinity)
-
     updated_socket =
       assign(socket, messages: ChatApp.Contexts.Rooms.get_room_messages(socket.assigns.room_id))
 
@@ -227,6 +216,51 @@ defmodule ChatAppWeb.SingleRoomLive do
              message
            end
          end)
+     )}
+  end
+
+  def handle_info({:edit_messages, %{"id" => message_id_from_client, "content" => content}}, socket) do
+    {:noreply,
+     assign(socket,
+       messages:
+         Enum.map(socket.assigns.messages, fn message ->
+           if message.id == message_id_from_client do
+             %{message | is_deleted: true}
+           else
+             message
+           end
+         end)
+     )}
+  end
+
+  def handle_info(
+        {:edit_messages, %{"id" => message_id_from_client, "content" => content}},
+        socket
+      ) do
+    {:noreply,
+     assign(socket,
+       messages:
+         Enum.map(socket.assigns.messages, fn message ->
+           if message.id == message_id_from_client do
+             %{message | content: content, is_edited: true}
+           else
+             message
+           end
+         end)
+     )}
+  end
+
+  def handle_info({:edit_messages, %{"id" => message_id_from_client, "content" => content}}, socket) do
+    {:noreply,
+     assign(socket,
+       messages:
+         Enum.map(socket.assigns.messages, fn message ->
+          if message.id == message_id_from_client do
+            %{message | content: content, is_edited: true}
+          else
+            message
+          end
+        end)
      )}
   end
 
