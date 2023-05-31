@@ -31,7 +31,8 @@ defmodule ChatAppWeb.SingleRoomLive do
         typing_statuses_topic: typing_statuses_topic,
         users: ChatApp.Contexts.Rooms.get_room_users(room_id),
         username: Faker.Person.name(),
-        users_typing: MapSet.new()
+        users_typing: MapSet.new(),
+        ask_username: false
       )}
     end
   end
@@ -165,12 +166,45 @@ defmodule ChatAppWeb.SingleRoomLive do
   end
 
   def handle_event("get_username", %{"username" => username}, socket) do
-    room_id = socket.assigns.room_id
-    LiveviewMonitor.monitor!(self(), __MODULE__, %{id: socket.id, room_id: room_id, username: username, users_typing: MapSet.new()})
-    message = ChatApp.Contexts.Messages.create_message_as_map("#{username} joined the chat", "", socket.assigns.room_id)
-    ChatApp.Contexts.Messages.insert_message(message)
-    PubSub.broadcast(ChatApp.PubSub, "messages:room:#{room_id}", :refresh_messages)
-    {:noreply, assign(socket, username: username)}
+    if username == "" or is_nil(username) do
+      {:noreply, assign(socket, ask_username: true)}
+    else
+      room_id = socket.assigns.room_id
+      LiveviewMonitor.monitor!(self(), __MODULE__, %{id: socket.id, room_id: room_id, username: username, users_typing: MapSet.new()})
+      message = ChatApp.Contexts.Messages.create_message_as_map("#{username} joined the chat", "", socket.assigns.room_id)
+      ChatApp.Contexts.Messages.insert_message(message)
+      PubSub.broadcast(ChatApp.PubSub, "messages:room:#{room_id}", :refresh_messages)
+      {:noreply, assign(socket, username: username, ask_username: false)}
+    end
+  end
+
+  def handle_event(
+        "join_room",
+        %{
+          "username" => username,
+          "room_id" => room_id
+        },
+        socket
+      ) do
+
+    room_ids = ChatApp.Contexts.Rooms.list_rooms()|> Enum.map(fn room -> room.id end)
+
+    cond do
+      room_id not in room_ids ->
+        {:noreply, socket |> put_flash(:error, "Room not found")}
+      true ->
+          usernames = ChatApp.Contexts.Rooms.get_room_users(room_id)
+          |> Enum.map(fn user -> user.username end)
+          cond do
+            username not in usernames ->  user = %{
+                                            "username" => username,
+                                            "room_id" => room_id
+                                          }
+              {:ok, _} = ChatApp.Contexts.Users.insert_user(user)
+              {:noreply, socket |> push_navigate(to: "/rooms/#{room_id}")}
+            true -> {:noreply, socket |> put_flash(:error, "Username already taken")}
+          end
+    end
   end
 
   @impl true
@@ -181,7 +215,7 @@ defmodule ChatAppWeb.SingleRoomLive do
     {:noreply, push_event(updated_socket, "new_message", %{id: "chatbox"})}
   end
 
-  def handle_info({:refresh_message_reactions, message}, socket) do
+  def handle_info({:refresh_message_reactions, _}, socket) do
     updated_socket =
       assign(socket, messages: ChatApp.Contexts.Rooms.get_room_messages(socket.assigns.room_id))
 
@@ -216,51 +250,6 @@ defmodule ChatAppWeb.SingleRoomLive do
              message
            end
          end)
-     )}
-  end
-
-  def handle_info({:edit_messages, %{"id" => message_id_from_client, "content" => content}}, socket) do
-    {:noreply,
-     assign(socket,
-       messages:
-         Enum.map(socket.assigns.messages, fn message ->
-           if message.id == message_id_from_client do
-             %{message | is_deleted: true}
-           else
-             message
-           end
-         end)
-     )}
-  end
-
-  def handle_info(
-        {:edit_messages, %{"id" => message_id_from_client, "content" => content}},
-        socket
-      ) do
-    {:noreply,
-     assign(socket,
-       messages:
-         Enum.map(socket.assigns.messages, fn message ->
-           if message.id == message_id_from_client do
-             %{message | content: content, is_edited: true}
-           else
-             message
-           end
-         end)
-     )}
-  end
-
-  def handle_info({:edit_messages, %{"id" => message_id_from_client, "content" => content}}, socket) do
-    {:noreply,
-     assign(socket,
-       messages:
-         Enum.map(socket.assigns.messages, fn message ->
-          if message.id == message_id_from_client do
-            %{message | content: content, is_edited: true}
-          else
-            message
-          end
-        end)
      )}
   end
 

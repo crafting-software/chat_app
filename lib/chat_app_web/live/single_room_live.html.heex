@@ -1,3 +1,10 @@
+<%= if @ask_username do %>
+<.live_component
+  module={ChatAppWeb.JoinRoomByLinkComponent}
+  id="join-room-by-link-modal"
+  room_id={@room.id}
+/>
+<% else %>
 <.header>
   <div>
     Room "<%= @room.room_name %>"
@@ -108,10 +115,7 @@
                           _ -> Map.put(acc, x.content, [x | Map.get(acc, x.content)])
                         end
                       end)
-                      |> Enum.into([])
-
-                    number_of_reactions = length(reactions)
-                    IO.inspect(number_of_reactions, label: "Number of reactions") %>
+                      |> Enum.into([]) %>
                     <%= for reaction_instances_pair <- reactions do %>
                       <% {reaction, instances} = reaction_instances_pair
                       [first_instance | other_instances] = instances
@@ -209,3 +213,5 @@
   <emoji-picker class="light" id="emoji_popup" hidden></emoji-picker>
   <.back navigate={~p"/"} id="back_link">Back to room list</.back>
 </div>
+
+<% end %>
