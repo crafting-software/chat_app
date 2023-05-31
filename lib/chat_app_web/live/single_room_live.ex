@@ -207,6 +207,10 @@ defmodule ChatAppWeb.SingleRoomLive do
     end
   end
 
+  def handle_event("leave_room", _, socket) do
+    {:noreply, socket |> push_navigate(to: "/")}
+  end
+
   @impl true
   def handle_info(:refresh_messages, socket) do
     updated_socket =

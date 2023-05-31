@@ -37,7 +37,7 @@ defmodule ChatAppWeb.JoinRoomByLinkComponent do
           </div>
           <div class="join-room-modal-button-group">
             <.button id="room_join_button" type="submit">Join</.button>
-            <.button type="button" phx-click={hide_modal("join-room-modal")}>Cancel</.button>
+            <.button type="button" phx-click="leave_room">Cancel</.button>
           </div>
         </form>
       </.modal>
